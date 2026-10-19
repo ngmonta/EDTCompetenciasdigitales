@@ -1,0 +1,775 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
+<title>OVA TIC Productividad · Participante</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap">
+<style>
+/* Layout: panel lateral institucional fijo (azul SENA) + área de contenido conmutables claro/oscuro */
+:root{
+  --verde:#39A900; --verde-2:#007832; --azul:#00304D;
+  --bg:#F4F7F2; --surface:#FFFFFF; --surface-2:#EEF3EA; --line:#D7E0D2;
+  --fg:#16241C; --muted:#56655C; --accent:#2F8F00; --accent-ink:#FFFFFF; --accent-soft:#E3F3D6;
+  --link:#006B2D; --warn:#9A5B00; --warn-soft:#FFF1D6; --bad:#B42318; --bad-soft:#FDE7E4; --ok:#1E7A00; --ok-soft:#E1F5D3;
+  --code:#0E2230; --code-fg:#D8F5C4;
+  --f-display:"Work Sans", "Segoe UI", system-ui, sans-serif;
+  --f-body:Calibri, "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:Consolas, "Cascadia Mono", ui-monospace, monospace;
+  --side-w:272px; --radius:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .main:not(.force-light){
+  --bg:#0A1A22; --surface:#10252F; --surface-2:#14303C; --line:#22434F;
+  --fg:#E4EEE7; --muted:#9FB3A8; --accent:#6BD12A; --accent-ink:#06210F; --accent-soft:#163A22;
+  --link:#86E04F; --warn:#F2B44B; --warn-soft:#3A2C12; --bad:#FF8A7A; --bad-soft:#3D1C19; --ok:#86E04F; --ok-soft:#173A1E;
+  --code:#06141B; color-scheme:dark } }
+:root[data-theme="dark"] .main:not(.force-light), .main.force-dark{
+  --bg:#0A1A22; --surface:#10252F; --surface-2:#14303C; --line:#22434F;
+  --fg:#E4EEE7; --muted:#9FB3A8; --accent:#6BD12A; --accent-ink:#06210F; --accent-soft:#163A22;
+  --link:#86E04F; --warn:#F2B44B; --warn-soft:#3A2C12; --bad:#FF8A7A; --bad-soft:#3D1C19; --ok:#86E04F; --ok-soft:#173A1E;
+  --code:#06141B; color-scheme:dark }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--azul);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--azul)}
+a{color:var(--link);text-underline-offset:2px}
+:focus-visible{outline:3px solid var(--verde);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.2;text-wrap:balance;margin:0}
+.app{display:grid;grid-template-columns:var(--side-w) minmax(0,1fr);min-height:100%}
+/* ---------- sidebar ---------- */
+.side{background:var(--azul);color:#E8F1EC;position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow-y:auto;display:flex;flex-direction:column;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:16px;padding-block:20px 16px;gap:18px;border-right:4px solid var(--verde)}
+.brand{display:flex;gap:12px;align-items:center}
+.brand img{width:52px;height:52px;border-radius:6px;flex:none}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:15px;display:block;letter-spacing:.2px}
+.brand span{font-size:12.5px;color:#A9C4B6;display:block;line-height:1.3}
+.role{display:inline-flex;align-self:flex-start;font-family:var(--f-display);font-weight:700;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;
+  background:var(--verde);color:#fff;padding:4px 10px;border-radius:99px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav .grp{font-family:var(--f-display);font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#7FA394;margin:12px 8px 4px}
+.nav button{all:unset;cursor:pointer;display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:8px;padding:8px 8px;border-radius:8px;
+  font-family:var(--f-display);font-size:14px;font-weight:500;color:#DCE8E1}
+.nav button:hover{background:#0B3E5E}
+.nav button[aria-current="true"]{background:var(--verde);color:#fff;font-weight:700}
+.nav button:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+.nav .code{font-size:12px;font-weight:700;color:#9CD47A;text-align:center;font-variant-numeric:tabular-nums}
+.nav button[aria-current="true"] .code{color:#fff}
+.nav .tick{width:16px;height:16px;border-radius:50%;border:2px solid #4D7488}
+.nav .tick.done{background:#9CD47A;border-color:#9CD47A;box-shadow:inset 0 0 0 3px var(--azul)}
+.nav button[aria-current="true"] .tick{border-color:#fff}
+.side-foot{margin-top:auto;font-size:12px;color:#86A497;line-height:1.4}
+/* ---------- main ---------- */
+.main{background:var(--bg);color:var(--fg);min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top .menu-btn{display:none}
+.crumb{min-width:0;flex:1}
+.crumb small{display:block;font-size:12px;color:var(--muted);font-family:var(--f-display);letter-spacing:.6px;text-transform:uppercase}
+.crumb strong{font-family:var(--f-display);font-size:16px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{width:140px;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:600;font-size:14px;
+  padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:3px solid var(--verde);outline-offset:2px}
+.btn svg{width:18px;height:18px}
+.content{padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+section.page{display:flex;flex-direction:column;gap:24px}
+section.page[hidden]{display:none!important}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;padding-bottom:20px;border-bottom:3px solid var(--accent)}
+.eyebrow{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(28px,4vw,40px);font-weight:800;margin-top:6px}
+.hero p{margin:10px 0 0;max-width:68ch;color:var(--muted);font-size:17px}
+.time{font-family:var(--f-display);font-weight:700;font-size:13px;color:var(--fg);background:var(--surface-2);border:1px solid var(--line);padding:6px 12px;border-radius:99px;white-space:nowrap;font-variant-numeric:tabular-nums}
+h2{font-size:22px;font-weight:700}
+h3{font-size:18px;font-weight:700}
+h4{font-size:15.5px;font-weight:700}
+p{margin:0}
+.prose{display:flex;flex-direction:column;gap:12px;max-width:72ch}
+.prose ul,.prose ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.flat{background:var(--surface-2);border-color:transparent}
+.card .k{font-family:var(--f-display);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.stat{font-family:var(--f-display);font-weight:800;font-size:30px;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1}
+.note{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:14px 16px;border-radius:var(--radius);background:var(--accent-soft);border:1px solid var(--line)}
+.note.warn{background:var(--warn-soft)} .note.bad{background:var(--bad-soft)}
+.note b.tag{font-family:var(--f-display);font-size:11.5px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--accent);color:var(--accent-ink);white-space:nowrap}
+.note.warn b.tag{background:var(--warn);color:var(--surface)} .note.bad b.tag{background:var(--bad);color:var(--surface)}
+.pill{display:inline-block;font-family:var(--f-display);font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);color:var(--fg);white-space:nowrap}
+.pill.alta{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.media{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.baja{background:var(--surface-2);color:var(--muted)}
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;padding:12px 0;border-top:1px dashed var(--line)}
+.steps li:first-child{border-top:0}
+.steps li::before{content:counter(s);width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-weight:800;display:grid;place-items:center;font-size:14px}
+.steps b{font-family:var(--f-display)}
+.kbd{font-family:var(--f-mono);font-size:13.5px;background:var(--surface-2);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;white-space:nowrap}
+.path{font-family:var(--f-display);font-weight:600;font-size:14px;color:var(--fg);background:var(--surface-2);border-radius:6px;padding:1px 7px}
+/* tabs */
+.tabs{display:flex;flex-direction:column;gap:16px}
+.tablist{display:flex;gap:4px;flex-wrap:wrap;border-bottom:2px solid var(--line)}
+.tablist button{all:unset;cursor:pointer;font-family:var(--f-display);font-weight:600;font-size:14.5px;padding:10px 14px;margin-bottom:-2px;border-bottom:3px solid transparent;color:var(--muted)}
+.tablist button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.tablist button:focus-visible{outline:2px solid var(--verde)}
+/* accordion */
+details.acc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+details.acc>summary{cursor:pointer;list-style:none;padding:14px 16px;font-family:var(--f-display);font-weight:700;display:flex;justify-content:space-between;gap:12px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary::after{content:"+";font-size:20px;line-height:1;color:var(--accent)}
+details.acc[open]>summary::after{content:"–"}
+details.acc>.body{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{font-family:var(--f-display);font-size:12.5px;letter-spacing:.6px;text-transform:uppercase;text-align:left;background:var(--azul);color:#fff;padding:10px 12px;position:sticky;top:0}
+td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even) td{background:var(--surface-2)}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+/* forms */
+label.f{display:flex;flex-direction:column;gap:5px;font-family:var(--f-display);font-size:13px;font-weight:600;color:var(--muted);min-width:0}
+input,select,textarea{font:inherit;font-family:var(--f-body);font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.out{font-family:var(--f-mono);font-size:15px;background:var(--code);color:var(--code-fg);padding:12px 14px;border-radius:8px;overflow-x:auto;word-break:break-all}
+pre.code{margin:0;font-family:var(--f-mono);font-size:13.5px;line-height:1.5;background:var(--code);color:var(--code-fg);padding:14px 16px;border-radius:8px;overflow-x:auto}
+.codebox{position:relative}
+.codebox .btn{position:absolute;top:8px;right:8px;padding:4px 10px;font-size:12px}
+/* quiz */
+.quiz{display:flex;flex-direction:column;gap:14px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px}
+.q h4{font-size:15.5px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opts button{all:unset;cursor:pointer;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);font-size:15px}
+.opts button:hover{border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--verde)}
+.opts button.right{background:var(--ok-soft);border-color:var(--ok);font-weight:700}
+.opts button.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opts button[disabled]{cursor:default}
+.fb{font-size:14.5px;color:var(--muted)}
+.score{font-family:var(--f-display);font-weight:800;font-size:18px}
+/* mail mock */
+.mail{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.mail .mh{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px;font-size:14px}
+.mail .mb{padding:16px;display:flex;flex-direction:column;gap:10px;font-size:15px}
+.hot{all:unset;cursor:pointer;border-bottom:2px dotted var(--warn);padding:0 2px}
+.hot.found{background:var(--bad-soft);border-bottom:2px solid var(--bad);color:var(--bad);font-weight:700}
+.hot:focus-visible{outline:2px solid var(--verde)}
+.inbox{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.inbox .row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto;gap:12px;padding:10px 14px;border-top:1px solid var(--line);font-size:14px;align-items:center}
+.inbox .row:first-child{border-top:0}
+.inbox .row .from{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inbox .row .subj{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.folder{font-family:var(--f-display);font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--surface-2);white-space:nowrap}
+.folder.moved{background:var(--accent);color:var(--accent-ink)}
+/* tree */
+.tree{font-family:var(--f-mono);font-size:13.5px;line-height:1.7;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;white-space:pre}
+.tree .d{color:var(--accent);font-weight:700}
+/* meter */
+.meter{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.meter i{display:block;height:100%;width:0;transition:width .25s,background .25s}
+.checks{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;font-size:14.5px}
+.checks li::before{content:"○ ";color:var(--muted)}
+.checks li.ok::before{content:"● ";color:var(--ok)}
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.vid{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;text-decoration:none;color:var(--fg);min-width:0}
+.vid:hover{border-color:var(--accent)}
+.thumb{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--azul);overflow:hidden}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;z-index:1;transition:opacity .3s}
+.thumb.loaded img{opacity:1}
+.thumb .fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:12px;color:#fff;
+  background:linear-gradient(135deg,#00304D 0%,#00304D 55%,#007832 100%)}
+.thumb .fallback b{font-family:var(--f-display);font-size:14px;line-height:1.25}
+.thumb .fallback small{font-size:11.5px;color:#BFD6CB}
+.thumb .play{z-index:2;position:absolute;top:50%;left:50%;width:54px;height:38px;margin:-19px 0 0 -27px;border-radius:10px;background:#39A900;display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.thumb .play::after{content:"";border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.thumb .sec{z-index:2;position:absolute;top:8px;left:8px;font-family:var(--f-display);font-weight:700;font-size:11.5px;background:rgba(0,48,77,.88);color:#fff;padding:2px 8px;border-radius:6px}
+.vid .meta{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.vid .meta b{font-family:var(--f-display);font-size:14.5px;line-height:1.3}
+.vid .meta small{color:var(--muted);font-size:13px}
+.links{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.links a{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:12px 16px;border-top:1px solid var(--line);text-decoration:none;color:var(--fg)}
+.links a:first-child{border-top:0}
+.links a:hover b{color:var(--link);text-decoration:underline}
+.links a small{display:block;color:var(--muted);font-size:13px;word-break:break-all}
+.links .src{font-family:var(--f-display);font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--accent);padding-top:3px;min-width:84px}
+.biblio{display:flex;flex-direction:column;gap:12px;padding-left:0;list-style:none;margin:0}
+.biblio li{padding-left:28px;text-indent:-28px;max-width:90ch}
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gloss .term{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.gloss .term b{font-family:var(--f-display);font-size:15.5px;color:var(--accent);display:block;margin-bottom:4px}
+.foot-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--line)}
+.flip{perspective:900px;min-height:170px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;min-height:170px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .fa,.flip .fb2{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line)}
+.flip .fa{background:var(--surface)}
+.flip .fb2{background:var(--accent-soft);transform:rotateY(180deg)}
+.flip small{font-family:var(--f-display);font-weight:700;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.timeline{display:flex;flex-direction:column;border-left:3px solid var(--line);margin-left:8px}
+.timeline .ti{position:relative;padding:10px 0 12px 22px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px}
+.timeline .ti::before{content:"";position:absolute;left:-9px;top:15px;width:15px;height:15px;border-radius:50%;background:var(--surface);border:3px solid var(--line)}
+.timeline .ti.now::before{background:var(--accent);border-color:var(--accent)}
+.timeline .ti.past{opacity:.6}
+.timeline .h{font-family:var(--f-display);font-weight:800;font-variant-numeric:tabular-nums}
+.chk{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.chk label{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer;font-size:15px}
+.chk label:first-child{border-top:0}
+.chk input{width:18px;height:18px;accent-color:var(--verde);margin-top:3px}
+.chk input:checked+span{text-decoration:line-through;color:var(--muted)}
+.mtx-out{font-variant-numeric:tabular-nums}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.scrim{display:none}
+@media (max-width:980px){
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;inset:0 auto 0 0;width:min(86vw,300px);z-index:50;transform:translateX(-105%);transition:transform .25s;height:100%;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none}
+  .scrim.open{display:block;position:fixed;inset:0;background:rgba(0,20,30,.5);z-index:40}
+  .top .menu-btn{display:inline-flex}
+  #themeBtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .time{justify-self:start}
+  .bar{width:70px}
+  .g2,.g3,.g4,.gloss{grid-template-columns:minmax(0,1fr)}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .inbox .row{grid-template-columns:minmax(0,1fr) auto}
+  .inbox .row .subj{grid-column:1/-1;grid-row:2}
+  .prog .lbl{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<div class="app" id="app">
+<aside class="side" aria-label="Navegación del OVA">
+ <div class="brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIsAAACKCAYAAACaRblaAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACNdSURBVHhe7Z1ndFvXma6fc9BJECTYCTaRFKlC9d4sS5YsS4odd2lSnDgTO5k1uZPruclk7qxMZjwtmUzJncn1XGc5iePEHsexLcuyLVvVVrV6F9Uo9k6wgATRgXPuD4m0cFAIWSTFgkcLS2ud94AkgBd7f3vvb39bkGVZXvamSJw4gxF3SZyYiZslTszEzRInZuJmiRMzcbPEiZm4WeLETNwscWImbpY4MRM3S5yYiZslTszEzRInZuJmiRMzcbPEiRkhvuocilrQUmJcgk7Uk6I30+Ox0efrpdNbj83XpLx9whA3y02S1OnkJ04nN6mQ9IRMyoz3oFPpMRvSsHm6sXtttHuqaHJcpbWviereS/RMMONMeLNohESyEyYxO+1eFmVuZEbGXLKTcpS3ARCQA/S4bVztrODTlp2c69zF9d5TytvGLRPaLGrBQJFxARsLv86awodIT8xQ3hIRh7ePo037+e3VH9HkqMUdsCMTUN42rpiYLgFEQUOuYRabS/+MhyZvvi2jACRqjdxb+AB/Pf91ypMfQKcyKm8Zd0xYs6RppvFM+Q9ZXbiRBG2iUo4JtaimLGMq35zxF2Qn5CMgKG8ZV0xYszxS9HVmZMxHrzEopdumPHMWXy75EYXGmUppXDEBzSKwOPWPuCd/PekJGUPSGqhFNcvz72OyaQl6MVUpjxsmnFkEYJllHZmJOahEtVL+3CTrzSzMvI+8xBKlNG6YcGZBECjPnINB/fnilEiIgsiM9HlYjAVKadwwocyiFnSUGVeQnWhBrRq6VqWfnKRcTLoU5eVxw8Qyi6hlcuJStCrDkMQqSvQaA+n6ApLUtzcMHytMKLOIiCTrzYjC8L3sLH0p6boi5eVxwfC9a6MQlagiN6kAUVAppSFDK+jRCFrl5XHBhDKLX/JT31ODJA/ftLxPduOXvcrL44IJZRYZmT5vL5IsKaUh46r9ANWO48rL44IJZRaf5OWC7Qh+2aeUhoQelw2Xz6W8PG6YUGaRZC+t3tNUd13D4/co5Tumta+FXk+P8vK4YUKZRUbGJzk43LAXu7dXKd8xZ6yf0mCvVl4eN0wos3DTMAfa3qC6+xJuv1spf27qbLWc6dhLu7tGKY0bJpxZAJpcFexr3E5rX9OQBLsObx8f171PZc8pPJJdKY8bJqRZAA63vs/Bpo9odTR/bsPIsozL6+STug/5uOlNOtzjOyd3wprF6rnK9prfsK/+A1r6mvBLtzdCkmSJHo+Nw017efXKv1PrOIVfdipvG1dM6BxcgPyEuazOfZxV+RvJM01Gr9ajjpK6IMkSHr+bTlc7Z9oP88sLP6XLfxVpmIbjo4kJb5Z+Zprv5dGiP6M0dRpZxlw0YvCUvQxIsp9eTw/Xuy7xSf37fNT8QtA94524WQa4sQ5t1GSwOHUzS3PuC1LdARf19irOdO6m0n7o5rhKDrpnvBM3iwIBEa2YgE6lC7ouI+OX/PgkD3556Cf0xgJxs8SJmbhL4sTMXWlZRNQkqfOxGIoRBZHMhGz06s+2ZPgkH3ZvL3ZvD+6AgzrnSQKK0YZWSMKsLSRdF36r6e1g9VTR5+8hQ1eCUZ2slAdwBxw3N8c3KqUBMnQlpGrzUQsapUSzq4ZefwOBGLqxXMMsTOr0sLk3kizR7KrG7m9Awq+Uh40RM4tGSCTLUExZykwyEixkGiaTpS9AFETSDBnoVPqBe/2Sjz5fHw6fHY/kpM5xGqujlavdF2lyXsEd6CFdO5nFGY+wPHdt0O/5POxtepXqniustnyVySnTlPIAzkAfFZ1HOdjyDh2e8GtAqy1PsTTrIYwak1Lig6o3OGt7D2egSykFYTGU83Dxt8lNKAlrloDs55rtAltr/4U+X7dSHjZGxCxGdTpTkpeyLOdB5mUux2LMI0kf+mZGwif5aLO3cLr9CIeat3Gxez/J6mweK36OJ6c/pbz9tvlVxfOcbT3K01OfZ0HuEqU8gCRLVHZdZmvly+xsfAWPFPpBfWPq3/FE6XcwG0L3D/382E/Y0fwCNl+LUgriKyX/wKZpz5CRkKWUAJBliU5nB/9y6juc7tiN0z/0i6LhGF6X3KQseSFPlv4ZT079BlPSp4cYxeP30O3qwupoo8vVgcPbFzQFrxE15CUX8MXSzWwq/S5TkhcGPX+kEAWRYnMZG4o3Myf1frRi7IaPBZWgpjhpDuuLHsOsT1PKAwiCSHpiJo8VfZeCxFmoheCR23AxImaZk7WIxZYVYWdGfQEflzvPsLfuXbZff4Od1W9zouUAbY4WZDl0HmNG5myKzaXKyyG0uxq53nM+pke3u0359IhoRA3T0ubwx+U/YIpp5c1ta3eOKKhI1eXyzLR/Js9UFPReSbJEQApNBZ1nWczCjAcx63KV0rAwImbRqfXo1J/FJLdidbTzuyv/yEuXv89rVX/LS1f+gv84++e8fuklrK4WejwdQQ9PwIHM4At/r1T8mGd2Lx308Y1di3i36pfKp0dFq9IyJX0G35n9Nxg1KQh3+DYKCBjV6SzP+Ar3FK4Jea963N10ONpCFjy1Ki0bi55kcnI5qjAB9VAzIjHLszP+gaem/mXYlkVGptdjo7GnjjpbDfW91VTaKqi0n8QWuBb2exuQA+QbZkWNWd6/9hZnWgbPhW1wXqPOeYqylBkRYxZfwIcoiKjE4GDTG/BwqvkYf3/qSXq8VvicMYtOTGaGeR1/v+y/MBvSgzS/5Gdr5atUd1/l6+XfJTvJEqTLyHx47R3erPoZlfYjQdpQo3r++eef/3XF3ymvDyk5+jIKjeVh30ABAZ1Kh9mQTmFKETOy5rI8/z42Fm9m46SnWZ71KKVJS/H4NXR7WnBLdmRkUjQ5TDMvoTxjtvJHApBvKmKBZRmL8+6J+hBkFY1919Cr9cxJX4XFlKf8UVS0n6PT2YFOrUd/y7deFFVkGnPI1JZxzXaSPn83c9NXU2aeh06tC9mfdKzpENftx3FLfUHXC43T+GrpD5iSXo4gBH89LlnPs6f+Dc527sMvqZmVsSDItAIC2cZcrE4rNT3X8MnBP3soGd4m5SaHW7fyduUL1HRVKSW4GbBpVBoMmgSStCZS9elkJ+YxKXkKs7OW8EDJY3xv4T/xN4t+x0MFz5GpGzxmSdAkkKI3D/pIUBtRCaEt3q14A1521m7h47oPcHg++zD6jb4ify1fyP9Tsg03NsWrBBWqMEPecGTqSlie+SQLcpcGmcsn+ehx29jf9CYnOz6kw1PN6Y6PqGg/F/R8gCStiTX5j7A4a41SGlJGxCw2bzsHWt7ixYs/5NWLL3K88TANtno8fk/UxTiVoEKvvlExclLyZBbmrGLTlG+zKm8zZu0kZFnCL0WelArIgYHAUJZlfLfkrPglf0gMIBP55zU6LvJJ4xZOtn4ack+SzsTGks1szP8WuQnTEAQhpIUIh15MZUbavawtehSjNilIUwkqjjcf5LT1EHZfJ37ZQ739Crvrt+ILBE9QCoJAsXkKy3MeoixpaZA2lIxIzNKPVkwkTVdITkI+KfpUTLpkcgzTMWuzyUqwYNanYdInk6I3o1Us5PUjyRJHmw5wpHE/+UlFPD79K2G/xbvqf8+FjsPIN4e8yDIBWRpowiUpgCCI1PVUc912lmLTTL4+9W+ZZ1kU8vNONh3llSvPU9lzhjlp9/NwyTdZlrc66B6AWls1siyRkZgV8uETJmaZnrKSJyc/x32TNoakRABc6bxITe95HP4bk3iioCVdV8jy3LUh8RNAa18zH1T9N29c/xnOQOwjvFgZdrNk6kqYkb6YPFNwKQoZ8PrdXGyvxBdwkGowk6wzk6QzYUksZrp5GbOy5gU9p5+GnjqONR5CFqSIAe5PTjzD+zUvKy9HZF7auogBbr9ZTnfuwqjOYHHmQ3xt2vcpTZsadF9ADuCX/KgEEbUYOjq51SzZ+lIemvQsD5Z8jYzETOWtnwtJlrjQforfVvwbRzveUsp3zLAHuEWJC3ls8nd4vOxZFmStGXgszFrD7PQVWJ3ttDgqsbobaXc10WivxuaykWUoCvkw+nH7XbT2NRGQ/RED3Nqea3j9frIMRYM+9GIy6boCytMWhw1wm+2NnO3YR4urCq/kpNdrxeuTmGSaRpLus4k5URBRi+qwU/TcEuBKiKzM2cT6SV8iP3mS8rbPjSAIGNSJqAUt17rO4xhkWeF2GfaWJc8wi6em/YD1RU+gUYU2tVZHOyebj9Dl7hi4lmbIYHbmAnJMwcNEbn57z7ae4FjjQTISsyO2LDXd17E62pWXw3LeepxudxerCzYwz7I4ZBRza8vST6ouh0cn/TlPTPkmSbrkkOeEo79lyTZM5Rvlf8my3DVB3Yksy9i9vXS7OmPaj51rKgjbXbfYG3nz8stsrf8ZXsl+sx2/c4bdLABfKHyWTaV/TmFyUdgXFwuyLOMNeGlzNrHl2stcsp5jXeGmiGa5HQ7U7eaS9SLzshczN2chGlVwFxLOLACJmmT+R/n/Zc2kL5KoTRq05svPj/2EQ+2vs7nsOdYWPk6yPmUgwBcQ8ATcfFKzgyPNe/H4B98G+8yc71OYUoJG0eX5JT81Pdf4ydHvcdW+Z8jq8w57NwTQ0tdGj8tOhsGCSZ+MLPe/RTf+v5GgqPwnIckyASmAX/Jh99m52nmR1y79F/ua/4BahKkpi5iWMSvkmbf7r9ZWjdXRhsWUT56pIERvsjdwtmMfra7glWaf5OFw61YWpm8gVZ+BShSjvB6ZY02HKEyYzcqC9WQZc5C58fp8kg8ZGauzjR8ff46LvdupdZ6kznkm6iOBLCYlTyFBkxD0ewVBQK8yYFKnc7T9/SHb2z0iLQsIqAQVZm0+001rmZW2mHxTERZTXsTmW5IkHF4HzX311NmqON7xMQ2uEzgDXUhygBz9NO7PfZoHih9VPvW2OdFyiKruq5SnzWNm1lylzIW2M2yr+zmXew4pJQAsukV8e+aPKEouDTtK6efVihdZYbmffNOkkDJldk8ve2reY2vjj0NydyKhEjT8YM7LTEtdGPp7ZXD6Hbxw5u+5bN+JV3IE65+DETLLDURBjVY0oBX1qEUNalFF5IU4GVnuz3v14Qk48cuegXUhlaAlQZ00JIUEPQE3PsmLVtSF7Sa9AQ8Ofw8+Kfx2V5Wgw6Q13+wOIr0e6PP2oFcn3Fz2CL5PliWcfgcOf2jaQzRSdJloRV3Iz2NgKaUbr+RAHoK4ZUTNEmdsE3dJnJgZkpYlUZ3GZNNCZqaHn0QbK3gCbup7KzlmfV8pDZCmK2By0vwxX8LU5umkqvcCXd7Yqz4MiVmydKWsy3uWzdOeVkpjikZ7He9U/ppdzb9QSgNMSpzH+rxvsciyXCmNKa7bLrOt6mUqencopYgMiVly9FN5uPC7fG32nyilMYPL5+TTpj28cO6vaPNcVsoDpGkLWJv7FE/P/F8k681Kecxwof0ML5//V451vaGUInJnLhknyLJMQ28tR5p3RzUKQKe3npOdH3Km9XjIqvV4J24WwOV3cqHjOIdatyulsLQ6G9jdsGVc148LR9wsyFR2XeZU2156/bVKMSwOfweXbHs52ngQeQK1LhPeLC6fiyNt73Kw7U2lFJVuj5UtVb+mx2ObMN3RhDfL0caDnGk9FvMUez8+yUmD8zi7rn+AZwgLGY4UGlGDQZ2gvByVCW2WLlcnx63buW4/qZQGRUaiz9/JH2r+idqea/gCd68Eu1/y0+3qosXeFPPD7rEH7S+PhSEZOhtUJvISp1AUw+av4UAvJrIsYxMLcpdg0CQMmirQz87qbfy+8qdc6zmqlAZYlfMlrtiOhaw438rXSn7Kk9OeJi0htqNj/JKfqq5r1Nqu4/I7keQAvf4Oap0nlLfGhCRLeP3e26qL5/a7aXXU0+y6qpQiMiRmudtoRD3Tk1eyqfQ5FuXeQ6Jm8MXF1r4WXjz3Iz5te3cgx1XJ3NT1PDXtBxxr2cMnza/T7g4fABckzOF78/6TWZkLQzaIheNqxyU+qnmN852H8QY8SLKEM9BDu6dSeeuoYmy75CY+yc357j2cbD6M0zf4UnxACrC/4SMudX8a1igCIomqbL5Y9C1mZMxnXeEfMS1lORoh/NnN9c6zHGz8iHZnq1IKywXrKY617+RK70GqHcepdZ4c9UZhvJilH1EQY+qAWvqa+bjxbdpdDUoJbrZUs80PsMCynESNkdK0qczPXIsloUx56wAHW97jcueZmMzqDjjxSXcvxvm8jAuzCAjoRBMzM+cPGuH7JB8f122lyXkenxz6wYqCmlRdLk+U/jFJ2mQEQUAtqlmcs4r5maswqMJXTmjzXOJw0w7qeqoGzR2Zap5FXuJkVCNU/WCoGBdmUQs6SowrmGdZQkKUeCUgBWixN/BG9T/R5WlWygAkqFKYm/ogS/LvQXtLgnl+ciGLs9czOSl0q0g/x9p3c7HzJC5f9OLJs3MWMCdjNWbN2DqpdRyYRSBJm8qfzPwhKTpz1J2ATl8fb196DXeEZGgBgUyDhc1lzyolAGamz2eJZTVihO2uvf5ajjbt4JL1fNTWRSNqWJS9mtnpS+64AsNIMnb+0ggY1WksSnuS2Tnzw27s6scT8HC9+xLvNf0UTyC0+wFI103insynKEkPPwWQrE9hUdZ6VmVF3lFwovM9jrS9i90dvRrTlPTpLMxeT7Z+hlIatYx5s6QZsnik9Kmw5Txupctl5d3K1/FKrojf+jzTJB4sfTJk+2o/giBQnFLKvQVfJEU9WSkD4Je9XLCe5mRL9PIXKkHFnIylLM+5XymNWsa0WdJ1hazI3ERZWuSigQB9XjsXrSc41rFFKQ1QZJzNfZavkm0M3dh2K3qNganm2azNe1IpDVBtP8XRtvdp64s+lM42WliQtYYpSSuV0qhkTJsl1ziJNYWPRp22lmSJut7rbK95g15f+A9PL5qZZl7OUsv9qAZpoQQEMhNzWFXwBYoTw1cscAZsVHQd5UjTx0opCK1Ky5TUWSy3bFBKo5Ixa5bcxDKWZT80aH05m7ubi9YTXOj6RCkNUJQ0k4VZ95NljK2mrk6tozhlKusKvhxxaaHFVc3Rtg9p6gk/l9NPmiGD+Vn3UJ6ySimNOsakWTSCkXLzPazMfSTsPp9+ApKfa91nONC8BZf02V7qW0nWWFiYtYa5mUsixirhMGpNrMxfR3nKvWjE0L/BHeihsuck+xo+Cls8sB+1SkNh8hTW5X8Vg5gRdv/PaGFMmiUvcSqz0+8lV1HGQ4nV2c6Jto8507lbKQ0w3byMBVlryTSGrzkbCbWoxpJUwKaS75OiyUMktPvqcDexv3krTb31EYNqgGRdCvNzllOesjpiSzUaGHNm0atMLM5ey9Kc+6KOgHwBH+fbj3Gm7bBSGsCkyWBx9mqmpJYrpZjQqLSsnLSWGeY16FWhxXt8soNG51l21LyJX1Gt6VZUooqsxDweKv4KRnX6qJ17GZ1/VRRKk5YyL2NNSNVGJW2OFk5YP+JK70GlNMCS9MeYnX5vUI2V20FAQKvS8vjkb5KTWBR2ss7mbeOdun+jyV5PIEIJMoAEdQLzLcuYbX4QrRg5YL+bjCmzCIgstaxmRkb0zWwyMqdbjnKl46JSGkAUVCwvWEWR+UbRwDthnmUhizOewKwNLQTEzeJDvz33In2+yJUkBUHApE1mU9mzGLXJozJ2GVNmWZq+mXkZ95E8yG7A6q5KDre9Ra3zlFIa4Mslf0N56rKg9Z874QvFT5CfFL6Kk1dy8Yn1F1R1X456Ur1aVDMnZz6rMp8hWXN7MdRIMKbMck/BGorMZVHXf3wBH/saPqLSdjFCXq1AUcJyluU+QHpC1pB9g/NMhay1PE2xMVyrJ+OVXLx++RdYXdEPeVCLah4oepRUfWxZdyPJmDHLhrxvMzN9GYma8AlI/VzpuMiZjp10euuVEty0xvrCL1FgKg6p8KTE5urmfOtpKtrPY3NHL4WhUWlYnnc/M9JWYhCDq2T3c67rI862HqXHHX2/0eS0MlbnfJUsfbFSuquMAbMImFSFrM5/jJzEG+cTRcLlc7K3/j1q7RX4pNCVZY2oZ1byBlbk349JlxJxmCrJElZHO7+48Ff88tIPeanif7O79i3a+qK3ChmJWSzJfoCylNCCQACOQAe76t+m3n496vYRvdrAvfkPMTl50ZCfPHInRH7nRwmiILI6dxOlqeVRp/VlZC62n+V0xy56fDfq6CsxqBJ5uPhZLEkFUYfdnoCbvbXb2dv4Jqc6dnLCuoP3a1/iVPsnUTPcREFkVsYCFmXdT5o2fPxS0X2Qc+1H6HKFnyTspzCliEWZ67Ak3HkAPlSMarOoBA0WQzkPlnwJsz49YqwiyRI9bhsf1LxCi+syATl0H49BlUS5eSXL8lehDVOguB9fwEudrYrtdS/jCXyWxHS99zRHW3dSa4uc5Q+QmpDG/MzVzEgNX2XBJVk52PwOV7vORB1Ka1U6FuaspDx1KQmq0bEBf1SbRa8yssbyNUrMU6KOWnwBL2dbTnDE+jYOv00pIwoasgylPDzpTzHpb6RKhkNGptvdxZ7abVT1HcYvB7ciFR0nONq8e9BNZSXmKSyxrCFTX6SUALjQvY/T1n1YndFLr+aZCpiXsYZ84+jIeRm1ZlELWiwJJTw0eVPU9R9JDtDpsvJ+9Wt4AuE/RKM6jXLzKpbk36OUgvD6PVT3XOGj+teUEgAt7iuc7thFVfc1pRREotbInPR7WZXzZdRC+K7zTNsRzrcfi7rXRy2qmZu5mHkZK0hQRZ8uGAlGrVlSdRY25P5p1IqWAHavnePNBzjS+VrYAoGioKbAWMYDBY9HbZ1kWaa1r5H99R/Q7Y9shivd59hR+xbeQXYg5iUXsCJ/PTn68BXAr/Qe4Fj7h7QOEjRnJ1lYnLWB6cmhZwWMNJE/hbtMWkImG8seUV4OIiAHaOlrZFvVq0ppgBRNPnPS17MgN3zuST8un5PzHYfZVv8zpRREj6+Ri117ON9yWikFoRJUFJum8EjR0xHnci52nOLTQXJeAMpSy5mfsyTi6G2kGJVmmWyaz5dLfkSSNvIZywBdzg6ONX1MlWO/UhpgZvp8vlC0SXk5hOvdV9hfH3l1+lbq+6rYWv0KnkDk2ViAFEMqS/PvY575sbAfdLOrglPW7VR1RW7JAEz6ZBZmrmN19t0twzbqzKIX0yg2LWJ+zrKIgSg3g9pKWwW7G7bgj3CodkHCXOanbcBiyldKQbQ7Wjnetouz3R8qpbC4At1c6z3Ix9U7oqYe3DjgPIdHS7+OEKYrDcg+KrpOsr3mjZAzhG5FFEQKkotZkbcxYu7vSBD6Cu4yZSmzWZP3KCZd9Fal2d7EiZZ9NDrPKqUBZmcuYknufSG17W8lIAWo6DjD8dZPcAZCR1LhkAlgddeytfb/0O3sHHSCbXbmQtblfBu9KnT2ucfXwqXuA1zpqFBKQSRoEpmaOpuVOQ8rpRFjVJklTVvIvIw1zMpcEDWodXgdnOs4yKHWt/HKdqUMwLTk5SzKWke2Mfoxts32Rk6376PafkYpRcUruaixn2NvzUdRh9KiIJKiT+Pxsm+RqZsasgsxIHuptZ9jW82LuPyRN6eJgkhWooWV+RvI0c8M260NN5E/kbvAVPMCFmbdR7I++jCxvqeaU20HaHJeUUoAGMQ0lmQ/yIy0JVFnar0BL0daP+Sk9UOcgU6lPCjugIsP6l6ixlYZdXSkFtVMSZ/OypzHMWlCD/fu9XVyumMPZ5qPRy07plcbKE0tZ2XO4xHPNBpORo1ZMnVFzM9cRekgWWsOr4Nz1sNUdEbelzPdvIK5WfeQkRh9mb/WVsWx1h3U9UXvAiIRkL1U9h1mf8OH2NxdUeMXtahmfdHjTDbND5tV1+vp5P2a32BzRy47JggCyToz9096mIKEOaiFyFMBw8GoMcu8jHXMzViFURvar9/K9a7LnLTuodkdvgSpSZPN2oJHKU2ZHrUrc/tdHGzcTk1P+NbpdvikaQvVtiu4o3RHAMWpk7kn5wky9KG5w85ALyc73+Nc28moVaS0Ki0lqVNZl/tNDOpQ0w0nkd/NESRVl8PCnOUUmaNH+k6fg8MtO7ncFTmpaX7ag8zMWDJoV3at8xJH2rfS6r7zuiiNrtPsb9xGW18Dshy5dQG4t2AdZSlzwga7XsnNB1X/TafLGvUkM42oYW3xF7AklITdWTBcjAqzbMj7FrPSVkad1r+RKnmMsx276fbVKWUA9KpE1hc9Rk5i9KGyL+DlncpXqLeHP2f687Ct7j8533k4apDKzTSGdXnfYIppKQLBcYdP8vBp56scbz6A3Rs+cOdmsJtrymND7ndI1UYP4IeSUWEWrUof00Hcexu3UdUTvvsREFmf/T+ZmjoXgyb8eswNZE40HqPCtos+f/SFvNvlcP2+QSfYABbnrWBWxmoSVeE3tW2rfo2WvgYCUVoXbra0g90zlIwKs7xZ/c9sr/ld1OSiT6p3cs12CLcUOmoRBQ1Z2rk8PPWPSDGkKuUBZGTcfje/r3yBDnf4rax3wvHOLZzu2IPNHX2+RqPSsCJnPfMzwi9sVvXt51jzx3Q6w+e8eAMe3qp4jW0N/0qXt1EpDxujwiwOfw/v1r7Atqpf0WoPLbLT7ezk/YYXaHJeGTjJ7FYSVEYeKf4meUmFUYfKbr+bHZXvUWU/PCTHwCnxSE6Oteynwhp93UhAoDRtKktyNpCfEJpV55fd7GnYynVbRVCwK8kSrX3NvHDqx7xe9Twdnoaosc1QMyrMAtDpbmZH/W949fK/cb7tswkySZbYXbOdevtlvGFSJbWikeKkpdw3aWPUsqYByU+rvZ4/VP8Eu789rOmGgsreoxxv20lTb/Q9znq1ntkZS1mQda9SAqDBcYYTLftotjfBzfehobeWP1x5ib3Nr9DuriEgR06eGg5GjVkAWl217G9+k/eqfsmFtrMEpABNPQ3savwNdl9oVUkAsy6D9QVfJceYG3WiqtfTw4H63dQ5zg/rm+zwd3GqfR/HWw9E3eMMkGPMY3H2/UxPDi254ZXtHG7dwrmOg9g9dmpt13nv+mt83PQa3d6GqHM6w8WIHNV7O7gCdjrcTTi8DhJUaXza/DEH2l7DI4WOMhLVqcxNu59NU76NURc6FO3H7XdxufMsv7/273T7bnxThxOHvw+NoKfENAtzlBhKLapJUCcTkAQqOk/gk4NfY6+vA41gxOcXOdW+nz2N/43VM3QjuNtlVLUs/XR7WzjU9jZvXvs5O+t/i1cKv6qcYyhide4m0hMj77GRZZk2RwuHmnZQ7TiulIcFr9TLVdunHGx6L+q6EUBaQjrzs1cwwxw+ueli5xG2XP9/7Gl8/a7Xyh2VZuHmt+pT65s0uc8ihek2jGozU1MXsHCQ4+ecPgdXu85zuCW29IOhosl5jQMtbw86lBYFkTzjJDYWbSZFYwlJlLJ6qqjsO0CbO/ay6cPFqDVLNERBw5TkZdxn+QomfeRUBlmWqO+9zqfN22lxn1fKw06ro4GdNVsGbV2SdCbmZC1lcfoTUZco7jaj9y+LgkHMoMy8iJnZc6MGen2+Po6172BX06+V0ojQ5W3k0443uGytiPp3SrKEXqVnZd4Do7bcBmPVLI5AC+c7PuFw3Sc4okyLn2k5zpGGyCmXI0GX28rrV16MmHoQkAK09jXzQeUWXjj/fNgud7QwZk8F0Yh6EtUmLImT+WL+c6wqWjtQPh2gy9nJq1d+yjvV/xV2K+tIISCSrM3ie7N+xYqC1QOnhvglP3W2GvbVf8iBlq20uitw+u0EFHuVRhNj1iz9aEQd6bp8zIY0NuR+h+X5q0lPyOLDqrd56/p/UGUfmRFQNNSCjummDfz1sp+RY8ynubeRw017Odr6AVX2U/R4O/DLd8/QsTLmzdKPgEB+YjnZxlzKTMuo6DrGpe6DeKTI3dRIISCiE5P5cslfIwtQZT9Odc8FrO6GUfH3xcq4McutpGoLcAd6Y07AHinyDDPxSB56fE3DsjY13IxLs8QZHuIuiRMzcbPEiZm4WeLETNwscWImbpY4MRM3S5yYiZslTszEzRInZuJmiRMzcbPEiZm4WeLETNwscWImbpY4MRM3S5yY+f9G5bPnhftt7gAAAABJRU5ErkJggg==" alt="Logosímbolo SENA"><div><b>TIC para la productividad</b><span>Bloque 1 · Funcionarios administrativos</span></div></div>
+ <span class="role">OVA Participante</span>
+ <nav class="nav"><div class="grp">Inicio</div><button type="button" data-go="inicio" aria-current="false"><span class="code">00</span><span>Bienvenida y ruta</span><span class="tick" aria-hidden="true"></span></button><div class="grp">Contenidos</div><button type="button" data-go="s11" aria-current="false"><span class="code">1.1</span><span>Instalación y diagnóstico</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="s12" aria-current="false"><span class="code">1.2</span><span>Transformación digital</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="s13" aria-current="false"><span class="code">1.3</span><span>Gestión del tiempo digital</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="s14" aria-current="false"><span class="code">1.4</span><span>Gestión documental</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="s15" aria-current="false"><span class="code">1.5</span><span>Seguridad de la información</span><span class="tick" aria-hidden="true"></span></button><div class="grp">Aplicación</div><button type="button" data-go="taller" aria-current="false"><span class="code">T</span><span>Taller de aplicación</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="retro" aria-current="false"><span class="code">R</span><span>Retroalimentación</span><span class="tick" aria-hidden="true"></span></button><div class="grp">Recursos</div><button type="button" data-go="herr" aria-current="false"><span class="code">H</span><span>Herramientas y configuración</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="glos" aria-current="false"><span class="code">G</span><span>Glosario</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="ciber" aria-current="false"><span class="code">C</span><span>Cibergrafía y videos</span><span class="tick" aria-hidden="true"></span></button><button type="button" data-go="biblio" aria-current="false"><span class="code">B</span><span>Bibliografía</span><span class="tick" aria-hidden="true"></span></button></nav>
+ <div class="side-foot">Servicio Nacional de Aprendizaje SENA<br>Objeto Virtual de Aprendizaje · 2026</div>
+</aside>
+<div class="scrim"></div>
+<div class="main">
+ <div class="top">
+  <button class="btn menu-btn" type="button" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <div class="crumb"><small id="crumbS"></small><strong id="crumbT"></strong></div>
+  <div class="prog"><span class="lbl">Avance</span><span class="bar"><i></i></span><span id="progTxt">0 / 0</span></div>
+  <button class="btn" id="themeBtn" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span>Modo oscuro</span></button>
+ </div>
+ <main class="content"><div class="wrap"><section class="page" id="inicio" data-title="Bienvenida y ruta" data-sub="OVA del participante" hidden>
+<header class="hero"><div><div class="eyebrow">Bloque 1 · 7:30 – 9:45 a.m.</div><h1>TIC para la productividad y la gestión</h1><p>Apertura y orientación al uso de TIC para organizar el trabajo administrativo diario en el SENA.</p></div><span class="time">135 min</span></header>
+
+<div class="grid g4">
+ <div class="card"><span class="k">Duración</span><span class="stat">135 min</span><p>7:30 – 9:45 a.m.</p></div>
+ <div class="card"><span class="k">Subtemas</span><span class="stat">5</span><p>Del 1.1 al 1.5</p></div>
+ <div class="card"><span class="k">Producto</span><span class="stat">2</span><p>Matriz de tareas y bandeja organizada</p></div>
+ <div class="card"><span class="k">Videos</span><span class="stat">16</span><p>En español, con enlace directo</p></div>
+</div>
+<div class="grid g2">
+ <div class="card"><h3>Objetivo del bloque</h3><p>Reconocer el papel de las TIC en la gestión administrativa y adoptar prácticas digitales que mejoren la organización del trabajo diario.</p>
+ <h4>Al terminar usted podrá</h4><ul class="checks"><li class="ok">Explicar cómo la Política de Gobierno Digital y Cero Papel cambian su proceso.</li><li class="ok">Organizar el correo con carpetas por proceso y reglas automáticas.</li><li class="ok">Planear su semana con bloques de tiempo y Microsoft To Do.</li><li class="ok">Nombrar y versionar archivos según una convención ligada a la TRD.</li><li class="ok">Detectar phishing, activar MFA y proteger datos personales.</li></ul></div>
+ <div class="card"><h3>Ruta de la sesión</h3>
+ <div class="timeline">
+  <div class="ti"><span class="h">7:30</span><span><b>1.1</b> Instalación y prueba diagnóstica</span></div>
+  <div class="ti"><span class="h">7:55</span><span><b>1.2</b> Transformación digital en la gestión pública</span></div>
+  <div class="ti"><span class="h">8:10</span><span><b>1.3</b> Gestión del tiempo digital</span></div>
+  <div class="ti"><span class="h">8:35</span><span><b>1.4</b> Gestión documental electrónica</span></div>
+  <div class="ti"><span class="h">8:50</span><span><b>1.5</b> Seguridad de la información</span></div>
+  <div class="ti"><span class="h">9:05</span><span><b>Taller</b> Matriz de tareas y bandeja organizada</span></div>
+  <div class="ti"><span class="h">9:30</span><span><b>Plenaria</b> Socialización y priorización</span></div>
+ </div></div>
+</div>
+<div class="note"><b class="tag">Cómo usar</b><p>Recorra las secciones con el menú lateral. Al final de cada una pulse <b>Marcar sección como completada</b> para ver su avance en la barra superior. El botón <b>Modo oscuro</b> cambia el área de contenido. Su avance se guarda solo en este navegador.</p></div>
+<div class="grid g3">
+ <div class="card flat"><span class="k">Necesita</span><p>Cuenta institucional de Microsoft 365, Outlook (clásico, nuevo o web) y el celular para la autenticación en dos pasos.</p></div>
+ <div class="card flat"><span class="k">Archivo del taller</span><p><b>Matriz_Tareas_Digitalizables_PARTICIPANTE.xlsx</b>, entregado por su instructor.</p></div>
+ <div class="card flat"><span class="k">Material de apoyo</span><p><b>Estructura_Carpetas_Modelo.zip</b> con la estructura de carpetas y la nomenclatura.</p></div>
+</div>
+<div class="foot-nav"><span></span><button class="btn primary" type="button" data-complete="inicio">Marcar sección como completada</button><button class="btn" type="button" data-goto="s11">Instalación y diagnóstico →</button></div>
+</section><section class="page" id="s11" data-title="1.1 Instalación y diagnóstico" data-sub="Contenidos" hidden>
+<header class="hero"><div><div class="eyebrow">Subtema 1.1</div><h1>Instalación y diagnóstico</h1><p>Presentación del programa, acuerdos de trabajo y prueba diagnóstica de nivel en ofimática con Microsoft Forms.</p></div><span class="time">7:30 · 25 min</span></header>
+
+<div class="grid g2">
+ <div class="card"><h3>Acuerdos de trabajo</h3><ul class="checks">
+  <li class="ok">Celular en silencio; Teams en “No molestar” durante la práctica.</li>
+  <li class="ok">Practicamos en nuestra propia cuenta: los cambios quedan para el día a día.</li>
+  <li class="ok">No compartimos contraseñas ni datos personales reales en los ejercicios.</li>
+  <li class="ok">Preguntamos en el momento: no hay preguntas básicas.</li>
+  <li class="ok">Respetamos los tiempos de cada bloque.</li></ul></div>
+ <div class="card"><h3>Prueba diagnóstica en Microsoft Forms</h3><p>El instructor comparte un enlace a un cuestionario de <b>20 preguntas</b> (10 minutos) sobre archivos, Word, Excel, Outlook, Microsoft 365, seguridad y normatividad.</p>
+ <ol class="steps"><li><span><b>Abra el enlace</b> con su cuenta institucional (el formulario solo acepta personas de la organización).</span></li>
+ <li><span><b>Responda una opción</b> por pregunta. No hay penalización: el objetivo es conocer su punto de partida.</span></li>
+ <li><span><b>Pulse Enviar</b> y revise su puntaje. Nivel: Básico menos de 50 · Intermedio 50 a 79 · Avanzado 80 o más.</span></li></ol></div>
+</div>
+<h2>Autoevaluación rápida</h2><p class="prose">Seis preguntas de muestra de la prueba. Elija una opción y lea la explicación.</p>
+<div class="quiz"><script type="application/json">[{"q": "¿Cuál de estos nombres de archivo sigue una nomenclatura estandarizada?", "o": ["documento final DEF (2).docx", "20261018_ACT_ComiteEvaluacion_v1.0.docx", "acta.docx", "Copia de acta nueva.docx"], "a": 1, "e": "Fecha AAAAMMDD + tipo + asunto + versión permite ordenar y encontrar el archivo."}, {"q": "En Excel, ¿qué fórmula suma el rango B2 a B10?", "o": ["=SUMAR(B2:B10)", "=SUMA(B2:B10)", "=TOTAL(B2-B10)", "=B2+B10"], "a": 1, "e": "La función en español es SUMA."}, {"q": "En Outlook, una regla sirve para:", "o": ["Programar reuniones", "Ejecutar acciones automáticas sobre los correos que cumplen condiciones", "Cambiar la contraseña", "Crear firmas"], "a": 1, "e": "Las reglas mueven, marcan o categorizan correos de forma automática."}, {"q": "¿Cuál es la diferencia principal entre Microsoft To Do y Microsoft Planner?", "o": ["To Do es para tareas personales; Planner para tareas de equipo", "Son la misma aplicación", "Planner solo funciona en celular", "To Do no se sincroniza con Outlook"], "a": 0, "e": "To Do organiza el trabajo individual; Planner, el de equipos."}, {"q": "La autenticación en dos pasos (MFA) significa:", "o": ["Escribir dos veces la contraseña", "Usar la contraseña y un segundo factor, como una app o un código", "Tener dos cuentas", "Cambiar la clave cada dos días"], "a": 1, "e": "Un segundo factor protege la cuenta aunque se filtre la contraseña."}, {"q": "Recibe un correo &#x27;urgente&#x27; que pide confirmar su clave institucional en un enlace. ¿Qué hace?", "o": ["Ingresa rápido para no perder el acceso", "Lo reenvía a sus compañeros", "No hace clic, lo reporta como phishing y avisa a TI", "Responde preguntando si es real"], "a": 2, "e": "La urgencia y la solicitud de credenciales son señales típicas de phishing."}]</script></div>
+<h3>Video de apoyo</h3><div class="vids"><a class="vid" data-sec="s11" href="https://www.youtube.com/watch?v=CJNDdUC4e7U" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/CJNDdUC4e7U/hqdefault.jpg" alt="Miniatura del video: Cómo crear un cuestionario en Microsoft Forms" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Christian Abata</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.1 Diagnóstico</span></div>
+<div class="meta"><b>Cómo crear un cuestionario en Microsoft Forms</b><small>Christian Abata · Español</small></div></a></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="inicio">← Bienvenida y ruta</button><button class="btn primary" type="button" data-complete="s11">Marcar sección como completada</button><button class="btn" type="button" data-goto="s12">Transformación digital →</button></div>
+</section><section class="page" id="s12" data-title="1.2 Transformación digital" data-sub="Contenidos" hidden>
+<header class="hero"><div><div class="eyebrow">Subtema 1.2</div><h1>Transformación digital en la gestión pública</h1><p>Política de Gobierno Digital, estrategia Cero Papel, trámites y servicios en línea, y su impacto en los procesos administrativos.</p></div><span class="time">7:55 · 15 min</span></header>
+
+<div class="prose"><p>La <b>transformación digital</b> no consiste en escanear papeles: es rediseñar cómo se presta un servicio usando las TIC. En el Estado colombiano la guía es la <b>Política de Gobierno Digital</b>, cuyos lineamientos generales fija el <b>Decreto 767 de 2022</b>, y la estrategia <b>Cero Papel</b> de la <b>Directiva Presidencial 04 de 2012</b>.</p></div>
+<div class="tabs"><div class="tablist" role="tablist"><button type="button">Gobierno Digital</button><button type="button">Cero Papel</button><button type="button">Trámites en línea</button><button type="button">Impacto en su proceso</button></div>
+<div class="tabpanel"><div class="grid g3">
+ <div class="card"><span class="k">Gobernanza e innovación</span><p>La política se organiza con una gobernanza clara y la <b>innovación pública digital</b> como forma de trabajo.</p></div>
+ <div class="card"><span class="k">Habilitadores</span><p>Arquitectura, seguridad y privacidad de la información, cultura y apropiación, y servicios ciudadanos digitales.</p></div>
+ <div class="card"><span class="k">Líneas de acción</span><p>Servicios y procesos inteligentes, decisiones basadas en datos y Estado abierto.</p></div></div>
+ <div class="note"><b class="tag">En el SENA</b><p>Cada vez que usted usa un formulario en línea en lugar de una planilla, comparte un enlace en lugar de un adjunto o consolida datos para decidir, aplica un habilitador de Gobierno Digital: <b>cultura y apropiación</b>.</p></div></div>
+<div class="tabpanel"><div class="prose"><p>La Directiva Presidencial 04 de 2012 pidió a las entidades reducir el consumo de papel con buenas prácticas y documentos electrónicos. Algunas prácticas para su puesto:</p>
+ <ul><li>Revisar en pantalla y comentar con <b>Control de cambios</b>, sin imprimir borradores.</li><li>Compartir <b>enlaces de OneDrive o SharePoint</b> en lugar de adjuntos.</li><li>Recolectar datos con <b>Microsoft Forms</b> en lugar de planillas impresas.</li><li>Guardar la versión aprobada en <b>PDF/A</b> en la carpeta de la serie documental.</li><li>Imprimir solo lo que el procedimiento exige en físico, a doble cara.</li></ul></div></div>
+<div class="tabpanel"><div class="prose"><p>Un trámite en línea permite que el ciudadano o el aprendiz haga su solicitud sin desplazarse. La <b>Ley 2052 de 2020</b> ordena racionalizar y digitalizar trámites. Para el funcionario administrativo significa:</p>
+ <ul><li>Las solicitudes llegan por canales digitales y deben quedar <b>radicadas</b> en el sistema oficial.</li><li>Los tiempos de respuesta se miden: organizar el correo deja de ser opcional.</li><li>La información debe ser verificable: nombres de archivo claros y versiones controladas.</li></ul></div></div>
+<div class="tabpanel"><p>Pulse cada tarjeta para ver cómo cambia una tarea cuando se digitaliza.</p><div class="grid g3" style="margin-top:12px">
+ <div class="flip"><div class="in"><div class="fa"><small>Antes</small><h4>Informe mensual</h4><p>15 instructores envían 15 archivos de Excel distintos; usted copia y pega durante 4 horas.</p></div><div class="fb2"><small>Después</small><h4>Forms + Excel en línea</h4><p>Un formulario único consolida las respuestas solo. Usted filtra y entrega en 30 minutos.</p></div></div></div>
+ <div class="flip"><div class="in"><div class="fa"><small>Antes</small><h4>Citaciones a comité</h4><p>Un correo redactado a mano por cada aprendiz, con riesgo de equivocar ficha o fecha.</p></div><div class="fb2"><small>Después</small><h4>Combinar correspondencia</h4><p>Una plantilla y una lista en Excel generan todos los correos personalizados en minutos.</p></div></div></div>
+ <div class="flip"><div class="in"><div class="fa"><small>Antes</small><h4>Préstamo de ambientes</h4><p>Llamadas y un cuaderno; aparecen reservas cruzadas.</p></div><div class="fb2"><small>Después</small><h4>Calendario compartido</h4><p>Cada ambiente tiene su calendario; todos ven la disponibilidad real.</p></div></div></div>
+</div></div></div>
+<h3>Videos de apoyo</h3><div class="vids"><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=Xtk5DzmREbw" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Xtk5DzmREbw/hqdefault.jpg" alt="Miniatura del video: ¿En qué consiste la Política de Gobierno Digital?" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Ministerio TIC Colombia</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Gobierno Digital</span></div>
+<div class="meta"><b>¿En qué consiste la Política de Gobierno Digital?</b><small>Ministerio TIC Colombia · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=FisCHFAP2B0" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/FisCHFAP2B0/hqdefault.jpg" alt="Miniatura del video: PotencIA tu Gobierno Digital No. 1: generalidades de la política" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Ministerio TIC Colombia</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Gobierno Digital</span></div>
+<div class="meta"><b>PotencIA tu Gobierno Digital No. 1: generalidades de la política</b><small>Ministerio TIC Colombia · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=RKUzkSQVans" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/RKUzkSQVans/hqdefault.jpg" alt="Miniatura del video: Cero Papel (Directiva Presidencial 04 de 2012)" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Viviana DDHH</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Cero Papel</span></div>
+<div class="meta"><b>Cero Papel (Directiva Presidencial 04 de 2012)</b><small>Viviana DDHH · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=Hvha6bS8QdY" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Hvha6bS8QdY/hqdefault.jpg" alt="Miniatura del video: Estrategia de Cero Papel: implementación e integración" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Enfoque1 by Didáctica</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Cero Papel</span></div>
+<div class="meta"><b>Estrategia de Cero Papel: implementación e integración</b><small>Enfoque1 by Didáctica · Español</small></div></a></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="s11">← Instalación y diagnóstico</button><button class="btn primary" type="button" data-complete="s12">Marcar sección como completada</button><button class="btn" type="button" data-goto="s13">Gestión del tiempo digital →</button></div>
+</section><section class="page" id="s13" data-title="1.3 Gestión del tiempo digital" data-sub="Contenidos" hidden>
+<header class="hero"><div><div class="eyebrow">Subtema 1.3</div><h1>Gestión del tiempo digital</h1><p>Bandeja de entrada organizada, reglas y carpetas en Outlook, calendario por bloques y listas de tareas con Microsoft To Do.</p></div><span class="time">8:10 · 25 min</span></header>
+
+<div class="prose"><p>El correo, el calendario y las tareas son el centro del trabajo administrativo. Cuatro hábitos digitales liberan tiempo cada semana: <b>carpetas por proceso</b>, <b>reglas automáticas</b>, <b>bloques de tiempo</b> y una <b>lista única de tareas</b>.</p></div>
+<div class="tabs"><div class="tablist" role="tablist"><button type="button">1. Carpetas</button><button type="button">2. Reglas</button><button type="button">3. Calendario</button><button type="button">4. Microsoft To Do</button></div>
+<div class="tabpanel"><div class="grid g2"><div class="card"><h3>Crear carpetas por proceso</h3><ol class="steps">
+ <li><span><b>Clic derecho</b> sobre <span class="path">Bandeja de entrada</span> y elija <span class="path">Nueva carpeta</span> (en el nuevo Outlook: <span class="path">Crear subcarpeta</span>).</span></li>
+ <li><span><b>Escriba el nombre con prefijo numérico</b>: <span class="kbd">01_Formacion</span>, <span class="kbd">02_Administrativo</span>, <span class="kbd">03_Comunicados_Institucionales</span>, <span class="kbd">04_PQRS_Aprendices</span>, <span class="kbd">99_Para_Conocimiento</span>.</span></li>
+ <li><span><b>Cree subcarpetas</b> solo si hay volumen: por ejemplo <span class="kbd">01_Formacion/Comites</span>.</span></li>
+ <li><span><b>Clic derecho > Agregar a Favoritos</b> en las dos carpetas que más usa.</span></li></ol></div>
+ <div class="card"><h3>Estructura modelo</h3><div class="tree"><span class="d">Bandeja de entrada</span>
+├─ <span class="d">01_Formacion</span>
+│  └─ Comites
+├─ <span class="d">02_Administrativo</span>
+├─ <span class="d">03_Comunicados_Institucionales</span>
+├─ <span class="d">04_PQRS_Aprendices</span>
+└─ <span class="d">99_Para_Conocimiento</span></div>
+ <div class="note"><b class="tag">Regla de oro</b><p>Use los mismos nombres de proceso en el correo y en OneDrive. Así encuentra todo con la misma lógica.</p></div></div></div></div>
+<div class="tabpanel"><div class="grid g2"><div class="card"><h3>Crear una regla paso a paso</h3><ol class="steps">
+ <li><span><b>Outlook clásico:</b> <span class="path">Inicio > Reglas > Administrar reglas y alertas > Nueva regla</span>. <b>Nuevo Outlook o web:</b> <span class="path">Configuración > Correo > Reglas > + Agregar nueva regla</span>.</span></li>
+ <li><span><b>Nombre</b> la regla: “Comités”.</span></li>
+ <li><span><b>Condición:</b> <span class="path">El asunto incluye</span> → escriba <span class="kbd">Comité</span>. Agregue otra condición con <span class="kbd">Citación</span> si lo necesita.</span></li>
+ <li><span><b>Acción:</b> <span class="path">Mover a la carpeta</span> → <span class="kbd">01_Formacion/Comites</span>. Puede sumar <span class="path">Categorizar</span>.</span></li>
+ <li><span><b>Excepción</b> (opcional) y active <span class="path">Ejecutar esta regla ahora</span> para ordenar los correos existentes.</span></li>
+ <li><span><b>Guarde</b> y pruebe enviándose un correo con la palabra clave.</span></li></ol>
+ <div class="note bad"><b class="tag">Nunca</b><p>Cree reglas que reenvíen correo institucional a cuentas personales o externas, ni reglas que eliminen correos automáticamente.</p></div></div>
+ <div class="card" id="ruleSim"><h3>Simulador de reglas</h3><p>Configure una regla y vea qué correos se moverían.</p>
+ <div class="grid g3"><label class="f" for="rCond">Condición<select id="rCond"><option value="subj">El asunto incluye</option><option value="from">El remitente es</option></select></label>
+ <label class="f" for="rVal">Palabra clave<input id="rVal" value="Comité"></label>
+ <label class="f" for="rFolder">Mover a<select id="rFolder"><option>01_Formacion/Comites</option><option>03_Comunicados_Institucionales</option><option>04_PQRS_Aprendices</option><option>99_Para_Conocimiento</option></select></label></div>
+ <p id="rSentence" class="fb"></p><div class="inbox" id="inboxSim"></div><p id="rCount" class="score" style="font-size:15px"></p>
+ <p class="fb">Pruebe: asunto incluye <b>Solicitud</b> → 04_PQRS_Aprendices, o remitente <b>Comunicaciones</b> → 03_Comunicados_Institucionales.</p>
+ <script type="application/json" id="mailsData">[{"from": "Comunicaciones SENA", "subj": "Boletín institucional de la semana"}, {"from": "Instructor Carlos Pérez", "subj": "Citación Comité de Evaluación ficha 2758431"}, {"from": "Aprendiz Laura Gómez", "subj": "Solicitud constancia de estudio"}, {"from": "Coordinación Académica", "subj": "Comité de evaluación - agenda del jueves"}, {"from": "Aprendiz Andrés Ruiz", "subj": "Solicitud cambio de jornada"}, {"from": "Mesa de ayuda TI", "subj": "Mantenimiento programado del sábado"}, {"from": "Comunicaciones SENA", "subj": "Invitación a la rendición de cuentas"}]</script></div></div></div>
+<div class="tabpanel"><div class="grid g2"><div class="card"><h3>Bloques de tiempo en el calendario</h3><ol class="steps">
+ <li><span><b>Defina su horario laboral:</b> <span class="path">Configuración > Calendario > Vista</span>, por ejemplo 7:00 a.m. a 4:00 p.m.</span></li>
+ <li><span><b>Cree un evento</b> llamado <span class="kbd">FOCO · Informe mensual</span> de 90 minutos, sin invitados.</span></li>
+ <li><span><b>Mostrar como: Ocupado</b>, para que nadie le agende reuniones encima.</span></li>
+ <li><span><b>Repetir:</b> diario o semanal según la tarea. Asigne una <b>categoría de color</b> por proceso.</span></li>
+ <li><span><b>Reserve dos franjas cortas</b> (9:00 y 2:00) para revisar el correo, en lugar de mirarlo cada 5 minutos.</span></li></ol></div>
+ <div class="card"><h3>Ejemplo de jornada</h3><div class="tbl"><table><thead><tr><th>Hora</th><th>Bloque</th></tr></thead><tbody>
+ <tr><td class="num">7:00</td><td>Revisión de To Do · “Mi día”</td></tr><tr><td class="num">7:15</td><td>FOCO · Radicación y respuestas</td></tr>
+ <tr><td class="num">9:00</td><td>Correo · carpetas por proceso</td></tr><tr><td class="num">9:30</td><td>Reuniones y atención</td></tr>
+ <tr><td class="num">11:00</td><td>FOCO · Informe o consolidado</td></tr><tr><td class="num">2:00</td><td>Correo · seguimiento de banderas</td></tr>
+ <tr><td class="num">3:30</td><td>Cierre · planear el día siguiente</td></tr></tbody></table></div></div></div></div>
+<div class="tabpanel"><div class="grid g2"><div class="card"><h3>Microsoft To Do paso a paso</h3><ol class="steps">
+ <li><span><b>Abra To Do</b> desde el iniciador de aplicaciones de Microsoft 365 o desde el ícono de tareas en Outlook.</span></li>
+ <li><span><b>Active el correo marcado:</b> <span class="path">Configuración > Aplicaciones conectadas > Correo electrónico marcado</span>.</span></li>
+ <li><span><b>Cree listas por proceso:</b> <span class="kbd">Formación</span>, <span class="kbd">Administrativo</span>, <span class="kbd">PQRS</span>.</span></li>
+ <li><span><b>Cada mañana</b> pase a <span class="path">Mi día</span> las 3 a 5 tareas que sí va a cerrar.</span></li>
+ <li><span><b>Agregue fecha de vencimiento y recordatorio</b> a lo que tiene plazo.</span></li>
+ <li><span><b>Marque con bandera</b> en Outlook los correos que requieren acción: aparecen solos en To Do.</span></li></ol></div>
+ <div class="card"><h3>To Do o Planner</h3><div class="tbl"><table><thead><tr><th></th><th>To Do</th><th>Planner</th></tr></thead><tbody>
+ <tr><td><b>Para</b></td><td>Mis tareas</td><td>Tareas del equipo</td></tr><tr><td><b>Ejemplo</b></td><td>Responder solicitud de constancia</td><td>Compromisos del comité de área</td></tr>
+ <tr><td><b>Se ve</b></td><td>Solo usted</td><td>Todo el equipo</td></tr></tbody></table></div>
+ <div class="note"><b class="tag">Tip</b><p>Las tareas de Planner asignadas a usted también aparecen en To Do, en la lista <b>Asignado a mí</b>.</p></div></div></div></div>
+</div>
+<h3>Videos de apoyo</h3><div class="vids"><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=zvCakDI2_HA" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/zvCakDI2_HA/hqdefault.jpg" alt="Miniatura del video: Cómo organizar correos en Outlook con carpetas y reglas automáticas" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Fernando Juca Maldonado</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 Outlook</span></div>
+<div class="meta"><b>Cómo organizar correos en Outlook con carpetas y reglas automáticas</b><small>Fernando Juca Maldonado · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=528qOxMLUgM" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/528qOxMLUgM/hqdefault.jpg" alt="Miniatura del video: Cómo hacer que un correo vaya directamente a una carpeta en Outlook" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Solvetic</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 Outlook</span></div>
+<div class="meta"><b>Cómo hacer que un correo vaya directamente a una carpeta en Outlook</b><small>Solvetic · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=sgF9lLFqjv0" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/sgF9lLFqjv0/hqdefault.jpg" alt="Miniatura del video: Cómo organizarte con Microsoft Outlook: tutorial de calendario" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Vani Palomo</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 Calendario</span></div>
+<div class="meta"><b>Cómo organizarte con Microsoft Outlook: tutorial de calendario</b><small>Vani Palomo · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=uCL24LABu0Q" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/uCL24LABu0Q/hqdefault.jpg" alt="Miniatura del video: Microsoft To Do, tutorial completo" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Bi_Learning</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 To Do</span></div>
+<div class="meta"><b>Microsoft To Do, tutorial completo</b><small>Bi_Learning · Español</small></div></a></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="s12">← Transformación digital</button><button class="btn primary" type="button" data-complete="s13">Marcar sección como completada</button><button class="btn" type="button" data-goto="s14">Gestión documental →</button></div>
+</section><section class="page" id="s14" data-title="1.4 Gestión documental electrónica" data-sub="Contenidos" hidden>
+<header class="hero"><div><div class="eyebrow">Subtema 1.4</div><h1>Gestión documental electrónica</h1><p>Nomenclatura estandarizada, carpetas por proceso, control de versiones y relación con las Tablas de Retención Documental.</p></div><span class="time">8:35 · 15 min</span></header>
+
+<div class="prose"><p>Un archivo bien nombrado y guardado en la carpeta correcta se encuentra en segundos y cumple la <b>Ley 594 de 2000</b> (Ley General de Archivos). Las <b>Tablas de Retención Documental (TRD)</b> de su dependencia definen las series documentales: úselas como base de su estructura de carpetas.</p></div>
+<div class="grid g2">
+ <div class="card"><h3>Convención de nombres</h3><div class="out">AAAAMMDD_TIPO_Asunto_Identificador_vX.Y.ext</div>
+ <div class="tbl"><table><thead><tr><th>Parte</th><th>Regla</th><th>Ejemplo</th></tr></thead><tbody>
+ <tr><td>Fecha</td><td>Año, mes, día; ordena solo</td><td>20261018</td></tr><tr><td>Tipo</td><td>3 letras del tipo documental</td><td>ACT, INF, CIT, SOL</td></tr>
+ <tr><td>Asunto</td><td>Palabras unidas con mayúscula inicial, sin tildes ni espacios</td><td>ComiteEvaluacion</td></tr>
+ <tr><td>Identificador</td><td>Opcional: ficha, radicado, contrato</td><td>Ficha2758431</td></tr><tr><td>Versión</td><td>v0.1 borrador · v1.0 aprobada</td><td>v1.0</td></tr></tbody></table></div></div>
+ <div class="card" id="fnForm"><h3>Generador de nombres</h3><p>Complete los campos y copie el nombre resultante.</p>
+ <div class="grid g2"><label class="f" for="fnDate">Fecha<input id="fnDate" type="date" value="2026-10-18"></label>
+ <label class="f" for="fnType">Tipo documental<select id="fnType"><option value="ACT">ACT · Acta</option><option value="INF">INF · Informe</option><option value="CIT">CIT · Citación</option><option value="SOL">SOL · Solicitud</option><option value="REG">REG · Registro</option><option value="CER">CER · Certificado</option><option value="MTZ">MTZ · Matriz</option></select></label>
+ <label class="f" for="fnAsunto">Asunto<input id="fnAsunto" value="comité de evaluación"></label>
+ <label class="f" for="fnId">Identificador (opcional)<input id="fnId" value="ficha 2758431"></label>
+ <label class="f" for="fnVer">Versión<select id="fnVer"><option>0.1</option><option>0.2</option><option selected>1.0</option><option>1.1</option><option>2.0</option></select></label>
+ <label class="f" for="fnExt">Extensión<select id="fnExt"><option>docx</option><option>pdf</option><option>xlsx</option><option>pptx</option></select></label></div>
+ <div class="codebox"><div class="out" id="fnOut"></div></div><button class="btn" type="button" data-copy="fnOut" style="align-self:flex-start">Copiar</button>
+ <p class="fb" id="fnWarn"></p></div>
+</div>
+<div class="grid g2">
+ <div class="card"><h3>Estructura de carpetas por proceso</h3><p>Primer nivel: proceso. Segundo nivel: serie documental de la TRD.</p>
+ <div class="tree"><span class="d">SENA_Regional_Centro_Dependencia</span>
+├─ <span class="d">01_GESTION_FORMACION</span>
+│  ├─ 01.01_ACTAS_Comite_Evaluacion
+│  ├─ 01.02_INFORMES_Novedades_Instructores
+│  └─ 01.03_CITACIONES
+├─ <span class="d">02_GESTION_ADMINISTRATIVA</span>
+├─ <span class="d">03_GESTION_DOCUMENTAL</span>
+├─ <span class="d">04_ATENCION_CIUDADANO_PQRS</span>
+└─ <span class="d">99_PARA_CONOCIMIENTO</span></div>
+ <p class="fb">Los códigos son ilustrativos: reemplácelos por los de la TRD vigente de su dependencia.</p></div>
+ <div class="card"><h3>Control de versiones</h3><ol class="steps">
+ <li><span><b>Trabaje un solo archivo</b> en OneDrive o SharePoint; no envíe adjuntos para revisión.</span></li>
+ <li><span><b>Consulte</b> <span class="path">Clic derecho > Historial de versiones</span> para recuperar una versión anterior.</span></li>
+ <li><span><b>Borradores</b> v0.1, v0.2… <b>Versión aprobada</b> v1.0, preferiblemente en PDF/A.</span></li>
+ <li><span><b>Elimine</b> de su vocabulario “final”, “final2”, “definitivo” y “copia de”.</span></li></ol>
+ <div class="note"><b class="tag">TRD</b><p>La TRD indica cuánto tiempo se conserva cada serie en el archivo de gestión y en el central, y su disposición final. Si el documento hace parte de una serie, su lugar es la carpeta de esa serie.</p></div></div>
+</div>
+<h3>Videos de apoyo</h3><div class="vids"><a class="vid" data-sec="s14" href="https://www.youtube.com/watch?v=mdnfCLlK4FE" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/mdnfCLlK4FE/hqdefault.jpg" alt="Miniatura del video: ¿Qué es una Tabla de Retención Documental (TRD)?" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>The RIMpro</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.4 TRD</span></div>
+<div class="meta"><b>¿Qué es una Tabla de Retención Documental (TRD)?</b><small>The RIMpro · Español</small></div></a><a class="vid" data-sec="s14" href="https://www.youtube.com/watch?v=aGUV0yA0MvU" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/aGUV0yA0MvU/hqdefault.jpg" alt="Miniatura del video: Así funcionan las Tablas de Retención Documental (TRD)" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Alpopular Logística Especializada</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.4 TRD</span></div>
+<div class="meta"><b>Así funcionan las Tablas de Retención Documental (TRD)</b><small>Alpopular Logística Especializada · Español</small></div></a><a class="vid" data-sec="s14" href="https://www.youtube.com/watch?v=_BB7jkI6BFs" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/_BB7jkI6BFs/hqdefault.jpg" alt="Miniatura del video: ¿Cómo organizo mis carpetas para encontrar fácilmente mis documentos?" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Tulio Ortiz</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.4 Carpetas</span></div>
+<div class="meta"><b>¿Cómo organizo mis carpetas para encontrar fácilmente mis documentos?</b><small>Tulio Ortiz · Español</small></div></a></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="s13">← Gestión del tiempo digital</button><button class="btn primary" type="button" data-complete="s14">Marcar sección como completada</button><button class="btn" type="button" data-goto="s15">Seguridad de la información →</button></div>
+</section><section class="page" id="s15" data-title="1.5 Seguridad de la información" data-sub="Contenidos" hidden>
+<header class="hero"><div><div class="eyebrow">Subtema 1.5</div><h1>Seguridad de la información</h1><p>Contraseñas seguras, autenticación en dos pasos, identificación de phishing y protección de datos personales (Ley 1581 de 2012).</p></div><span class="time">8:50 · 15 min</span></header>
+
+<div class="grid g2">
+ <div class="card"><h3>Contraseñas seguras</h3><p>Use una <b>frase de contraseña</b>: tres o cuatro palabras sin relación, con números y símbolos. Es larga, fácil de recordar y difícil de adivinar.</p>
+ <label class="f" for="pw">Probador (no use su contraseña real; nada se guarda ni se envía)<input id="pw" type="password" autocomplete="off" value="Café-Montaña-Ruana-47!"></label>
+ <label style="display:flex;gap:8px;align-items:center;font-size:14px"><input id="pwShow" type="checkbox" style="width:auto"> Mostrar</label>
+ <div class="meter"><i id="pwBar"></i></div><p class="score" id="pwTxt" style="font-size:16px"></p><ul class="checks" id="pwChecks"></ul></div>
+ <div class="card"><h3>Autenticación en dos pasos (MFA)</h3><ol class="steps">
+ <li><span><b>Instale Microsoft Authenticator</b> en su celular desde la tienda oficial.</span></li>
+ <li><span><b>Ingrese a</b> <span class="kbd">aka.ms/mysecurityinfo</span> con su cuenta institucional.</span></li>
+ <li><span><b>Agregar método > Aplicación de autenticación</b> y escanee el código QR con la app.</span></li>
+ <li><span><b>Apruebe la notificación de prueba</b> escribiendo el número que aparece en pantalla.</span></li>
+ <li><span><b>Agregue un teléfono de respaldo</b> por si cambia de celular.</span></li></ol>
+ <div class="note warn"><b class="tag">Atención</b><p>Si le llega una solicitud de aprobación que usted no inició, <b>rechácela</b> y cambie su contraseña: alguien la conoce.</p></div></div>
+</div>
+<h2>Cacería de phishing</h2><p class="prose">Este correo llegó a su bandeja. Haga clic en las <b>5 señales</b> que lo delatan.</p>
+<div class="grid g2"><div class="mail hunt"><div class="mh"><span><b>De:</b> Soporte Correo SENA &lt;<button class="hot" type="button" data-tip="El dominio no es el institucional: “sena-soporte.co” imita al real.">soporte@sena-soporte.co</button>&gt;</span><span><b>Asunto:</b> <button class="hot" type="button" data-tip="La urgencia y las mayúsculas buscan que actúe sin pensar.">URGENTE: su buzón será desactivado HOY</button></span></div>
+<div class="mb"><p><button class="hot" type="button" data-tip="Un saludo genérico: el soporte real conoce su nombre.">Estimado usuario:</button></p><p>Detectamos actividad inusual. Para evitar la suspensión de su cuenta debe <button class="hot" type="button" data-tip="Ningún área de TI pide su contraseña por correo.">confirmar su usuario y contraseña</button> en el siguiente enlace antes de 2 horas:</p>
+<p><button class="hot" type="button" data-tip="Al pasar el cursor, el enlace real apunta a un sitio externo, no a Microsoft ni al SENA.">https://login-sena365.verify-account.co</button></p><p>Atentamente, Equipo de Soporte</p>
+<p class="huntOut fb" aria-live="polite">0 de 5 señales encontradas.</p></div></div>
+<div class="card"><h3>Qué hacer ante un correo sospechoso</h3><ol class="steps"><li><span><b>No haga clic</b> en enlaces ni abra adjuntos.</span></li><li><span><b>Pase el cursor</b> sobre el enlace para ver la dirección real, sin hacer clic.</span></li><li><span><b>Repórtelo:</b> <span class="path">Inicio > Notificar > Notificar phishing</span>.</span></li><li><span><b>Avise a la mesa de ayuda de TI</b> si ya hizo clic o escribió su contraseña, y cámbiela de inmediato.</span></li></ol></div></div>
+<h2>Protección de datos personales · Ley 1581 de 2012</h2>
+<div class="grid g4">
+ <div class="card"><span class="k">Público</span><p>Estado civil, profesión, datos en registros públicos.</p></div>
+ <div class="card"><span class="k">Semiprivado</span><p>Datos financieros y crediticios.</p></div>
+ <div class="card"><span class="k">Privado</span><p>Datos que solo interesan al titular: dirección, teléfono personal.</p></div>
+ <div class="card"><span class="k">Sensible</span><p>Salud, origen étnico, orientación política o sexual, biométricos.</p></div></div>
+<details class="acc"><summary>Los principios del tratamiento de datos (artículo 4)</summary><div class="body"><p>Legalidad · Finalidad · Libertad · Veracidad o calidad · Transparencia · Acceso y circulación restringida · Seguridad · Confidencialidad.</p><p>En la práctica: recolecte solo lo necesario, para una finalidad informada, con autorización del titular, y compártalo solo con quien lo requiere para su función.</p></div></details>
+<details class="acc"><summary>Buenas prácticas en su puesto</summary><div class="body"><ul class="checks"><li class="ok">Use CCO en envíos masivos a aprendices o ciudadanos.</li><li class="ok">No envíe bases de datos con documentos de identidad por correo: comparta un enlace con permisos a personas específicas.</li><li class="ok">Bloquee la pantalla al levantarse: <span class="kbd">Windows</span> + <span class="kbd">L</span>.</li><li class="ok">No guarde copias de documentos de terceros en el escritorio o en USB.</li><li class="ok">Los soportes de salud (incapacidades) son datos sensibles: acceso restringido.</li></ul></div></details>
+<h3>Repaso</h3>
+<div class="quiz"><script type="application/json">[{"q": "Un compañero le pide por chat el listado de aprendices con número de documento y teléfono para una actividad. ¿Qué hace?", "o": ["Se lo envía por WhatsApp", "Verifica la finalidad y comparte solo los datos necesarios por un canal institucional", "Lo publica en el grupo de Teams", "Lo imprime y se lo entrega"], "a": 1, "e": "Principios de finalidad y circulación restringida: solo lo necesario, por canales institucionales."}, {"q": "¿Cuál es la mejor práctica para un envío masivo de citaciones a 40 aprendices?", "o": ["Poner todos los correos en Para", "Poner todos en CC", "Usar CCO o combinar correspondencia", "Enviar desde el correo personal"], "a": 2, "e": "CCO o la combinación de correspondencia evitan exponer las direcciones de todos."}, {"q": "Le llega una notificación de Authenticator que usted no solicitó. ¿Qué significa?", "o": ["Es una actualización normal", "Alguien conoce su contraseña: rechace y cámbiela", "Debe aprobarla para no perder el acceso", "Es un error de Outlook"], "a": 1, "e": "MFA detuvo un intento de acceso con su contraseña. Rechazar y cambiar la clave es lo correcto."}]</script></div>
+<h3>Videos de apoyo</h3><div class="vids"><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=Mo_iddRc16k" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Mo_iddRc16k/hqdefault.jpg" alt="Miniatura del video: Contraseñas seguras: cómo crearlas para evitar ser hackeado" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>KAMBIG Centro de Estudios</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 Contraseñas</span></div>
+<div class="meta"><b>Contraseñas seguras: cómo crearlas para evitar ser hackeado</b><small>KAMBIG Centro de Estudios · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=Zf8Tfqf3H40" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Zf8Tfqf3H40/hqdefault.jpg" alt="Miniatura del video: Cómo proteger las cuentas de Microsoft 365 activando la autenticación en dos pasos (MFA)" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>IT With Carlos</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 MFA</span></div>
+<div class="meta"><b>Cómo proteger las cuentas de Microsoft 365 activando la autenticación en dos pasos (MFA)</b><small>IT With Carlos · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=6l0NZbpfPYA" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/6l0NZbpfPYA/hqdefault.jpg" alt="Miniatura del video: Cómo detectar correos falsos y evitar el phishing paso a paso" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>VerificarEmails</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 Phishing</span></div>
+<div class="meta"><b>Cómo detectar correos falsos y evitar el phishing paso a paso</b><small>VerificarEmails · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=Y3JzdNEi568" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Y3JzdNEi568/hqdefault.jpg" alt="Miniatura del video: Protección de datos en Colombia: Ley 1581 de 2012" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Jair Mardi</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 Ley 1581</span></div>
+<div class="meta"><b>Protección de datos en Colombia: Ley 1581 de 2012</b><small>Jair Mardi · Español</small></div></a></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="s14">← Gestión documental</button><button class="btn primary" type="button" data-complete="s15">Marcar sección como completada</button><button class="btn" type="button" data-goto="taller">Taller de aplicación →</button></div>
+</section><section class="page" id="taller" data-title="Taller de aplicación" data-sub="Aplicación" hidden>
+<header class="hero"><div><div class="eyebrow">Taller · 9:05 a.m.</div><h1>Mis tareas, digitalizadas</h1><p>Elabore el inventario de sus tareas repetitivas, propóngales una solución digital y organice su bandeja de correo.</p></div><span class="time">25 min</span></header>
+
+<div class="grid g2">
+ <div class="card"><span class="k">Producto 1</span><h3>Matriz de tareas digitalizables del puesto</h3><p>Mínimo 5 tareas repetitivas con su propuesta de digitalización, horas ahorradas y prioridad.</p></div>
+ <div class="card"><span class="k">Producto 2</span><h3>Bandeja de correo organizada</h3><p>Estructura de carpetas por proceso y mínimo 2 reglas activas y probadas en Outlook.</p></div></div>
+<div class="tabs"><div class="tablist" role="tablist"><button type="button">Parte A · Inventario</button><button type="button">Parte B · Matriz en Excel</button><button type="button">Parte C · Outlook</button><button type="button">Calculadora</button></div>
+<div class="tabpanel"><div class="card"><h3>Haga su inventario de tareas repetitivas (5 min)</h3><ol class="steps">
+ <li><span><b>Piense en su última semana</b> y anote todo lo que hizo más de una vez.</span></li>
+ <li><span><b>Revise su correo enviado</b>: los mensajes parecidos son tareas repetitivas.</span></li>
+ <li><span><b>Ejemplos frecuentes en el SENA:</b> radicación de correspondencia, consolidación de informes, envío de citaciones a comité, respuestas a solicitudes de aprendices, control de préstamo de ambientes, archivo de actas, seguimiento de vencimientos.</span></li>
+ <li><span><b>Elija 5 o más</b> y estime cuántas veces al mes las hace y cuántos minutos toma cada vez.</span></li></ol></div></div>
+<div class="tabpanel"><div class="card"><h3>Diligencie la matriz en Excel (12 min)</h3><ol class="steps">
+ <li><span><b>Abra</b> <span class="kbd">Matriz_Tareas_Digitalizables_PARTICIPANTE.xlsx</span> y lea la hoja <span class="path">Instrucciones</span>.</span></li>
+ <li><span><b>En la hoja Matriz</b>, la fila 6 es un ejemplo resuelto. Escriba sus tareas desde la fila 7, solo en las celdas <b>amarillas</b>.</span></li>
+ <li><span><b>Proceso y herramienta</b> se eligen de listas desplegables. Impacto y facilidad van de 1 a 5.</span></li>
+ <li><span><b>Las celdas verdes se calculan solas:</b> horas ahorradas = veces × (minutos hoy − minutos digital) ÷ 60; puntaje = impacto × facilidad; prioridad Alta ≥ 16, Media 9–15, Baja ≤ 8.</span></li>
+ <li><span><b>Escriba el riesgo</b> de seguridad o de datos personales de cada tarea.</span></li>
+ <li><span><b>Guarde</b> como <span class="kbd">AAAAMMDD_MTZ_TareasDigitalizables_SuNombre_v1.0.xlsx</span>.</span></li></ol>
+ <h4>Ejemplo resuelto</h4><div class="tbl"><table><thead><tr><th>Tarea</th><th>Herramienta</th><th>Veces/mes</th><th>Min hoy</th><th>Min digital</th><th>Horas/mes</th><th>Puntaje</th><th>Prioridad</th></tr></thead><tbody>
+ <tr><td>Envío de citaciones a Comité de Evaluación</td><td>Word · Combinar correspondencia</td><td class="num">12</td><td class="num">20</td><td class="num">3</td><td class="num">3,4</td><td class="num">20</td><td><span class="pill alta">Alta</span></td></tr>
+ <tr><td>Consolidación del reporte mensual de novedades</td><td>Microsoft Forms</td><td class="num">1</td><td class="num">240</td><td class="num">30</td><td class="num">3,5</td><td class="num">25</td><td><span class="pill alta">Alta</span></td></tr>
+ <tr><td>Seguimiento a tareas propias diarias</td><td>Microsoft To Do</td><td class="num">20</td><td class="num">5</td><td class="num">2</td><td class="num">1,0</td><td class="num">15</td><td><span class="pill media">Media</span></td></tr></tbody></table></div></div></div>
+<div class="tabpanel"><div class="card"><h3>Organice su bandeja (8 min)</h3><ol class="steps">
+ <li><span><b>Cree las carpetas</b> 01_ a 04_ y 99_ según su proceso (ver 1.3 › Carpetas).</span></li>
+ <li><span><b>Regla 1 · Comunicados:</b> remitente = área de comunicaciones → <span class="kbd">03_Comunicados_Institucionales</span>.</span></li>
+ <li><span><b>Regla 2 · Solicitudes:</b> asunto incluye “Solicitud” o “Constancia” → <span class="kbd">04_PQRS_Aprendices</span> + marcar con bandera.</span></li>
+ <li><span><b>Pruebe</b> cada regla enviándose un correo con la palabra clave.</span></li>
+ <li><span><b>Registre</b> sus reglas en la hoja <span class="path">Reglas_Outlook</span> y complete la lista de verificación.</span></li></ol></div></div>
+<div class="tabpanel"><form class="card" id="mtx"><h3>Calculadora de priorización</h3><p>Pruebe aquí sus tareas antes de pasarlas al Excel. Se guardan solo en este navegador.</p>
+ <div class="grid g3"><label class="f" for="mTarea" style="grid-column:1/-1">Tarea<input id="mTarea" placeholder="Ej.: Radicación de correspondencia entrante"></label>
+ <label class="f" for="mHerr">Herramienta<select id="mHerr"><option>Outlook - Reglas</option><option>Outlook - Plantillas de correo</option><option>Outlook - Calendario</option><option>Microsoft To Do</option><option>Microsoft Planner</option><option>Microsoft Forms</option><option>Excel en línea</option><option>Word - Combinar correspondencia</option><option>OneDrive / SharePoint</option><option>Teams</option></select></label>
+ <label class="f" for="mVeces">Veces por mes<input id="mVeces" type="number" min="0" value="12"></label>
+ <label class="f" for="mHoy">Minutos por vez (hoy)<input id="mHoy" type="number" min="0" value="20"></label>
+ <label class="f" for="mDig">Minutos por vez (digital)<input id="mDig" type="number" min="0" value="3"></label>
+ <label class="f" for="mImp">Impacto (1-5)<select id="mImp"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></label>
+ <label class="f" for="mFac">Facilidad (1-5)<select id="mFac"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></label></div>
+ <div class="grid g3 mtx-out"><div class="card flat"><span class="k">Horas ahorradas / mes</span><span class="stat" id="mHrs">0</span></div><div class="card flat"><span class="k">Puntaje</span><span class="stat" id="mPts">0</span></div><div class="card flat"><span class="k">Prioridad</span><span><span class="pill" id="mPri">—</span></span></div></div>
+ <button class="btn primary" type="submit" style="align-self:flex-start">Agregar a mi matriz</button>
+ <div class="tbl"><table><thead><tr><th>Tarea</th><th>Herramienta</th><th>Horas/mes</th><th>Puntaje</th><th>Prioridad</th><th></th></tr></thead><tbody id="mtxBody"></tbody></table></div>
+ <p class="score" style="font-size:15px">Tareas: <span id="mN">0</span> · Ahorro total: <span id="mTot">0 h/mes</span></p></form></div>
+</div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="s15">← Seguridad de la información</button><button class="btn primary" type="button" data-complete="taller">Marcar sección como completada</button><button class="btn" type="button" data-goto="retro">Retroalimentación →</button></div>
+</section><section class="page" id="retro" data-title="Retroalimentación" data-sub="Aplicación" hidden>
+<header class="hero"><div><div class="eyebrow">Plenaria · 9:30 a.m.</div><h1>Socialización y priorización</h1><p>Comparta sus propuestas, prioricemos las más viables y aclaremos dudas de seguridad digital.</p></div><span class="time">15 min</span></header>
+
+<div class="grid g3">
+ <div class="card"><span class="k">1 · Socialice</span><p>Comparta con el grupo su tarea de <b>mayor puntaje</b>: qué hace hoy, qué herramienta propone y cuántas horas ahorra.</p></div>
+ <div class="card"><span class="k">2 · Prioricemos</span><p>El grupo agrupa propuestas por herramienta y elige las de puntaje alto y riesgo bajo para implementar primero.</p></div>
+ <div class="card"><span class="k">3 · Resuelva dudas</span><p>Espacio para preguntas sobre MFA, phishing y manejo de datos personales.</p></div></div>
+<h3>Autoevaluación del producto</h3>
+<div class="chk" data-key="autoeval">
+ <label><input type="checkbox"><span>Mi matriz tiene 5 o más tareas reales y repetitivas.</span></label>
+ <label><input type="checkbox"><span>Cada tarea tiene una herramienta pertinente y pasos concretos.</span></label>
+ <label><input type="checkbox"><span>Calculé horas ahorradas y prioridad en todas las tareas.</span></label>
+ <label><input type="checkbox"><span>Identifiqué el riesgo de seguridad o de datos personales de cada tarea.</span></label>
+ <label><input type="checkbox"><span>Tengo 2 o más reglas activas y probadas, sin reenvíos externos.</span></label>
+ <label><input type="checkbox"><span>Mi bandeja tiene carpetas por proceso con prefijo numérico.</span></label>
+ <label><input type="checkbox"><span>Activé la autenticación en dos pasos en mi cuenta.</span></label></div>
+<p class="chkOut score" style="font-size:15px"></p>
+<h3>Preguntas frecuentes de seguridad digital</h3>
+<details class="acc"><summary>¿Puedo reenviar el correo institucional a mi correo personal para leerlo en el celular?</summary><div class="body"><p>No. Instale Outlook en el celular con su cuenta institucional. El reenvío a cuentas externas expone información de la entidad y datos personales.</p></div></details>
+<details class="acc"><summary>¿Qué hago si ya hice clic en un enlace de phishing?</summary><div class="body"><p>Cambie su contraseña de inmediato desde un equipo de confianza, revise que MFA esté activo y avise a la mesa de ayuda de TI. Reporte el correo con Notificar phishing.</p></div></details>
+<details class="acc"><summary>¿Es seguro guardar archivos en OneDrive?</summary><div class="body"><p>Sí, es el almacenamiento institucional. Comparta con <b>Personas específicas</b> en lugar de “Cualquier persona con el vínculo”, y retire los permisos cuando ya no se necesiten.</p></div></details>
+<details class="acc"><summary>¿Cada cuánto debo cambiar la contraseña?</summary><div class="body"><p>Siga la política de TI de la entidad. Cámbiela siempre que sospeche que alguien la conoce. Una frase larga y única con MFA es más segura que cambios frecuentes a claves cortas.</p></div></details>
+<div class="foot-nav"><button class="btn" type="button" data-goto="taller">← Taller de aplicación</button><button class="btn primary" type="button" data-complete="retro">Marcar sección como completada</button><button class="btn" type="button" data-goto="herr">Herramientas y configuración →</button></div>
+</section><section class="page" id="herr" data-title="Herramientas y configuración" data-sub="Recursos" data-track="no" hidden>
+<header class="hero"><div><div class="eyebrow">Recursos</div><h1>Herramientas de software y su configuración</h1><p>Qué herramienta usar para cada tarea administrativa, cómo configurarla y dónde encontrar la opción.</p></div></header>
+<div class="tbl"><table><thead><tr><th>Herramienta</th><th>Uso en el puesto</th><th>Configuración recomendada</th><th>Dónde se configura</th></tr></thead><tbody><tr><td><b>Outlook (clásico, nuevo y web)</b></td><td>Correo institucional, carpetas y reglas</td><td>Bandeja prioritaria activada · carpetas 01_ a 99_ por proceso · mínimo 2 reglas · firma institucional · plantillas de respuesta</td><td><span class='path'>Clásico: Inicio &gt; Reglas &gt; Administrar reglas y alertas · Nuevo/Web: Configuración &gt; Correo &gt; Reglas</span></td></tr><tr><td><b>Calendario de Outlook</b></td><td>Bloques de tiempo y reuniones</td><td>Horario laboral definido · bloques diarios “Foco” marcados como Ocupado · categorías de color por proceso · recordatorio 15 min</td><td><span class='path'>Configuración &gt; Calendario &gt; Vista &gt; Horario laboral</span></td></tr><tr><td><b>Microsoft To Do</b></td><td>Tareas personales del día</td><td>Lista “Mi día” cada mañana · lista por proceso · “Correo electrónico marcado” activado · fechas de vencimiento y recordatorios</td><td><span class='path'>To Do &gt; Configuración &gt; Aplicaciones conectadas &gt; Correo electrónico marcado</span></td></tr><tr><td><b>Microsoft Planner</b></td><td>Tareas de equipo</td><td>Un plan por área · depósitos por estado · responsable y fecha en cada tarea</td><td><span class='path'>Teams &gt; Agregar pestaña &gt; Planner, o planner.cloud.microsoft</span></td></tr><tr><td><b>Microsoft Forms</b></td><td>Diagnóstico y recolección de datos</td><td>Solo personas de la organización · registrar nombre · una respuesta por persona · modo Cuestionario con puntos</td><td><span class='path'>Forms &gt; Nuevo cuestionario &gt; … &gt; Configuración · Importación rápida desde Word</span></td></tr><tr><td><b>OneDrive</b></td><td>Archivos de trabajo propios</td><td>Sincronización activa · compartir con “Personas específicas” · historial de versiones · carpetas por proceso</td><td><span class='path'>Clic derecho en el archivo &gt; Historial de versiones</span></td></tr><tr><td><b>SharePoint / Archivos de Teams</b></td><td>Documentos del equipo</td><td>Biblioteca por dependencia con estructura TRD · permisos mínimos · coautoría en lugar de adjuntos</td><td><span class='path'>Teams &gt; Canal &gt; Archivos &gt; Abrir en SharePoint</span></td></tr><tr><td><b>Teams</b></td><td>Reuniones y chat de trabajo</td><td>Reuniones creadas desde el calendario · archivos compartidos como enlace · estado “No molestar” durante bloques de foco</td><td><span class='path'>Teams &gt; Configuración &gt; Notificaciones</span></td></tr><tr><td><b>Word</b></td><td>Citaciones, certificados y actas</td><td>Estilos de título · Combinar correspondencia · Control de cambios · guardar como PDF/A</td><td><span class='path'>Correspondencia &gt; Iniciar combinación · Archivo &gt; Guardar como &gt; PDF &gt; Opciones &gt; Compatible con ISO 19005-1 (PDF/A)</span></td></tr><tr><td><b>Excel</b></td><td>Matrices, consolidados e informes</td><td>Formato como tabla · validación de datos · tablas dinámicas · edición en línea compartida</td><td><span class='path'>Datos &gt; Validación de datos · Insertar &gt; Tabla dinámica</span></td></tr><tr><td><b>Microsoft Authenticator</b></td><td>Segundo factor de autenticación</td><td>Instalada en el celular · método predeterminado: notificación de la aplicación · número de teléfono de respaldo</td><td><span class='path'>aka.ms/mysecurityinfo &gt; Agregar método &gt; Aplicación de autenticación</span></td></tr><tr><td><b>Notificar phishing (Outlook)</b></td><td>Reporte de correos sospechosos</td><td>Usar el botón en lugar de reenviar el correo · avisar a la mesa de ayuda de TI</td><td><span class='path'>Inicio &gt; Notificar &gt; Notificar phishing</span></td></tr><tr><td><b>Explorador de archivos (Windows)</b></td><td>Nombres y extensiones de archivo</td><td>Mostrar extensiones de archivo (detecta “factura.pdf.exe”) · vista Detalles · ordenar por nombre</td><td><span class='path'>Vista &gt; Mostrar &gt; Extensiones de nombre de archivo</span></td></tr><tr><td><b>Sistema de gestión documental de la entidad</b></td><td>Radicación oficial de comunicaciones</td><td>Radicar siempre en el sistema oficial · nombrar el PDF con el número de radicado · no guardar copias en equipos personales</td><td><span class='path'>Según el procedimiento vigente de Gestión Documental del SENA</span></td></tr></tbody></table></div>
+<div class="note warn"><b class="tag">Importante</b><p>Las rutas corresponden a Microsoft 365 en español (octubre de 2026). Microsoft cambia los menús con frecuencia: si una opción no aparece, use el cuadro <b>Buscar</b> de la aplicación con el nombre de la función.</p></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="retro">← Retroalimentación</button><button class="btn" type="button" data-goto="glos">Glosario →</button></div>
+</section><section class="page" id="glos" data-title="Glosario" data-sub="Recursos" data-track="no" hidden>
+<header class="hero"><div><div class="eyebrow">Recursos</div><h1>Glosario de términos</h1><p>32 términos del bloque. Escriba en el buscador para filtrar.</p></div></header>
+<div class="toolbar"><label class="f" style="flex:1;min-width:0" for="glossQ">Buscar término<input id="glossQ" type="search" placeholder="Ej.: phishing, TRD, regla…"></label><span class="pill" id="glossN">32 términos</span></div>
+<div class="gloss"><div class="term"><b>Autenticación en dos pasos (MFA)</b>Método de acceso que exige la contraseña y un segundo factor, como un código o una aprobación en Microsoft Authenticator.</div><div class="term"><b>Bandeja prioritaria</b>Función de Outlook que separa los correos importantes (Prioritarios) del resto (Otros).</div><div class="term"><b>Bloque de tiempo</b>Franja reservada en el calendario para trabajo concentrado en una sola tarea, marcada como Ocupado.</div><div class="term"><b>Carpeta por proceso</b>Carpeta de correo o de archivos que agrupa la información de un proceso institucional, con prefijo numérico.</div><div class="term"><b>Categoría</b>Etiqueta de color en Outlook que permite clasificar correos, eventos y tareas.</div><div class="term"><b>Cero Papel</b>Política que promueve la reducción del uso de papel mediante documentos y trámites electrónicos (Directiva Presidencial 04 de 2012).</div><div class="term"><b>Ciclo vital del documento</b>Etapas de un documento: archivo de gestión, archivo central y archivo histórico.</div><div class="term"><b>Coautoría</b>Edición simultánea de un mismo archivo por varias personas en OneDrive o SharePoint.</div><div class="term"><b>Combinar correspondencia</b>Función de Word que genera documentos o correos personalizados a partir de una lista de datos.</div><div class="term"><b>Control de versiones</b>Registro ordenado de los cambios de un documento con números de versión (v0.1, v1.0).</div><div class="term"><b>Dato personal sensible</b>Dato que afecta la intimidad o puede generar discriminación: salud, origen étnico, orientación política, biométricos, entre otros.</div><div class="term"><b>Disposición final</b>Decisión de la TRD sobre un documento al terminar su retención: conservación total, eliminación, selección o medio técnico.</div><div class="term"><b>Expediente electrónico</b>Conjunto de documentos electrónicos de un mismo trámite, organizado y con índice.</div><div class="term"><b>Gobierno Digital</b>Política pública que orienta el uso de las TIC en el Estado para generar valor público (Decreto 767 de 2022).</div><div class="term"><b>Habeas data</b>Derecho a conocer, actualizar y rectificar la información personal registrada en bases de datos.</div><div class="term"><b>Ingeniería social</b>Manipulación de las personas para obtener información confidencial o acceso a sistemas.</div><div class="term"><b>Microsoft Forms</b>Aplicación de Microsoft 365 para crear formularios y cuestionarios con resultados en Excel.</div><div class="term"><b>Microsoft To Do</b>Aplicación de tareas personales integrada con Outlook; los correos marcados con bandera aparecen allí.</div><div class="term"><b>Nomenclatura</b>Convención fija para nombrar archivos: fecha, tipo documental, asunto, identificador y versión.</div><div class="term"><b>OneDrive</b>Almacenamiento personal en la nube de Microsoft 365, con historial de versiones.</div><div class="term"><b>PDF/A</b>Formato PDF normalizado (ISO 19005) para la conservación de documentos electrónicos a largo plazo.</div><div class="term"><b>Phishing</b>Suplantación de una entidad o persona, por correo o mensaje, para robar credenciales o instalar software malicioso.</div><div class="term"><b>Planner</b>Aplicación de Microsoft 365 para gestionar tareas de equipo en tableros.</div><div class="term"><b>Radicación</b>Registro oficial de una comunicación con número consecutivo, fecha y hora en el sistema de gestión documental.</div><div class="term"><b>Regla de Outlook</b>Instrucción automática que ejecuta una acción (mover, marcar, categorizar) sobre correos que cumplen una condición.</div><div class="term"><b>Responsable del tratamiento</b>Persona o entidad que decide sobre la base de datos y el tratamiento de los datos personales.</div><div class="term"><b>Serie documental</b>Conjunto de documentos homogéneos producidos por una dependencia en cumplimiento de una función (p. ej., Actas, Informes).</div><div class="term"><b>SharePoint</b>Plataforma de Microsoft 365 para sitios y bibliotecas de documentos de equipo.</div><div class="term"><b>Tabla de Retención Documental (TRD)</b>Listado de series y subseries documentales de cada dependencia con su tiempo de retención y disposición final.</div><div class="term"><b>Transformación digital</b>Cambio de procesos, servicios y cultura de una organización mediante el uso estratégico de las TIC.</div><div class="term"><b>Trámite en línea</b>Servicio que el ciudadano realiza total o parcialmente por medios electrónicos, sin desplazarse.</div><div class="term"><b>Tratamiento de datos</b>Cualquier operación sobre datos personales: recolección, almacenamiento, uso, circulación o supresión.</div></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="herr">← Herramientas y configuración</button><button class="btn" type="button" data-goto="ciber">Cibergrafía y videos →</button></div>
+</section><section class="page" id="ciber" data-title="Cibergrafía" data-sub="Recursos" data-track="no" hidden>
+<header class="hero"><div><div class="eyebrow">Recursos</div><h1>Cibergrafía y videos en español</h1><p>Videos de YouTube verificados por subtema y enlaces a fuentes oficiales.</p></div></header>
+<div class="toolbar" role="group" aria-label="Filtrar videos por subtema"><button class="btn primary" type="button" data-vfilter="all">Todos</button><button class="btn" type="button" data-vfilter="s11">1.1</button><button class="btn" type="button" data-vfilter="s12">1.2</button><button class="btn" type="button" data-vfilter="s13">1.3</button><button class="btn" type="button" data-vfilter="s14">1.4</button><button class="btn" type="button" data-vfilter="s15">1.5</button></div>
+<div class="vids"><a class="vid" data-sec="s11" href="https://www.youtube.com/watch?v=CJNDdUC4e7U" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/CJNDdUC4e7U/hqdefault.jpg" alt="Miniatura del video: Cómo crear un cuestionario en Microsoft Forms" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Christian Abata</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.1 Diagnóstico</span></div>
+<div class="meta"><b>Cómo crear un cuestionario en Microsoft Forms</b><small>Christian Abata · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=Xtk5DzmREbw" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Xtk5DzmREbw/hqdefault.jpg" alt="Miniatura del video: ¿En qué consiste la Política de Gobierno Digital?" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Ministerio TIC Colombia</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Gobierno Digital</span></div>
+<div class="meta"><b>¿En qué consiste la Política de Gobierno Digital?</b><small>Ministerio TIC Colombia · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=FisCHFAP2B0" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/FisCHFAP2B0/hqdefault.jpg" alt="Miniatura del video: PotencIA tu Gobierno Digital No. 1: generalidades de la política" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Ministerio TIC Colombia</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Gobierno Digital</span></div>
+<div class="meta"><b>PotencIA tu Gobierno Digital No. 1: generalidades de la política</b><small>Ministerio TIC Colombia · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=RKUzkSQVans" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/RKUzkSQVans/hqdefault.jpg" alt="Miniatura del video: Cero Papel (Directiva Presidencial 04 de 2012)" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Viviana DDHH</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Cero Papel</span></div>
+<div class="meta"><b>Cero Papel (Directiva Presidencial 04 de 2012)</b><small>Viviana DDHH · Español</small></div></a><a class="vid" data-sec="s12" href="https://www.youtube.com/watch?v=Hvha6bS8QdY" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Hvha6bS8QdY/hqdefault.jpg" alt="Miniatura del video: Estrategia de Cero Papel: implementación e integración" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Enfoque1 by Didáctica</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.2 Cero Papel</span></div>
+<div class="meta"><b>Estrategia de Cero Papel: implementación e integración</b><small>Enfoque1 by Didáctica · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=zvCakDI2_HA" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/zvCakDI2_HA/hqdefault.jpg" alt="Miniatura del video: Cómo organizar correos en Outlook con carpetas y reglas automáticas" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Fernando Juca Maldonado</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 Outlook</span></div>
+<div class="meta"><b>Cómo organizar correos en Outlook con carpetas y reglas automáticas</b><small>Fernando Juca Maldonado · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=528qOxMLUgM" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/528qOxMLUgM/hqdefault.jpg" alt="Miniatura del video: Cómo hacer que un correo vaya directamente a una carpeta en Outlook" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Solvetic</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 Outlook</span></div>
+<div class="meta"><b>Cómo hacer que un correo vaya directamente a una carpeta en Outlook</b><small>Solvetic · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=sgF9lLFqjv0" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/sgF9lLFqjv0/hqdefault.jpg" alt="Miniatura del video: Cómo organizarte con Microsoft Outlook: tutorial de calendario" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Vani Palomo</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 Calendario</span></div>
+<div class="meta"><b>Cómo organizarte con Microsoft Outlook: tutorial de calendario</b><small>Vani Palomo · Español</small></div></a><a class="vid" data-sec="s13" href="https://www.youtube.com/watch?v=uCL24LABu0Q" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/uCL24LABu0Q/hqdefault.jpg" alt="Miniatura del video: Microsoft To Do, tutorial completo" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Bi_Learning</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.3 To Do</span></div>
+<div class="meta"><b>Microsoft To Do, tutorial completo</b><small>Bi_Learning · Español</small></div></a><a class="vid" data-sec="s14" href="https://www.youtube.com/watch?v=mdnfCLlK4FE" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/mdnfCLlK4FE/hqdefault.jpg" alt="Miniatura del video: ¿Qué es una Tabla de Retención Documental (TRD)?" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>The RIMpro</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.4 TRD</span></div>
+<div class="meta"><b>¿Qué es una Tabla de Retención Documental (TRD)?</b><small>The RIMpro · Español</small></div></a><a class="vid" data-sec="s14" href="https://www.youtube.com/watch?v=aGUV0yA0MvU" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/aGUV0yA0MvU/hqdefault.jpg" alt="Miniatura del video: Así funcionan las Tablas de Retención Documental (TRD)" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Alpopular Logística Especializada</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.4 TRD</span></div>
+<div class="meta"><b>Así funcionan las Tablas de Retención Documental (TRD)</b><small>Alpopular Logística Especializada · Español</small></div></a><a class="vid" data-sec="s14" href="https://www.youtube.com/watch?v=_BB7jkI6BFs" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/_BB7jkI6BFs/hqdefault.jpg" alt="Miniatura del video: ¿Cómo organizo mis carpetas para encontrar fácilmente mis documentos?" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Tulio Ortiz</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.4 Carpetas</span></div>
+<div class="meta"><b>¿Cómo organizo mis carpetas para encontrar fácilmente mis documentos?</b><small>Tulio Ortiz · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=Mo_iddRc16k" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Mo_iddRc16k/hqdefault.jpg" alt="Miniatura del video: Contraseñas seguras: cómo crearlas para evitar ser hackeado" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>KAMBIG Centro de Estudios</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 Contraseñas</span></div>
+<div class="meta"><b>Contraseñas seguras: cómo crearlas para evitar ser hackeado</b><small>KAMBIG Centro de Estudios · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=Zf8Tfqf3H40" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Zf8Tfqf3H40/hqdefault.jpg" alt="Miniatura del video: Cómo proteger las cuentas de Microsoft 365 activando la autenticación en dos pasos (MFA)" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>IT With Carlos</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 MFA</span></div>
+<div class="meta"><b>Cómo proteger las cuentas de Microsoft 365 activando la autenticación en dos pasos (MFA)</b><small>IT With Carlos · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=6l0NZbpfPYA" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/6l0NZbpfPYA/hqdefault.jpg" alt="Miniatura del video: Cómo detectar correos falsos y evitar el phishing paso a paso" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>VerificarEmails</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 Phishing</span></div>
+<div class="meta"><b>Cómo detectar correos falsos y evitar el phishing paso a paso</b><small>VerificarEmails · Español</small></div></a><a class="vid" data-sec="s15" href="https://www.youtube.com/watch?v=Y3JzdNEi568" target="_blank" rel="noopener">
+<div class="thumb"><img src="https://i.ytimg.com/vi/Y3JzdNEi568/hqdefault.jpg" alt="Miniatura del video: Protección de datos en Colombia: Ley 1581 de 2012" loading="lazy">
+<div class="fallback"><small>Video en español · YouTube</small><b>Jair Mardi</b></div><span class="play" aria-hidden="true"></span><span class="sec">1.5 Ley 1581</span></div>
+<div class="meta"><b>Protección de datos en Colombia: Ley 1581 de 2012</b><small>Jair Mardi · Español</small></div></a></div>
+<div class="note"><b class="tag">Nota</b><p>Los 16 videos están en español y se verificaron en octubre de 2026. Cada tarjeta abre YouTube en una pestaña nueva. Si la miniatura no carga en su red, la tarjeta muestra el canal sobre fondo institucional y el enlace sigue funcionando.</p></div>
+<h3>Sitios oficiales y documentación</h3>
+<div class="links"><a href="https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=186766" target="_blank" rel="noopener"><span class="src">MinTIC</span><span><b>Decreto 767 de 2022: lineamientos generales de la Política de Gobierno Digital</b><small>https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=186766</small></span></a><a href="https://gobiernodigital.mintic.gov.co/692/articles-272977_Decreto_767_2022.pdf" target="_blank" rel="noopener"><span class="src">MinTIC</span><span><b>Decreto 767 de 2022 (PDF en el portal de Gobierno Digital)</b><small>https://gobiernodigital.mintic.gov.co/692/articles-272977_Decreto_767_2022.pdf</small></span></a><a href="https://www.apccolombia.gov.co/sites/default/files/normograma_files/Juridica/DIRECTPRES04_%202012.pdf" target="_blank" rel="noopener"><span class="src">APC Colombia</span><span><b>Directiva Presidencial 04 de 2012: eficiencia administrativa y política Cero Papel (PDF)</b><small>https://www.apccolombia.gov.co/sites/default/files/normograma_files/Juridica/DIRECTPRES04_%202012.pdf</small></span></a><a href="https://www.funcionpublica.gov.co/gestor-normativo" target="_blank" rel="noopener"><span class="src">Función Pública</span><span><b>Gestor Normativo: consulta de leyes y decretos (Ley 1581 de 2012, Ley 594 de 2000)</b><small>https://www.funcionpublica.gov.co/gestor-normativo</small></span></a><a href="https://support.microsoft.com/es-es/office/administrar-mensajes-de-correo-electr%C3%B3nico-mediante-reglas-en-outlook-c24f5dea-9465-4df4-ad17-a50704d66c59" target="_blank" rel="noopener"><span class="src">Microsoft</span><span><b>Administrar mensajes de correo electrónico mediante reglas en Outlook</b><small>https://support.microsoft.com/es-es/office/administrar-mensajes-de-correo-electr%C3%B3nico-mediante-reglas-en-outlook-c24f5dea-9465-4df4-ad17-a50704d66c59</small></span></a><a href="https://support.microsoft.com/es-es/office/organizar-la-bandeja-de-entrada-9aea8ad7-883d-459b-a3ea-ae20f06cfb32" target="_blank" rel="noopener"><span class="src">Microsoft</span><span><b>Organizar la bandeja de entrada en Outlook</b><small>https://support.microsoft.com/es-es/office/organizar-la-bandeja-de-entrada-9aea8ad7-883d-459b-a3ea-ae20f06cfb32</small></span></a><a href="https://support.microsoft.com/es-es/outlook/calendar/create-tasks-with-to-do-in-outlook" target="_blank" rel="noopener"><span class="src">Microsoft</span><span><b>Crear y administrar tareas con To Do en Outlook</b><small>https://support.microsoft.com/es-es/outlook/calendar/create-tasks-with-to-do-in-outlook</small></span></a><a href="https://support.microsoft.com/es-es/office/to-do-vs-planner-1044260a-3ac9-4006-aa27-f84476a03d23" target="_blank" rel="noopener"><span class="src">Microsoft</span><span><b>To Do vs. Planner: cuál usar</b><small>https://support.microsoft.com/es-es/office/to-do-vs-planner-1044260a-3ac9-4006-aa27-f84476a03d23</small></span></a><a href="https://support.microsoft.com/es-es/office/convertir-un-formulario-o-cuestionario-de-word-o-pdf-en-microsoft-forms-66b7e9bc-eb0d-4c65-b7e6-f9f92dcd71cb" target="_blank" rel="noopener"><span class="src">Microsoft</span><span><b>Convertir un cuestionario de Word o PDF en Microsoft Forms</b><small>https://support.microsoft.com/es-es/office/convertir-un-formulario-o-cuestionario-de-word-o-pdf-en-microsoft-forms-66b7e9bc-eb0d-4c65-b7e6-f9f92dcd71cb</small></span></a><a href="https://support.microsoft.com/es-es/office/retrasar-o-programar-el-env%C3%ADo-de-mensajes-de-correo-electr%C3%B3nico-en-outlook-026af69f-c287-490a-a72f-6c65793744ba" target="_blank" rel="noopener"><span class="src">Microsoft</span><span><b>Retrasar o programar el envío de mensajes en Outlook</b><small>https://support.microsoft.com/es-es/office/retrasar-o-programar-el-env%C3%ADo-de-mensajes-de-correo-electr%C3%B3nico-en-outlook-026af69f-c287-490a-a72f-6c65793744ba</small></span></a></div>
+<div class="foot-nav"><button class="btn" type="button" data-goto="glos">← Glosario</button><button class="btn" type="button" data-goto="biblio">Bibliografía →</button></div>
+</section><section class="page" id="biblio" data-title="Bibliografía" data-sub="Recursos" data-track="no" hidden>
+<header class="hero"><div><div class="eyebrow">Recursos</div><h1>Bibliografía</h1><p>Normas y textos de referencia del bloque, en formato APA 7.</p></div></header>
+<ol class="biblio"><li>Archivo General de la Nación. (2019). <i>Acuerdo 004 de 2019, por el cual se reglamenta el procedimiento para la elaboración, aprobación, evaluación y convalidación, implementación, publicación e inscripción en el Registro Único de Series Documentales de las Tablas de Retención Documental y las Tablas de Valoración Documental</i>. AGN.</li><li>Allen, D. (2015). <i>Getting things done: The art of stress-free productivity</i> (ed. rev.). Penguin Books.</li><li>Congreso de la República de Colombia. (2000). <i>Ley 594 de 2000, por medio de la cual se dicta la Ley General de Archivos</i>. Diario Oficial n.º 44.093.</li><li>Congreso de la República de Colombia. (2009). <i>Ley 1273 de 2009, por medio de la cual se modifica el Código Penal y se crea un nuevo bien jurídico tutelado denominado “de la protección de la información y de los datos”</i>.</li><li>Congreso de la República de Colombia. (2012). <i>Ley Estatutaria 1581 de 2012, por la cual se dictan disposiciones generales para la protección de datos personales</i>.</li><li>Congreso de la República de Colombia. (2014). <i>Ley 1712 de 2014, por medio de la cual se crea la Ley de Transparencia y del Derecho de Acceso a la Información Pública Nacional</i>.</li><li>Congreso de la República de Colombia. (2020). <i>Ley 2052 de 2020, por medio de la cual se establecen disposiciones transversales a la rama ejecutiva en relación con la racionalización de trámites</i>.</li><li>Departamento Nacional de Planeación. (2020). <i>Documento CONPES 3995: Política Nacional de Confianza y Seguridad Digital</i>. DNP.</li><li>Ministerio de Cultura. (2015). <i>Decreto 1080 de 2015, Decreto Único Reglamentario del Sector Cultura</i> (Título II, Patrimonio Archivístico).</li><li>Ministerio de Comercio, Industria y Turismo. (2013). <i>Decreto 1377 de 2013, por el cual se reglamenta parcialmente la Ley 1581 de 2012</i> (compilado en el Decreto 1074 de 2015).</li><li>Ministerio de Tecnologías de la Información y las Comunicaciones. (2022). <i>Decreto 767 de 2022, por el cual se establecen los lineamientos generales de la Política de Gobierno Digital</i>.</li><li>Ministerio de Tecnologías de la Información y las Comunicaciones. (s. f.). <i>Modelo de Seguridad y Privacidad de la Información (MSPI)</i>. MinTIC.</li><li>Newport, C. (2016). <i>Deep work: Rules for focused success in a distracted world</i>. Grand Central Publishing.</li><li>Presidencia de la República de Colombia. (2012). <i>Directiva Presidencial 04 de 2012: eficiencia administrativa y lineamientos de la política Cero Papel en la administración pública</i>.</li><li>Servicio Nacional de Aprendizaje SENA. (s. f.). <i>Manual de identidad visual institucional</i>. SENA.</li></ol>
+<div class="foot-nav"><button class="btn" type="button" data-goto="ciber">← Cibergrafía y videos</button><span></span></div>
+</section></div></main>
+</div>
+</div>
+<script>document.body.dataset.store="ovaP_";</script>
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const KEY=document.body.dataset.store;
+const store={get(k,d){try{const v=localStorage.getItem(KEY+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+             set(k,v){try{localStorage.setItem(KEY+k,JSON.stringify(v))}catch(e){}}};
+const main=$('.main'), side=$('.side'), scrim=$('.scrim');
+// ---------- tema del área de contenido
+const themeBtn=$('#themeBtn');
+function isDark(){ if(main.classList.contains('force-dark'))return true; if(main.classList.contains('force-light'))return false;
+  return getComputedStyle(main).getPropertyValue('--bg').trim().toLowerCase()==='#0a1a22'; }
+function paintThemeBtn(){const d=isDark(); themeBtn.querySelector('span').textContent=d?'Modo claro':'Modo oscuro'; themeBtn.setAttribute('aria-pressed',d)}
+const savedTheme=store.get('theme',null);
+if(savedTheme==='dark')main.classList.add('force-dark'); if(savedTheme==='light')main.classList.add('force-light');
+themeBtn.addEventListener('click',()=>{const d=isDark();main.classList.remove('force-dark','force-light');main.classList.add(d?'force-light':'force-dark');store.set('theme',d?'light':'dark');paintThemeBtn()});
+paintThemeBtn();
+// ---------- navegación
+const pages=$$('section.page'), navBtns=$$('.nav button[data-go]');
+let done=store.get('done',[]);
+function paintProgress(){ const tot=pages.filter(p=>p.dataset.track!=='no').length; const n=done.filter(id=>pages.some(p=>p.id===id&&p.dataset.track!=='no')).length;
+  $('.bar i').style.width=(tot?Math.round(n/tot*100):0)+'%'; $('#progTxt').textContent=n+' / '+tot;
+  navBtns.forEach(b=>{const t=b.querySelector('.tick'); if(t)t.classList.toggle('done',done.includes(b.dataset.go))});
+  $$('[data-complete]').forEach(b=>{const on=done.includes(b.dataset.complete);b.textContent=on?'✓ Sección completada':'Marcar sección como completada';b.classList.toggle('primary',!on)}); }
+function go(id,push){ const p=document.getElementById(id)||pages[0]; pages.forEach(x=>x.hidden=x!==p);
+  navBtns.forEach(b=>b.setAttribute('aria-current',b.dataset.go===p.id?'true':'false'));
+  $('#crumbT').textContent=p.dataset.title||''; $('#crumbS').textContent=p.dataset.sub||'';
+  if(push){try{history.replaceState(null,'','#'+p.id)}catch(e){}} main.scrollTop=0; window.scrollTo(0,0);
+  side.classList.remove('open'); scrim.classList.remove('open'); store.set('last',p.id); }
+navBtns.forEach(b=>b.addEventListener('click',()=>go(b.dataset.go,true)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.goto,true)));
+$$('[data-complete]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.complete; done=done.includes(id)?done.filter(x=>x!==id):done.concat(id); store.set('done',done); paintProgress()}));
+$('.menu-btn').addEventListener('click',()=>{side.classList.add('open');scrim.classList.add('open')});
+scrim.addEventListener('click',()=>{side.classList.remove('open');scrim.classList.remove('open')});
+const h=(location.hash||'').slice(1); go(h&&document.getElementById(h)?h:store.get('last',pages[0].id),false); paintProgress();
+// ---------- pestañas
+$$('.tabs').forEach(t=>{const bs=$$('.tablist button',t), ps=$$(':scope > .tabpanel',t);
+  bs.forEach((b,i)=>{b.setAttribute('role','tab');b.addEventListener('click',()=>{bs.forEach((x,j)=>{x.setAttribute('aria-selected',i===j);ps[j].hidden=i!==j})})});
+  bs.forEach((x,j)=>{x.setAttribute('aria-selected',j===0);ps[j].hidden=j!==0}); });
+// ---------- tarjetas giratorias
+$$('.flip').forEach(f=>{f.tabIndex=0;f.setAttribute('role','button');const t=()=>f.classList.toggle('on');f.addEventListener('click',t);f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}})});
+// ---------- cuestionarios
+$$('.quiz').forEach(qz=>{const data=JSON.parse(qz.querySelector('script').textContent); let ok=0, answered=0; const sc=document.createElement('div'); sc.className='score';
+  data.forEach((q,i)=>{const el=document.createElement('div');el.className='q';el.innerHTML='<h4>'+(i+1)+'. '+q.q+'</h4><div class="opts"></div><div class="fb" hidden></div>';
+    const o=el.querySelector('.opts'), fb=el.querySelector('.fb');
+    q.o.forEach((t,j)=>{const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+j)+'. '+t;o.appendChild(b);
+      b.addEventListener('click',()=>{ $$('button',o).forEach((x,k)=>{x.disabled=true; if(k===q.a)x.classList.add('right')}); if(j!==q.a)b.classList.add('wrong'); else ok++;
+        answered++; fb.hidden=false; fb.innerHTML=(j===q.a?'<b style="color:var(--ok)">Correcto.</b> ':'<b style="color:var(--bad)">Revise.</b> ')+q.e;
+        sc.textContent='Resultado: '+ok+' de '+data.length+(answered===data.length?(ok/data.length>=.8?' · Nivel avanzado':ok/data.length>=.5?' · Nivel intermedio':' · Nivel básico'):''); });});
+    qz.appendChild(el);});
+  sc.textContent='Resultado: 0 de '+data.length; qz.appendChild(sc);
+  const r=document.createElement('button');r.className='btn';r.type='button';r.textContent='Reiniciar';r.style.alignSelf='flex-start';
+  r.addEventListener('click',()=>{ok=0;answered=0;$$('.q',qz).forEach(q=>q.remove());sc.remove();r.remove();qz.dataset.reset='1';qz.dispatchEvent(new Event('rebuild'))});
+  qz.appendChild(r); qz.addEventListener('rebuild',()=>{location.reload()},{once:true}); });
+// ---------- copiar
+$$('[data-copy]').forEach(b=>b.addEventListener('click',()=>{const src=document.getElementById(b.dataset.copy); const txt=src.innerText;
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents(src);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Seleccionado: Ctrl+C'};
+  try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1600)},fallback)}catch(e){fallback()}}));
+// ---------- glosario
+const gq=$('#glossQ'); if(gq){gq.addEventListener('input',()=>{const v=gq.value.trim().toLowerCase(); let n=0; $$('.gloss .term').forEach(t=>{const m=!v||t.textContent.toLowerCase().includes(v);t.hidden=!m;if(m)n++}); $('#glossN').textContent=n+' términos'})}
+// ---------- miniaturas
+$$('.thumb img').forEach(img=>{const ok=()=>{if(img.naturalWidth>0)img.parentElement.classList.add('loaded')}; img.addEventListener('load',ok); if(img.complete)ok();});
+// ---------- filtro videos
+$$('[data-vfilter]').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.vfilter; $$('[data-vfilter]').forEach(x=>x.classList.toggle('primary',x===b)); $$('.vid').forEach(c=>c.hidden=v!=='all'&&c.dataset.sec!==v)}));
+// ---------- generador de nombres
+const fn=$('#fnForm'); if(fn){const upd=()=>{const d=$('#fnDate').value.replace(/-/g,''), t=$('#fnType').value, a=$('#fnAsunto').value, id=$('#fnId').value, v=$('#fnVer').value, x=$('#fnExt').value;
+  const clean=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9 ]/g,' ').trim().split(/\s+/).filter(Boolean).map(w=>w[0].toUpperCase()+w.slice(1)).join('');
+  const parts=[d||'AAAAMMDD',t,clean(a)||'Asunto']; if(clean(id))parts.push(clean(id)); const name=parts.join('_')+'_v'+v+'.'+x; $('#fnOut').textContent=name;
+  const warn=[]; if(/[áéíóúñÁÉÍÓÚÑ]/.test(a+id))warn.push('Se quitaron tildes y eñes.'); if(/[#%&\/\\?*:"<>|]/.test(a+id))warn.push('Se quitaron caracteres especiales.'); if(name.length>80)warn.push('El nombre supera 80 caracteres: acorte el asunto.');
+  $('#fnWarn').textContent=warn.length?warn.join(' '):'Nombre válido según la convención.'; };
+  $$('input,select',fn).forEach(i=>i.addEventListener('input',upd)); upd();}
+// ---------- medidor de contraseña (no se guarda ni se envía)
+const pw=$('#pw'); if(pw){const upd=()=>{const v=pw.value; const rules=[[v.length>=12,'12 caracteres o más'],[/[a-z]/.test(v)&&/[A-Z]/.test(v),'Mayúsculas y minúsculas'],[/\d/.test(v),'Al menos un número'],[/[^A-Za-z0-9]/.test(v),'Al menos un símbolo'],[!/(sena|1234|qwerty|password|contrase|colombia|2026|2025)/i.test(v)&&v.length>0,'Sin palabras obvias (sena, 1234, año)']];
+  let s=rules.filter(r=>r[0]).length; if(v.length>=16)s+=1; const pct=Math.min(100,Math.round(s/6*100));
+  const bar=$('#pwBar'); bar.style.width=pct+'%'; bar.style.background=pct<50?'var(--bad)':pct<84?'var(--warn)':'var(--ok)';
+  $('#pwTxt').textContent=!v?'Escriba una contraseña de prueba (no use la real).':pct<50?'Débil':pct<84?'Aceptable':'Fuerte';
+  $('#pwChecks').innerHTML=rules.map(r=>'<li class="'+(r[0]?'ok':'')+'">'+r[1]+'</li>').join(''); };
+  pw.addEventListener('input',upd); upd(); $('#pwShow').addEventListener('change',e=>pw.type=e.target.checked?'text':'password');}
+// ---------- cacería de phishing
+$$('.hunt').forEach(hn=>{const hs=$$('.hot',hn), tot=hs.length, out=$('.huntOut',hn);
+  hs.forEach(h=>h.addEventListener('click',()=>{h.classList.add('found'); const f=hs.filter(x=>x.classList.contains('found')).length; const tip=h.dataset.tip;
+    out.innerHTML='<b>'+f+' de '+tot+' señales encontradas.</b> '+tip+(f===tot?' <b style="color:var(--ok)">¡Encontró todas las señales!</b>':'');}));});
+// ---------- simulador de reglas
+const rs=$('#ruleSim'); if(rs){const mails=JSON.parse($('#mailsData').textContent);
+  const draw=()=>{const cond=$('#rCond').value, val=$('#rVal').value.trim().toLowerCase(), act=$('#rFolder').value;
+    $('#rSentence').innerHTML='Cuando llegue un mensaje <b>'+$('#rCond').selectedOptions[0].text.toLowerCase()+' “'+(val||'…')+'”</b>, moverlo a la carpeta <b>'+act+'</b>.';
+    const box=$('#inboxSim'); box.innerHTML=''; let n=0;
+    mails.forEach(m=>{const hay=(cond==='from'?m.from:m.subj).toLowerCase(); const hit=val&&hay.includes(val); if(hit)n++;
+      const r=document.createElement('div');r.className='row';r.innerHTML='<span class="from"></span><span class="subj"></span><span class="folder'+(hit?' moved':'')+'"></span>';
+      r.children[0].textContent=m.from;r.children[1].textContent=m.subj;r.children[2].textContent=hit?act:'Bandeja de entrada';box.appendChild(r)});
+    $('#rCount').textContent=n+' de '+mails.length+' correos se organizarían automáticamente.'; };
+  $$('select,input',rs).forEach(i=>i.addEventListener('input',draw)); draw();}
+// ---------- calculadora de matriz
+const mx=$('#mtx'); if(mx){let rows=store.get('mtx',[]);
+  const calc=()=>{const v=+$('#mVeces').value||0, a=+$('#mHoy').value||0, b=+$('#mDig').value||0, im=+$('#mImp').value, fa=+$('#mFac').value;
+    const hrs=Math.max(0,Math.round(v*(a-b)/60*10)/10), p=im*fa, pr=p>=16?'Alta':p>=9?'Media':'Baja'; return {hrs,p,pr}};
+  const live=()=>{const c=calc(); $('#mHrs').textContent=c.hrs.toLocaleString('es-CO'); $('#mPts').textContent=c.p; const pp=$('#mPri'); pp.textContent=c.pr; pp.className='pill '+c.pr.toLowerCase();};
+  const paint=()=>{const tb=$('#mtxBody'); tb.innerHTML=''; let tot=0;
+    if(!rows.length){tb.innerHTML='<tr><td colspan="6" style="color:var(--muted)">Aún no ha agregado tareas. Diligencie el formulario y pulse “Agregar a mi matriz”.</td></tr>'}
+    rows.forEach((r,i)=>{tot+=r.hrs; const tr=document.createElement('tr'); tr.innerHTML='<td></td><td></td><td class="num">'+r.hrs.toLocaleString('es-CO')+'</td><td class="num">'+r.p+'</td><td><span class="pill '+r.pr.toLowerCase()+'">'+r.pr+'</span></td><td><button class="btn" type="button" style="padding:3px 9px;font-size:12px">Quitar</button></td>';
+      tr.children[0].textContent=r.t; tr.children[1].textContent=r.h; tr.querySelector('button').addEventListener('click',()=>{rows.splice(i,1);store.set('mtx',rows);paint()}); tb.appendChild(tr)});
+    $('#mTot').textContent=(Math.round(tot*10)/10).toLocaleString('es-CO')+' h/mes'; $('#mN').textContent=rows.length; };
+  $$('input,select',mx).forEach(i=>i.addEventListener('input',live));
+  mx.addEventListener('submit',e=>{e.preventDefault(); const t=$('#mTarea').value.trim(); if(!t){$('#mTarea').focus();return} const c=calc(); rows.push({t,h:$('#mHerr').value,...c}); store.set('mtx',rows); $('#mTarea').value=''; paint();});
+  live(); paint();}
+// ---------- checklist persistente
+$$('.chk[data-key]').forEach(c=>{const k='chk_'+c.dataset.key; const st=store.get(k,{}); $$('input',c).forEach((i,ix)=>{i.checked=!!st[ix]; i.addEventListener('change',()=>{st[ix]=i.checked;store.set(k,st); const out=c.nextElementSibling; if(out&&out.classList.contains('chkOut'))out.textContent=$$('input:checked',c).length+' de '+$$('input',c).length+' listos'})}); const out=c.nextElementSibling; if(out&&out.classList.contains('chkOut'))out.textContent=$$('input:checked',c).length+' de '+$$('input',c).length+' listos';});
+// ---------- filtro tabla
+$$('[data-tfilter]').forEach(sel=>sel.addEventListener('input',()=>{const v=sel.value; $$('#'+sel.dataset.tfilter+' tbody tr').forEach(tr=>tr.hidden=v!=='all'&&tr.dataset.p!==v)}));
+// ---------- cronómetro de clase (docente)
+const ag=$('#agendaLive'); if(ag){const items=$$('.ti',ag); const tick=()=>{const now=new Date(); const m=now.getHours()*60+now.getMinutes(); let cur=-1;
+  items.forEach((it,i)=>{const s=+it.dataset.s, e=+it.dataset.e; it.classList.toggle('now',m>=s&&m<e); it.classList.toggle('past',m>=e); if(m>=s&&m<e)cur=i;});
+  const lab=$('#agendaNow'); if(cur>=0){const it=items[cur]; lab.textContent='Ahora: '+it.querySelector('b').textContent+' · quedan '+(+it.dataset.e-m)+' min';}
+  else lab.textContent=m<450?'La sesión inicia a las 7:30 a.m.':'Fuera del horario del bloque (7:30 – 9:45 a.m.). La línea de tiempo se resalta sola durante la clase.'; };
+  tick(); setInterval(tick,30000);}
+// ---------- temporizador manual
+const tm=$('#timer'); if(tm){let left=0,iv=null; const show=()=>{const m=Math.floor(left/60),s=left%60; $('#tmOut').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
+  $$('[data-min]',tm).forEach(b=>b.addEventListener('click',()=>{left=+b.dataset.min*60;show();clearInterval(iv);iv=setInterval(()=>{if(left>0){left--;show()}else{clearInterval(iv);$('#tmOut').textContent='¡Tiempo!'}},1000)}));
+  $('#tmStop').addEventListener('click',()=>{clearInterval(iv);left=0;show()}); show();}
+})();
+</script></body></html>

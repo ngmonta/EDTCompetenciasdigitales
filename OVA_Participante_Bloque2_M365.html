@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OVA M365 – Participante</title>
+<meta name="description" content="Objeto Virtual de Aprendizaje – Bloque 2: Productividad digital con Microsoft 365 para funcionarios administrativos del SENA (Participante).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#39A900; --green-d:#007832; --navy:#00304D; --navy-2:#0A3E5C;
+  --font:'Work Sans',Calibri,'Segoe UI',Arial,sans-serif;
+  --sidebar-w:272px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--font);background:var(--navy);color:#1F2A33;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+/* ---------- content theme tokens (only content area switches) ---------- */
+.content{
+  --bg:#F2F5F3; --surface:#FFFFFF; --surface-2:#F7FAF6; --text:#1E2930; --muted:#5A6870; --border:#DCE3DF;
+  --accent:#007832; --accent-strong:#39A900; --accent-soft:#E8F4E0; --info-soft:#E6EEF4; --warn-soft:#FFF4D6; --warn:#8A5A00;
+  --danger:#B42318; --danger-soft:#FDECEA; --ok:#1E7B34; --code:#EEF2F0; --shadow:0 1px 2px rgba(0,30,50,.06),0 4px 14px rgba(0,30,50,.06);
+  --ins:#0B6E2E; --del:#B42318;
+}
+.content[data-theme="dark"]{
+  --bg:#0D1820; --surface:#14232D; --surface-2:#182A35; --text:#E4ECEF; --muted:#9DB0B9; --border:#25404D;
+  --accent:#7DD43F; --accent-strong:#5CC21A; --accent-soft:#17321F; --info-soft:#152B3A; --warn-soft:#33290F; --warn:#F2C35B;
+  --danger:#FF8A80; --danger-soft:#3A1D1D; --ok:#7DD43F; --code:#1C303B; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+  --ins:#7DD43F; --del:#FF8A80;
+}
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+.sidebar{background:var(--navy);color:#DCE7EE;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;border-right:1px solid #0B4466}
+.brand{display:flex;align-items:center;gap:12px;padding:20px 18px 16px;border-bottom:1px solid #0E4A6E}
+.brand img{width:46px;height:auto}
+.brand b{display:block;font-size:13px;letter-spacing:.02em;color:#fff}
+.brand span{font-size:11.5px;color:#9FC0D3}
+.role{margin:14px 18px 6px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--green);color:#fff;padding:5px 10px;border-radius:999px;width:max-content}
+.nav{padding:6px 10px 20px;flex:1}
+.nav h6{margin:16px 10px 6px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#7FA6BD;font-weight:600}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;font-size:14px;color:#D5E3EB;line-height:1.25}
+.nav a:hover{background:#0B4466}
+.nav a.active{background:#0F5279;color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--green)}
+.nav .num{flex:none;width:30px;height:24px;border-radius:6px;background:#0C4062;display:grid;place-items:center;font-size:11.5px;font-weight:700;color:#BFE3A6}
+.nav a.done .num{background:var(--green);color:#fff}
+.side-foot{padding:14px 18px;font-size:11px;color:#7FA6BD;border-top:1px solid #0E4A6E}
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #DCE3DF;display:flex;align-items:center;gap:14px;padding:10px 22px}
+.topbar h1{font-size:16px;margin:0;font-weight:700;color:var(--navy);line-height:1.2}
+.topbar h1 small{display:block;font-weight:400;color:#5A6870;font-size:12.5px}
+.prog{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12.5px;color:#5A6870;white-space:nowrap}
+.bar{width:150px;height:8px;background:#E3EAE5;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);transition:width .4s}
+.iconbtn{border:1px solid #DCE3DF;background:#fff;border-radius:999px;padding:7px 12px;font:600 13px var(--font);color:var(--navy);cursor:pointer;display:inline-flex;gap:7px;align-items:center}
+.iconbtn:hover{border-color:var(--green)}
+.menu-btn{display:none}
+.content{flex:1;background:var(--bg);color:var(--text);padding:28px clamp(16px,3vw,40px) 60px;transition:background .25s,color .25s}
+.wrap{max-width:1080px;margin:0 auto}
+section.sec{display:none;animation:fade .25s ease}
+section.sec.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ---------- typography & blocks ---------- */
+.kicker{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h2.t{font-size:clamp(26px,3.4vw,36px);line-height:1.12;margin:6px 0 10px;font-weight:800;letter-spacing:-.01em}
+h3{font-size:20px;margin:30px 0 10px;font-weight:700}
+h4{font-size:16px;margin:18px 0 8px;font-weight:700}
+p,li{line-height:1.6;font-size:15.5px}
+.lead{font-size:17px;color:var(--muted);max-width:820px}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.stat{font-size:34px;font-weight:800;color:var(--accent);line-height:1}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.pill.navy{background:var(--info-soft);color:var(--text)}
+kbd,.path{font-family:var(--font);font-size:13px;font-weight:600;background:var(--code);border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 7px;white-space:nowrap}
+.path{background:var(--accent-soft);border-color:transparent;color:var(--text);font-weight:600}
+.note{border-radius:12px;padding:14px 16px;margin:16px 0;background:var(--info-soft);border:1px solid var(--border)}
+.note.tip{background:var(--accent-soft)}
+.note.warn{background:var(--warn-soft)}
+.note b:first-child{display:block;margin-bottom:4px}
+.teacher{border:2px dashed var(--accent-strong);background:var(--surface-2);border-radius:14px;padding:14px 18px;margin:18px 0}
+.teacher>.lbl{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+table.tbl{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--surface);border-radius:12px;overflow:hidden}
+.tbl th{background:var(--green-d);color:#fff;text-align:left;padding:10px 12px;font-weight:600}
+.tbl td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--surface-2)}
+.tscroll{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+button.btn{font:600 14px var(--font);border:0;border-radius:10px;padding:10px 16px;background:var(--green-d);color:#fff;cursor:pointer}
+button.btn:hover{filter:brightness(1.08)}
+button.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button.btn.sm{padding:6px 11px;font-size:13px}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:stretch}
+.hero .card.big{background:linear-gradient(135deg,var(--green-d),#0B5E2C 55%,var(--navy));color:#fff;border:0;padding:28px}
+.hero .card.big p{color:#E7F3EA}
+.hero .card.big h2{color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+/* tabs */
+.tabs{margin-top:10px}
+.tablist{display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.tablist button{font:600 14px var(--font);background:none;border:0;padding:10px 12px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tablist button[aria-selected="true"]{color:var(--accent);border-color:var(--accent-strong)}
+.tabpanel{display:none}.tabpanel.on{display:block}
+/* stepper */
+.stepper{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin:14px 0}
+.stepper .shead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.stepper .shead b{font-size:15px;overflow-wrap:anywhere;min-width:0}
+.dots{display:flex;gap:6px}
+.dots i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;background:var(--code);color:var(--muted);cursor:pointer}
+.dots i.on{background:var(--green-d);color:#fff}
+.dots i.seen{background:var(--accent-soft);color:var(--accent)}
+.step{display:none}.step.on{display:block;animation:fade .2s}
+.step h5{font-size:17px;margin:4px 0 6px}
+.snav{display:flex;justify-content:space-between;margin-top:14px}
+/* quiz */
+.quiz .q{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:10px 0}
+.quiz .q p{margin:0 0 8px;font-weight:600}
+.quiz label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;cursor:pointer;border:1px solid transparent;font-size:15px}
+.quiz label:hover{background:var(--surface-2)}
+.quiz label.right{border-color:var(--ok);background:var(--accent-soft)}
+.quiz label.wrong{border-color:var(--danger);background:var(--danger-soft)}
+.quiz .fb{font-size:14px;margin-top:6px;display:none}
+.quiz .fb.on{display:block}
+.quiz .key{display:none;font-size:12px;font-weight:700;color:var(--accent);margin-left:auto}
+.showkeys .quiz .key{display:inline}
+.score{font-weight:700;margin-top:10px}
+/* completion */
+.complete{margin-top:34px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:18px}
+/* flip cards */
+.flip{perspective:900px;min-height:170px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;min-height:170px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;border-radius:14px;padding:16px;backface-visibility:hidden;border:1px solid var(--border);display:flex;flex-direction:column;justify-content:center}
+.flip .f{background:var(--danger-soft)}
+.flip .b{background:var(--accent-soft);transform:rotateY(180deg)}
+.flip small{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:11px;margin-bottom:6px}
+/* video cards */
+.vcard{display:flex;flex-direction:column;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .15s}
+.vcard:hover{transform:translateY(-3px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#0A2A3D center/cover no-repeat}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .play{position:absolute;inset:0;display:grid;place-items:center}
+.thumb .play span{width:56px;height:40px;border-radius:12px;background:rgba(200,0,0,.88);display:grid;place-items:center}
+.thumb .play span:after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.vcard .vb{padding:12px 14px}
+.vcard .vb b{display:block;font-size:14.5px;line-height:1.35;color:var(--text)}
+.vcard .vb span{font-size:12.5px;color:var(--muted)}
+/* simulators */
+.sim{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin:16px 0}
+.sim h4{margin-top:0}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+.field input,.field select{font:400 14.5px var(--font);padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text)}
+.opt{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.opt button{font:600 13.5px var(--font);padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer}
+.opt button.on{background:var(--green-d);border-color:var(--green-d);color:#fff}
+.meter{height:12px;border-radius:99px;background:var(--code);overflow:hidden}
+.meter i{display:block;height:100%;transition:width .35s,background .35s}
+.paper{overflow-wrap:anywhere;background:#fff;color:#222;border-radius:8px;padding:22px 26px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:14.5px;line-height:1.5;border:1px solid #D5D9DC;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.paper .mf{background:#E7E7E7;border-radius:3px;padding:0 3px;color:#222}
+.paper .val{background:#FFF3B0;border-radius:3px;padding:0 3px}
+.paper .ins{color:#0B6E2E;text-decoration:underline}
+.paper .del{color:#B42318;text-decoration:line-through}
+.paper .hdr{display:flex;gap:10px;align-items:center;border-bottom:2px solid #39A900;padding-bottom:8px;margin-bottom:12px;font-size:12px;color:#4D4D4C}
+.paper .hdr img{width:34px}
+.sig{font-family:Calibri,Arial,sans-serif;color:#222;background:#fff;border-radius:8px;padding:16px;border:1px solid #D5D9DC}
+.change{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:6px 0}
+.timeline{list-style:none;padding:0;margin:0}
+.timeline li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--border)}
+.timeline .v{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:800}
+.timeline li.cur .v{background:var(--green-d);color:#fff}
+.doc-co{position:relative;line-height:1.9}
+.cursor{display:inline-block;width:2px;height:1.2em;vertical-align:-3px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+.tag{font-size:11px;font-weight:700;color:#fff;padding:1px 6px;border-radius:4px;vertical-align:top;margin-left:2px}
+.thread{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface-2)}
+.msg{display:flex;gap:10px;margin:8px 0}
+.av{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+.mention{color:#0F5BB5;font-weight:700}
+.resolved{opacity:.55}
+.sortable{display:flex;flex-wrap:wrap;gap:8px}
+.chipq{padding:8px 12px;border-radius:999px;border:1px dashed var(--border);background:var(--surface-2);font-size:14px}
+.check{list-style:none;padding:0}
+.check li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px}
+.check li:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;margin-top:4px;accent-color:#007832;flex:none}
+.check li.ok span{text-decoration:line-through;color:var(--muted)}
+.gl-item{padding:12px 0;border-bottom:1px solid var(--border)}
+.gl-item b{color:var(--accent)}
+.files a.fl{display:flex;gap:12px;align-items:center;text-decoration:none;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.files a.fl:hover{border-color:var(--accent-strong)}
+.ext{flex:none;width:46px;height:46px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#fff}
+.x-xlsx{background:#1D6F42}.x-docx{background:#2B579A}.x-dotx{background:#41659F}.x-html{background:#E34F26}.x-pptx{background:#C43E1C}
+.agenda{list-style:none;margin:0;padding:0;border-left:3px solid var(--accent-strong)}
+.agenda li{position:relative;padding:8px 0 12px 18px}
+.agenda li:before{content:"";position:absolute;left:-8px;top:14px;width:13px;height:13px;border-radius:50%;background:var(--surface);border:3px solid var(--accent-strong)}
+.agenda time{font-weight:800;color:var(--accent);margin-right:8px}
+.mobile-scrim{display:none}
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:0;top:0;width:min(86vw,300px);transform:translateX(-100%);transition:transform .25s;z-index:30}
+  .sidebar.open{transform:none}
+  .mobile-scrim.open{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:20}
+  .menu-btn{display:inline-flex}
+  .hero{grid-template-columns:1fr}
+  .bar{width:80px}
+  .topbar{padding:10px 14px;gap:10px}
+  .topbar h1 small{display:none}
+}
+@media (max-width:560px){ .prog span.lbl{display:none} .iconbtn .txt{display:none} .content{padding:20px 16px 50px} }
+@media print{.sidebar,.topbar,.complete,.snav{display:none}.app{display:block}section.sec{display:block!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar" aria-label="Navegación del OVA">
+  <div class="brand"><img src="data:image/png;base64,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" alt="Logo SENA"><div><b>Servicio Nacional de Aprendizaje</b><span>Formación a funcionarios administrativos</span></div></div>
+  <span class="role">🎓 OVA Participante</span>
+  <nav class="nav" id="nav"></nav>
+  <div class="side-foot">Bloque 2 · 10:00 a. m. – 12:00 m.<br>Productividad digital con Microsoft 365</div>
+</aside>
+<div class="mobile-scrim" id="scrim"></div>
+<div class="main">
+  <header class="topbar">
+    <button class="iconbtn menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+    <h1>Productividad digital con Microsoft 365<small>Bloque 2 · Producir, almacenar y compartir documentos administrativos de forma segura</small></h1>
+    <div class="prog" title="Avance de secciones completadas"><span class="lbl">Avance</span><div class="bar"><i id="barFill"></i></div><b id="pct">0%</b></div>
+    <button class="iconbtn" id="themeBtn" aria-pressed="false" title="Cambiar el área de contenido a modo oscuro"><span id="themeIco">🌙</span><span class="txt" id="themeTxt">Modo oscuro</span></button>
+  </header>
+  <main class="content" id="content" data-theme="light">
+  <div class="wrap">
+
+<!-- ===================== INICIO ===================== -->
+<section class="sec" data-sec="inicio" data-group="Inicio" data-num="◉" data-title="Bienvenida">
+  <div class="hero">
+    <div class="card big">
+      <div class="kicker" style="color:#BFE3A6">Bloque 2 · 2 horas</div>
+      <h2 class="t">Productividad digital con Microsoft 365</h2>
+      <p><b>Objetivo:</b> aprovechar las aplicaciones de Microsoft 365 para producir, almacenar y compartir documentos administrativos de forma segura y eficiente.</p>
+      <div class="chips" style="margin-top:14px"><span class="pill" style="background:#ffffff22;color:#fff">Outlook</span><span class="pill" style="background:#ffffff22;color:#fff">OneDrive</span><span class="pill" style="background:#ffffff22;color:#fff">Word</span><span class="pill" style="background:#ffffff22;color:#fff">Coautoría</span></div>
+      <p style="margin-top:18px"><button class="btn" style="background:#fff;color:#007832" onclick="go('m21')">Comenzar el recorrido →</button></p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">¿Qué vas a lograr?</h4>
+      <ul style="padding-left:18px;margin:0">
+        <li>Ubicar cada aplicación de Microsoft 365 y elegir entre la versión de escritorio o la web.</li>
+        <li>Configurar Outlook para trabajar mejor: firma, plantillas, respuestas automáticas, calendarios y salas.</li>
+        <li>Guardar y compartir en OneDrive con el permiso justo y recuperar versiones o archivos borrados.</li>
+        <li>Producir oficios, memorandos y citaciones en Word con estilos, plantillas y combinación de correspondencia.</li>
+        <li>Revisar documentos en equipo con control de cambios, comentarios, @menciones y coautoría.</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Ruta de aprendizaje</h3>
+  <div class="grid g3" id="routeCards"></div>
+  <h3>Producto esperado</h3>
+  <div class="grid g2">
+    <div class="card"><span class="pill">Producto 1</span><h4>Citaciones combinadas</h4><p class="muted" style="margin:0">20 citaciones personalizadas generadas con combinación de correspondencia a partir de una lista en Excel.</p></div>
+    <div class="card"><span class="pill">Producto 2</span><h4>Memorando revisado y compartido</h4><p class="muted" style="margin:0">Memorando revisado en parejas con control de cambios y comentarios, compartido desde OneDrive con permiso de solo lectura.</p></div>
+  </div>
+  <div class="note tip"><b>¿Cómo usar este OVA?</b>Recorre las secciones del menú en orden. Cada tema trae explicación, un paso a paso, un simulador para practicar sin riesgo y una autoevaluación corta. Al final de cada sección pulsa <b>«Marcar como completada»</b> para ver tu avance. El botón <b>🌙 Modo oscuro</b> cambia solo el área de contenido.</div>
+
+</section>
+
+
+
+<!-- ===================== 2.1 ===================== -->
+<section class="sec" data-sec="m21" data-group="Temas" data-num="2.1" data-title="Ecosistema Microsoft 365">
+  <div class="kicker">Tema 2.1 · 10 min</div>
+  <h2 class="t">Ecosistema Microsoft 365</h2>
+  <p class="lead">Microsoft 365 es el conjunto de aplicaciones y servicios en la nube con los que el SENA produce, guarda y comparte información. Entender qué es cada pieza te ayuda a elegir la herramienta correcta.</p>
+  <div class="tabs">
+    <div class="tablist" role="tablist"><button role="tab">Office 365 vs. Microsoft 365</button><button role="tab">Portal office.com</button><button role="tab">Escritorio vs. web</button></div>
+    <div class="tabpanel">
+      <div class="grid g2">
+        <div class="card"><span class="pill navy">Office 365</span><h4>Productividad en la nube</h4><p>Nombre con el que nació (2011) la suscripción que incluye las aplicaciones de Office (Word, Excel, PowerPoint, Outlook) y servicios en línea: correo Exchange, OneDrive, SharePoint y Teams.</p><p class="muted" style="margin:0">Hoy el nombre se mantiene en algunos planes empresariales (por ejemplo, Office 365 E1/E3/E5).</p></div>
+        <div class="card"><span class="pill">Microsoft 365</span><h4>Office 365 + más</h4><p>Desde abril de 2020 muchos planes pasaron a llamarse Microsoft 365. En los planes empresariales suma a Office 365 la licencia de <b>Windows</b> y herramientas de <b>seguridad y administración de dispositivos e identidades</b>.</p><p class="muted" style="margin:0">En la práctica: es la «sombrilla» completa de servicios en la nube.</p></div>
+      </div>
+      <div class="note"><b>Idea clave para recordar</b>Office 365 ⊂ Microsoft 365. Ambos se usan con tu <b>cuenta institucional</b>; lo que cambia es el alcance del plan que el SENA tenga contratado. Tu correo y tus archivos institucionales viven en la nube de la entidad, no en tu equipo.</div>
+    </div>
+    <div class="tabpanel">
+      <p>Ingresa en <span class="path">https://www.office.com</span> (también disponible como <span class="path">m365.cloud.microsoft</span>) con tu correo institucional. Desde allí accedes a:</p>
+      <div class="grid g4">
+        <div class="card"><b>📧 Outlook</b><p class="muted" style="margin:4px 0 0">Correo, calendario y contactos.</p></div>
+        <div class="card"><b>☁️ OneDrive</b><p class="muted" style="margin:4px 0 0">Tus archivos de trabajo en la nube.</p></div>
+        <div class="card"><b>📝 Word · Excel · PowerPoint</b><p class="muted" style="margin:4px 0 0">Versiones web para crear y editar.</p></div>
+        <div class="card"><b>👥 Teams · SharePoint</b><p class="muted" style="margin:4px 0 0">Equipos, chats y sitios compartidos.</p></div>
+      </div>
+      <div class="stepper" data-title="Paso a paso: ingresar al portal y anclar aplicaciones">
+        <div class="step"><h5>Abre el navegador</h5><p>Usa Microsoft Edge o Google Chrome actualizados. Evita modo incógnito si quieres que el equipo recuerde tu sesión (solo en tu equipo personal de trabajo).</p></div>
+        <div class="step"><h5>Inicia sesión</h5><p>Escribe <span class="path">office.com</span> → <kbd>Iniciar sesión</kbd> → correo institucional → contraseña → confirma el segundo factor de autenticación si tu cuenta lo tiene activo.</p></div>
+        <div class="step"><h5>Explora el inicio</h5><p>Verás archivos recientes, compartidos contigo y favoritos. Usa la barra de búsqueda superior para encontrar documentos por nombre o contenido.</p></div>
+        <div class="step"><h5>Ancla tus aplicaciones</h5><p>En el iniciador de aplicaciones (cuadrícula de 9 puntos ▦) haz clic derecho sobre una app → <kbd>Anclar al iniciador</kbd>.</p></div>
+        <div class="step"><h5>Cierra sesión en equipos compartidos</h5><p>Al terminar en un equipo que no es tuyo: icono de tu perfil → <kbd>Cerrar sesión</kbd> y cierra el navegador.</p></div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <div class="tscroll"><table class="tbl">
+        <tr><th>Criterio</th><th>Aplicaciones de escritorio</th><th>Aplicaciones web</th></tr>
+        <tr><td>Dónde se usan</td><td>Instaladas en el equipo (Windows/Mac)</td><td>En el navegador, desde cualquier equipo</td></tr>
+        <tr><td>Funciones</td><td>Completas (combinación de correspondencia, macros, campos avanzados)</td><td>Esenciales; algunas funciones avanzadas no están</td></tr>
+        <tr><td>Sin internet</td><td>Sí funcionan (sincronizan al reconectar)</td><td>No</td></tr>
+        <tr><td>Coautoría</td><td>Sí, si el archivo está en OneDrive/SharePoint y el Autoguardado está activo</td><td>Sí, de forma nativa</td></tr>
+        <tr><td>Ideal para</td><td>Documentos extensos, plantillas, combinación, formatos complejos</td><td>Revisiones rápidas, trabajo desde otro equipo, colaboración</td></tr>
+      </table></div>
+      <div class="sim">
+        <h4>🎯 Reto rápido: ¿escritorio o web?</h4>
+        <p class="muted" style="margin-top:0">Haz clic en la opción que mejor responde a cada situación.</p>
+        <div id="classify"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Autoevaluación</h3>
+  <div class="quiz" data-quiz="q21"></div>
+  <div class="complete"><span class="muted">¿Terminaste el tema 2.1?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== 2.2 ===================== -->
+<section class="sec" data-sec="m22" data-group="Temas" data-num="2.2" data-title="Outlook avanzado">
+  <div class="kicker">Tema 2.2 · 15 min</div>
+  <h2 class="t">Outlook avanzado</h2>
+  <p class="lead">Seis funciones que ahorran tiempo en la gestión administrativa diaria. Las rutas se indican para el <b>nuevo Outlook / Outlook en la web</b> y, entre paréntesis, para <b>Outlook clásico</b>.</p>
+  <div class="tabs">
+    <div class="tablist" role="tablist"><button>✍️ Firma</button><button>📄 Plantillas</button><button>🏖️ Respuestas automáticas</button><button>📅 Calendario compartido</button><button>⏰ Programar envío</button><button>🏢 Reserva de salas</button></div>
+    <div class="tabpanel">
+      <p>La firma institucional identifica a la entidad y facilita el contacto. Debe ser sobria, sin imágenes pesadas ni frases personales, y respetar el Manual de Identidad Visual del SENA (colores y tipografía).</p>
+      <div class="stepper" data-title="Paso a paso: crear la firma institucional">
+        <div class="step"><h5>Abre la configuración</h5><p><span class="path">⚙ Configuración › Cuentas › Firmas</span> <span class="muted">(clásico: Archivo › Opciones › Correo › Firmas)</span>.</p></div>
+        <div class="step"><h5>Crea una nueva firma</h5><p>Pulsa <kbd>+ Nueva firma</kbd>, nómbrala «Institucional» y pega el texto generado con el simulador de abajo (o escríbelo).</p></div>
+        <div class="step"><h5>Asígnala por defecto</h5><p>En <b>Firma predeterminada</b> elige «Institucional» para mensajes nuevos y una versión corta para respuestas y reenvíos.</p></div>
+        <div class="step"><h5>Guarda y prueba</h5><p><kbd>Guardar</kbd> → redacta un correo de prueba a tu propia cuenta y verifica cómo se ve en el celular.</p></div>
+      </div>
+      <div class="sim">
+        <h4>🧪 Generador de firma institucional</h4>
+        <div class="grid g3">
+          <label class="field">Nombre completo<input id="sgN" value="Paola Andrea Herrera Ospina"></label>
+          <label class="field">Cargo<input id="sgC" value="Secretaria Grado 03"></label>
+          <label class="field">Dependencia<input id="sgD" value="Subdirección de Centro"></label>
+          <label class="field">Regional / Centro<input id="sgR" value="Regional Distrito Capital"></label>
+          <label class="field">Teléfono y extensión<input id="sgT" value="(601) 000 0000 Ext. 12345"></label>
+          <label class="field">Correo<input id="sgE" value="pherrera@ejemplo.sena.edu.co"></label>
+        </div>
+        <p class="muted" style="font-size:13px">Vista previa (así se verá en el correo):</p>
+        <div class="sig" id="sigPrev"></div>
+        <p><button class="btn sm" id="sigCopy">Copiar firma (formato)</button> <span id="sigMsg" class="muted" style="font-size:13px"></span></p>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <p>Las plantillas guardan correos que escribes con frecuencia (acuse de recibo, solicitud de documentos, convocatorias) para insertarlos con un clic.</p>
+      <div class="grid g2">
+        <div class="stepper" data-title="Nuevo Outlook / web: Mis plantillas">
+          <div class="step"><h5>Abre un mensaje nuevo</h5><p><kbd>Nuevo correo</kbd>. En la cinta, busca <span class="path">Aplicaciones › Mis plantillas</span> (o en «…» Más opciones).</p></div>
+          <div class="step"><h5>Agrega la plantilla</h5><p><kbd>+ Plantilla</kbd> → escribe un título («Acuse de recibo») y el cuerpo → <kbd>Guardar</kbd>.</p></div>
+          <div class="step"><h5>Úsala</h5><p>En un mensaje nuevo, abre <b>Mis plantillas</b> y haz clic en la plantilla; el texto se inserta en el cuerpo. Personaliza antes de enviar.</p></div>
+        </div>
+        <div class="stepper" data-title="Outlook clásico: plantilla .oft">
+          <div class="step"><h5>Redacta el modelo</h5><p>Crea un correo con asunto y cuerpo modelo (sin destinatarios fijos si varían).</p></div>
+          <div class="step"><h5>Guárdalo como plantilla</h5><p><span class="path">Archivo › Guardar como › Tipo: Plantilla de Outlook (*.oft)</span>.</p></div>
+          <div class="step"><h5>Úsala</h5><p><span class="path">Inicio › Nuevos elementos › Más elementos › Elegir formulario › Plantillas de usuario en el sistema de archivos</span>.</p></div>
+        </div>
+      </div>
+      <div class="note tip"><b>Ejemplo resuelto – plantilla «Acuse de recibo»</b>Asunto: <i>Acuse de recibo – [asunto original]</i><br>«Cordial saludo. Confirmamos la recepción de su comunicación del [fecha], radicada con el número [n.º]. Será atendida dentro de los términos establecidos. Atentamente, [firma]».</div>
+    </div>
+    <div class="tabpanel">
+      <p>Informan automáticamente que estás ausente (vacaciones, comisión, incapacidad) y a quién dirigirse. Programarlas evita que se te olvide activarlas o desactivarlas.</p>
+      <div class="stepper" data-title="Paso a paso: respuesta automática programada">
+        <div class="step"><h5>Abre la opción</h5><p><span class="path">⚙ Configuración › Cuentas › Respuestas automáticas</span> <span class="muted">(clásico: Archivo › Respuestas automáticas)</span>.</p></div>
+        <div class="step"><h5>Actívala y prográmala</h5><p>Activa <b>Respuestas automáticas</b> y marca <b>Enviar respuestas solo durante un período de tiempo</b>; define fecha y hora de inicio y fin.</p></div>
+        <div class="step"><h5>Mensaje interno</h5><p>Para personas de la organización: incluye fechas de ausencia y la persona de contacto con su correo.</p></div>
+        <div class="step"><h5>Mensaje externo</h5><p>Activa <b>Enviar respuestas fuera de la organización</b> con un mensaje más breve, sin datos internos (no reveles extensiones privadas ni motivos personales).</p></div>
+        <div class="step"><h5>Guarda</h5><p><kbd>Guardar</kbd>. Opcional: bloquear el calendario y rechazar reuniones durante ese período.</p></div>
+      </div>
+      <div class="note tip"><b>Ejemplo resuelto</b>«Cordial saludo. Me encuentro fuera de la oficina del 15 al 26 de diciembre de 2026. Para asuntos de correspondencia comuníquese con Julián David Pineda Arango, jpineda@ejemplo.sena.edu.co. Su mensaje será atendido a mi regreso. Gracias.»</div>
+    </div>
+    <div class="tabpanel">
+      <p>Compartir el calendario permite que tu jefe o equipo vea tu disponibilidad y coordine reuniones sin cruces. Escoge el nivel de detalle que corresponde.</p>
+      <div class="stepper" data-title="Paso a paso: compartir el calendario">
+        <div class="step"><h5>Ve al calendario</h5><p>Abre <b>Calendario</b> → clic derecho sobre <b>Calendario</b> (o <kbd>Compartir</kbd> en la cinta) → <kbd>Uso compartido y permisos</kbd>.</p></div>
+        <div class="step"><h5>Agrega personas</h5><p>Escribe el nombre o correo institucional del compañero.</p></div>
+        <div class="step"><h5>Elige el permiso</h5><p><b>Puede ver cuándo estoy ocupado</b> · <b>Puede ver títulos y ubicaciones</b> · <b>Puede ver todos los detalles</b> · <b>Puede editar</b> · <b>Delegado</b> (puede aceptar reuniones por ti).</p></div>
+        <div class="step"><h5>Comparte y verifica</h5><p><kbd>Compartir</kbd>. La otra persona recibe una invitación; al aceptarla, verá tu calendario junto al suyo.</p></div>
+      </div>
+      <div class="note"><b>Calendario de grupo</b>Para una dependencia es mejor un <b>calendario de grupo</b> (Grupo de Microsoft 365 o Teams) en el que todos ven turnos, comités y vencimientos.</div>
+    </div>
+    <div class="tabpanel">
+      <p>Programar el envío permite redactar hoy y entregar en el momento oportuno (inicio de jornada, después de un comité, en una fecha de vencimiento).</p>
+      <div class="grid g2">
+        <div class="stepper" data-title="Nuevo Outlook / web">
+          <div class="step"><h5>Redacta el mensaje</h5><p>Completa destinatarios, asunto y cuerpo.</p></div>
+          <div class="step"><h5>Programa</h5><p>Flecha junto a <kbd>Enviar</kbd> → <kbd>Programar envío</kbd> → elige una sugerencia o <b>Hora personalizada</b>.</p></div>
+          <div class="step"><h5>Verifica</h5><p>El mensaje queda en <b>Borradores</b> (o «Programados») con la hora de entrega; puedes editarlo o cancelar el envío antes.</p></div>
+        </div>
+        <div class="stepper" data-title="Outlook clásico">
+          <div class="step"><h5>Opciones</h5><p>En el mensaje: <span class="path">Opciones › Retrasar entrega</span>.</p></div>
+          <div class="step"><h5>Fecha y hora</h5><p>Marca <b>No entregar antes del</b> y fija fecha y hora → <kbd>Cerrar</kbd> → <kbd>Enviar</kbd>.</p></div>
+          <div class="step"><h5>Ten en cuenta</h5><p>En clásico con cuentas IMAP/POP Outlook debe estar abierto a esa hora; con Exchange se entrega desde el servidor.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <p>Las salas de reunión y equipos (videobeam, portátiles) pueden configurarse como <b>buzones de recurso</b>. Al invitarlos a una reunión, la sala se reserva si está libre y responde automáticamente.</p>
+      <div class="stepper" data-title="Paso a paso: reservar una sala">
+        <div class="step"><h5>Nuevo evento</h5><p>En <b>Calendario</b> → <kbd>Nuevo evento</kbd>; agrega título y asistentes.</p></div>
+        <div class="step"><h5>Revisa disponibilidad</h5><p>Usa el <b>Asistente para programación</b> para ver en qué horas están libres todos los asistentes.</p></div>
+        <div class="step"><h5>Busca la sala</h5><p>En el campo de ubicación elige <kbd>Buscar una sala</kbd> / <kbd>Examinar más salas</kbd> (Buscador de salas); filtra por edificio, capacidad y disponibilidad.</p></div>
+        <div class="step"><h5>Envía</h5><p><kbd>Enviar</kbd>. Recibirás la aceptación o rechazo automático de la sala; si fue rechazada, elige otra hora.</p></div>
+      </div>
+      <div class="note warn"><b>Importante</b>Si no ves salas en el buscador, tu sede no tiene buzones de recurso configurados. Solicítalo a la mesa de servicio de TI; mientras tanto, usa el calendario compartido de la dependencia.</div>
+    </div>
+  </div>
+
+  <h3>Autoevaluación</h3>
+  <div class="quiz" data-quiz="q22"></div>
+  <div class="complete"><span class="muted">¿Terminaste el tema 2.2?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== 2.3 ===================== -->
+<section class="sec" data-sec="m23" data-group="Temas" data-num="2.3" data-title="OneDrive">
+  <div class="kicker">Tema 2.3 · 15 min</div>
+  <h2 class="t">OneDrive: guardar, compartir y recuperar</h2>
+  <p class="lead">OneDrive es tu espacio de trabajo en la nube. Guarda allí los documentos de trabajo para tener copia, versiones y acceso desde cualquier equipo. Para documentos del equipo o de archivo de gestión, usa además el sitio de SharePoint/Teams de la dependencia.</p>
+  <div class="grid g4">
+    <div class="card"><div class="stat">93</div><p class="muted" style="margin:6px 0 0">días permanecen los archivos eliminados en la papelera de reciclaje de OneDrive para cuentas de trabajo.</p></div>
+    <div class="card"><div class="stat">2</div><p class="muted" style="margin:6px 0 0">permisos base al compartir: <b>Puede ver</b> o <b>Puede editar</b>.</p></div>
+    <div class="card"><div class="stat">500</div><p class="muted" style="margin:6px 0 0">versiones por archivo guarda el historial de forma predeterminada (el administrador puede ajustarlo). No necesitas copias «final2».</p></div>
+    <div class="card"><div class="stat">1</div><p class="muted" style="margin:6px 0 0">vínculo por destinatario o grupo: comparte con <b>personas específicas</b> siempre que sea posible.</p></div>
+  </div>
+  <div class="tabs">
+    <div class="tablist"><button>🔄 Sincronización</button><button>🔐 Compartir con permisos</button><button>⏳ Vínculos con caducidad</button><button>🕘 Historial de versiones</button><button>♻️ Recuperar eliminados</button></div>
+    <div class="tabpanel">
+      <div class="stepper" data-title="Paso a paso: sincronizar OneDrive en Windows">
+        <div class="step"><h5>Abre la aplicación OneDrive</h5><p>Ícono de nube en la barra de tareas (o busca «OneDrive» en Inicio) e inicia sesión con tu cuenta institucional.</p></div>
+        <div class="step"><h5>Elige la carpeta</h5><p>Acepta la ubicación propuesta: <span class="path">C:\Users\tu_usuario\OneDrive - SENA</span>.</p></div>
+        <div class="step"><h5>Archivos a petición</h5><p>Los archivos aparecen con íconos de estado: <b>☁ solo en línea</b>, <b>✔ disponible localmente</b>, <b>✔ verde sólido siempre disponible</b> (clic derecho → «Mantener siempre en este dispositivo»).</p></div>
+        <div class="step"><h5>Copia de seguridad de carpetas</h5><p><span class="path">⚙ Configuración › Sincronizar y hacer copia de seguridad › Administrar copia de seguridad</span> para proteger Escritorio y Documentos (si la política institucional lo permite).</p></div>
+        <div class="step"><h5>Verifica el estado</h5><p>Una nube con ✔ indica todo sincronizado. Una ❗ roja indica un error (nombre no válido, archivo abierto, espacio insuficiente).</p></div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <p>Compartir bien es elegir <b>quién</b> accede, <b>qué puede hacer</b> y <b>por cuánto tiempo</b>. Prueba el simulador para ver el nivel de riesgo de cada combinación.</p>
+      <div class="sim">
+        <h4>🧪 Simulador de uso compartido</h4>
+        <p style="margin:0 0 4px"><b>Archivo:</b> 20261030_Memorando_ArchivoElectronico.docx</p>
+        <div class="field">¿Quién puede acceder?</div>
+        <div class="opt" data-g="aud"><button data-v="esp" class="on">Personas específicas</button><button data-v="org">Personas de la organización (SENA)</button><button data-v="any">Cualquier persona con el vínculo</button></div>
+        <div class="field">¿Qué pueden hacer?</div>
+        <div class="opt" data-g="perm"><button data-v="ver" class="on">Puede ver</button><button data-v="edit">Puede editar</button></div>
+        <div class="field">Configuración adicional</div>
+        <div class="opt" data-g="extra" data-multi="1"><button data-v="exp">Fecha de expiración</button><button data-v="dl">Bloquear descarga</button></div>
+        <div class="meter"><i id="riskBar"></i></div>
+        <p id="riskTxt" style="font-weight:700;margin:8px 0 4px"></p>
+        <p id="riskTip" class="muted" style="margin:0"></p>
+      </div>
+      <div class="stepper" data-title="Paso a paso: compartir con permiso diferenciado">
+        <div class="step"><h5>Selecciona el archivo</h5><p>En OneDrive web (o en el Explorador de Windows, clic derecho) → <kbd>Compartir</kbd>.</p></div>
+        <div class="step"><h5>Configura el vínculo</h5><p>Pulsa el ⚙ o el texto de permisos («Cualquier persona con el vínculo puede editar»…) para abrir <b>Configuración del vínculo</b>.</p></div>
+        <div class="step"><h5>Elige destinatarios y permiso</h5><p>Selecciona <b>Personas específicas</b> y cambia a <b>Puede ver</b> (solo lectura) o <b>Puede editar</b> según el caso. Opcional: <b>Bloquear la descarga</b> (solo con «Puede ver»).</p></div>
+        <div class="step"><h5>Agrega personas y mensaje</h5><p>Escribe los correos, un mensaje breve y pulsa <kbd>Enviar</kbd> (o <kbd>Copiar vínculo</kbd> para pegarlo en un correo o chat).</p></div>
+        <div class="step"><h5>Revisa y retira accesos</h5><p><span class="path">… › Administrar acceso</span> muestra quién tiene permiso; desde allí cambias a «Puede ver» o quitas el acceso cuando ya no se necesite.</p></div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <p>Un vínculo con <b>fecha de expiración</b> deja de funcionar automáticamente. Útil para documentos que se comparten temporalmente (por ejemplo, con un evaluador o contratista).</p>
+      <div class="stepper" data-title="Paso a paso: vínculo con fecha de expiración">
+        <div class="step"><h5>Compartir › Configuración del vínculo</h5><p>Abre el panel de configuración del vínculo como en el paso anterior.</p></div>
+        <div class="step"><h5>Define la fecha</h5><p>En <b>Establecer fecha de expiración</b> elige el día en que el vínculo dejará de funcionar. Opcional: <b>Establecer contraseña</b>.</p></div>
+        <div class="step"><h5>Aplica y comparte</h5><p><kbd>Aplicar</kbd> → <kbd>Copiar vínculo</kbd> o <kbd>Enviar</kbd>. Informa al destinatario la fecha límite.</p></div>
+      </div>
+      <div class="note warn"><b>Depende de la política institucional</b>La fecha de expiración y la contraseña están disponibles sobre todo para vínculos de tipo «Cualquier persona», y el administrador de Microsoft 365 puede habilitarlas o bloquearlas. Si no te aparece la opción, registra la fecha en tu calendario y <b>retira el acceso manualmente</b> desde «Administrar acceso».</div>
+    </div>
+    <div class="tabpanel">
+      <p>Cada vez que guardas (o con Autoguardado), OneDrive crea una versión. Puedes ver quién cambió qué y restaurar una versión anterior sin perder las demás.</p>
+      <div class="sim">
+        <h4>🧪 Historial de versiones del memorando</h4>
+        <ul class="timeline" id="versions"></ul>
+        <p id="verMsg" class="muted" style="margin:10px 0 0"></p>
+      </div>
+      <div class="stepper" data-title="Paso a paso: restaurar una versión">
+        <div class="step"><h5>Abre el historial</h5><p>OneDrive web: selecciona el archivo → <span class="path">… › Historial de versiones</span>. En Word: <span class="path">Archivo › Información › Historial de versiones</span> o clic en el nombre del archivo en la barra de título.</p></div>
+        <div class="step"><h5>Compara</h5><p>Abre la versión anterior para revisarla (se abre en solo lectura).</p></div>
+        <div class="step"><h5>Restaura</h5><p><kbd>Restaurar</kbd>: esa versión pasa a ser la actual y las demás siguen en el historial.</p></div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <div class="stepper" data-title="Paso a paso: recuperar archivos eliminados">
+        <div class="step"><h5>Abre la papelera</h5><p>En OneDrive web, menú izquierdo → <kbd>Papelera de reciclaje</kbd>.</p></div>
+        <div class="step"><h5>Selecciona y restaura</h5><p>Marca los archivos o carpetas → <kbd>Restaurar</kbd>. Vuelven a su ubicación original.</p></div>
+        <div class="step"><h5>Papelera de segunda fase</h5><p>Si vaciaste la papelera, revisa al final de la lista <b>Papelera de reciclaje de segunda fase</b>. El total de permanencia es de 93 días desde la eliminación.</p></div>
+        <div class="step"><h5>¿No aparece?</h5><p>Comunícate con la mesa de servicio de TI: el administrador puede tener opciones adicionales de restauración.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Autoevaluación</h3>
+  <div class="quiz" data-quiz="q23"></div>
+  <div class="complete"><span class="muted">¿Terminaste el tema 2.3?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== 2.4 ===================== -->
+<section class="sec" data-sec="m24" data-group="Temas" data-num="2.4" data-title="Word administrativo">
+  <div class="kicker">Tema 2.4 · 15 min</div>
+  <h2 class="t">Word para documentos administrativos</h2>
+  <p class="lead">Cuatro técnicas que convierten horas de trabajo repetitivo en minutos y garantizan documentos uniformes.</p>
+  <div class="tabs">
+    <div class="tablist"><button>🔠 Estilos y tabla de contenido</button><button>📑 Plantillas de oficios y memorandos</button><button>✉️ Combinación de correspondencia</button><button>📝 Control de cambios y comentarios</button></div>
+    <div class="tabpanel">
+      <p>Los <b>estilos</b> (Título 1, Título 2, Normal) dan formato uniforme y le dicen a Word cuál es la estructura del documento. Con ellos la <b>tabla de contenido</b> se crea y actualiza sola.</p>
+      <div class="sim">
+        <h4>🧪 Aplica estilos y mira la tabla de contenido</h4>
+        <p class="muted" style="margin-top:0">Haz clic en «Aplicar Título 1» en cada título del procedimiento. La tabla de contenido se actualizará automáticamente.</p>
+        <div class="grid g2">
+          <div class="paper" id="stylesDoc"></div>
+          <div class="paper"><b style="color:#007832">Tabla de contenido</b><div id="tocOut" style="margin-top:8px"></div></div>
+        </div>
+      </div>
+      <div class="stepper" data-title="Paso a paso con el archivo 04_Practica_Estilos_y_Tabla_de_Contenido.docx">
+        <div class="step"><h5>Aplica Título 1</h5><p>Ubica el cursor en «1. Objetivo» → <span class="path">Inicio › Estilos › Título 1</span>. Repite con los títulos principales (1 a 6).</p></div>
+        <div class="step"><h5>Aplica Título 2</h5><p>Aplica <b>Título 2</b> a los subtítulos 3.1, 3.2, 4.1, 4.2 y 4.3.</p></div>
+        <div class="step"><h5>Ajusta el estilo una sola vez</h5><p>Clic derecho en <b>Título 1</b> › <kbd>Modificar</kbd> → fuente Work Sans (o Calibri), color verde institucional #007832. Todos los títulos cambian a la vez.</p></div>
+        <div class="step"><h5>Inserta la tabla de contenido</h5><p>Cursor al inicio del documento → <span class="path">Referencias › Tabla de contenido › Tabla automática 1</span>.</p></div>
+        <div class="step"><h5>Actualiza</h5><p>Cambia un título y luego <span class="path">Referencias › Actualizar tabla › Actualizar toda la tabla</span> (o <kbd>F9</kbd> sobre la tabla).</p></div>
+        <div class="step"><h5>Navega</h5><p><span class="path">Vista › Panel de navegación</span> muestra los títulos para moverte por el documento.</p></div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <p>Una <b>plantilla (.dotx)</b> es un molde: cada vez que la abres crea un documento nuevo con encabezado, márgenes, estilos y textos guía, sin riesgo de dañar el original.</p>
+      <div class="grid g2">
+        <div class="paper"><div class="hdr"><img src="data:image/png;base64,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" alt=""><div><b>Servicio Nacional de Aprendizaje – SENA</b><br>Dirección Regional – Coordinación Administrativa</div></div>
+          <p style="text-align:center;font-weight:700;color:#007832;font-size:17px;margin:0 0 10px">MEMORANDO</p>
+          <p style="margin:0"><b>Fecha:</b> <span style="color:#888">[Ciudad], [día] de [mes] de [año]</span><br><b>Para:</b> <span style="color:#888">[Destinatario]</span><br><b>De:</b> <span style="color:#888">[Dependencia]</span><br><b>Asunto:</b> <span style="color:#888">[Una línea]</span></p>
+          <p style="color:#888">[Texto del memorando…]</p><p>Atentamente,</p></div>
+        <div class="stepper" data-title="Paso a paso: crear y usar una plantilla">
+          <div class="step"><h5>Diseña el modelo</h5><p>Encabezado con el logo, márgenes, estilos y textos guía entre corchetes. Puedes partir de <b>05_Plantilla_Memorando.dotx</b> o <b>06_Plantilla_Oficio.dotx</b>.</p></div>
+          <div class="step"><h5>Guarda como plantilla</h5><p><span class="path">Archivo › Guardar como › Tipo: Plantilla de Word (*.dotx)</span>. Word la guarda en <i>Documentos\Plantillas personalizadas de Office</i>.</p></div>
+          <div class="step"><h5>Úsala</h5><p><span class="path">Archivo › Nuevo › Personal</span> → elige la plantilla → se crea un <b>Documento1</b> nuevo. Reemplaza los textos guía.</p></div>
+          <div class="step"><h5>Comparte con el equipo</h5><p>Guarda la plantilla en la carpeta de la dependencia en OneDrive/SharePoint con permiso <b>Puede ver</b> para que nadie la modifique por error.</p></div>
+        </div>
+      </div>
+      <div class="note"><b>Oficio vs. memorando</b><b style="display:inline">Oficio:</b> comunicación externa, con radicado, destinatario completo y firma. <b style="display:inline">Memorando:</b> comunicación interna entre dependencias, más breve, con Para/De/Asunto. Use siempre el formato vigente del Sistema Integrado de Gestión de su centro.</div>
+    </div>
+    <div class="tabpanel">
+      <p>La <b>combinación de correspondencia</b> une un <b>documento principal</b> (la carta con campos «Nombres», «Cargo»…) con un <b>origen de datos</b> (la lista de Excel) para producir un documento por cada fila. Se hace en <b>Word de escritorio</b>.</p>
+      <div class="sim">
+        <h4>🧪 Simulador: vista previa de resultados</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+          <button class="btn sm ghost" id="mmToggle">👁 Vista previa de resultados: NO</button>
+          <button class="btn sm ghost" id="mmPrev">◀</button><span id="mmIdx" style="font-weight:700;min-width:90px;text-align:center">Registro 1 / 20</span><button class="btn sm ghost" id="mmNext">▶</button>
+          <label class="field" style="flex-direction:row;align-items:center;gap:6px;margin-left:auto"><input type="checkbox" id="mmFmt" checked style="width:16px;height:16px"> Aplicar formato de fecha \@</label>
+        </div>
+        <div class="paper" id="mmDoc"></div>
+      </div>
+      <div class="stepper" data-title="Paso a paso: citaciones para 20 funcionarios (taller parte A)">
+        <div class="step"><h5>Prepara el Excel</h5><p>Abre <b>01_Lista_Funcionarios_Citacion.xlsx</b>: encabezados en la fila 1, sin filas vacías ni celdas combinadas. Guárdalo y <b>ciérralo</b>.</p></div>
+        <div class="step"><h5>Inicia la combinación</h5><p>Abre <b>02_Plantilla_Citacion_Base.docx</b> → <span class="path">Correspondencia › Iniciar combinación de correspondencia › Cartas</span>.</p></div>
+        <div class="step"><h5>Selecciona destinatarios</h5><p><span class="path">Seleccionar destinatarios › Usar una lista existente</span> → busca el Excel → elige la hoja <b>Funcionarios$</b> → marca «La primera fila de datos contiene encabezados de columna» → <kbd>Aceptar</kbd>.</p></div>
+        <div class="step"><h5>Inserta los campos</h5><p>Selecciona cada texto resaltado [Campo] y reemplázalo con <span class="path">Insertar campo combinado › Nombre del campo</span>. Borra el recuadro de instrucción.</p></div>
+        <div class="step"><h5>Formatea la fecha</h5><p>Presiona <kbd>Alt</kbd>+<kbd>F9</kbd> para ver códigos de campo. Cambia <code>{ MERGEFIELD Fecha_Citacion }</code> por <code>{ MERGEFIELD Fecha_Citacion \@ "d 'de' MMMM 'de' yyyy" }</code>. <kbd>Alt</kbd>+<kbd>F9</kbd> de nuevo y <kbd>F9</kbd> para actualizar.</p></div>
+        <div class="step"><h5>Vista previa</h5><p><kbd>Vista previa de resultados</kbd> y recorre los registros con ◀ ▶. Revisa tildes, espacios y la fecha.</p></div>
+        <div class="step"><h5>Finaliza</h5><p><span class="path">Finalizar y combinar › Editar documentos individuales › Todos</span> → se crea un documento con 20 páginas. Guárdalo como <b>Citaciones_Combinadas_[TuNombre].docx</b> en OneDrive.</p></div>
+        <div class="step"><h5>Opcional: enviar por correo</h5><p><span class="path">Finalizar y combinar › Enviar mensajes de correo electrónico</span> → Para: <b>Correo</b>; Asunto: «Citación jornada Microsoft 365». (Requiere Outlook de escritorio configurado.) Pruébalo primero con tu propio correo.</p></div>
+      </div>
+    </div>
+    <div class="tabpanel">
+      <p>El <b>control de cambios</b> registra inserciones y eliminaciones con el nombre del revisor; los <b>comentarios</b> permiten preguntar o sugerir sin tocar el texto. El autor decide qué aceptar.</p>
+      <div class="sim">
+        <h4>🧪 Acepta o rechaza los cambios del revisor</h4>
+        <div class="paper" id="tcDoc"></div>
+        <div id="tcBtns" style="margin-top:10px"></div>
+        <p id="tcMsg" class="muted" style="margin:8px 0 0"></p>
+      </div>
+      <div class="stepper" data-title="Paso a paso: revisar con control de cambios">
+        <div class="step"><h5>Identifícate</h5><p><span class="path">Archivo › Opciones › General › Nombre de usuario</span>: escribe tu nombre para que los cambios queden a tu nombre.</p></div>
+        <div class="step"><h5>Activa el control</h5><p><span class="path">Revisar › Control de cambios</span> (<kbd>Ctrl</kbd>+<kbd>Mayús</kbd>+<kbd>E</kbd>). En Word web/365 el modo aparece como <b>Revisando</b>.</p></div>
+        <div class="step"><h5>Edita normalmente</h5><p>Lo que borres aparece tachado y lo que escribas, subrayado y de color. Elige <b>Todas las marcas</b> en «Mostrar para revisión».</p></div>
+        <div class="step"><h5>Comenta</h5><p>Selecciona el texto → <span class="path">Revisar › Nuevo comentario</span> (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>). Escribe sugerencias claras y respetuosas.</p></div>
+        <div class="step"><h5>El autor decide</h5><p><span class="path">Revisar › Siguiente</span> y <kbd>Aceptar</kbd> o <kbd>Rechazar</kbd> cada cambio. Responde los comentarios y <kbd>Resolver</kbd>.</p></div>
+        <div class="step"><h5>Versión final limpia</h5><p>Antes de enviar o firmar: no deben quedar cambios ni comentarios. <span class="path">Archivo › Información › Inspeccionar documento</span> ayuda a verificarlo.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Autoevaluación</h3>
+  <div class="quiz" data-quiz="q24"></div>
+  <div class="complete"><span class="muted">¿Terminaste el tema 2.4?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== 2.5 ===================== -->
+<section class="sec" data-sec="m25" data-group="Temas" data-num="2.5" data-title="Coautoría en tiempo real">
+  <div class="kicker">Tema 2.5 · 10 min</div>
+  <h2 class="t">Coautoría en tiempo real</h2>
+  <p class="lead">Varias personas editan el mismo documento al mismo tiempo, sin enviar copias por correo. Requisitos: archivo en <b>OneDrive o SharePoint</b>, permiso <b>Puede editar</b> y <b>Autoguardado</b> activo.</p>
+  <div class="grid g2">
+    <div class="sim" style="margin:0">
+      <h4>🧪 Así se ve la edición simultánea</h4>
+      <div class="paper doc-co" id="coDoc"></div>
+      <p class="muted" style="font-size:13px;margin:8px 0 0">Cada coautor aparece con un color y una bandera con su nombre en el lugar donde escribe.</p>
+    </div>
+    <div class="sim" style="margin:0">
+      <h4>💬 Comentario con @mención</h4>
+      <div class="thread" id="thread"></div>
+      <p style="margin-top:10px"><button class="btn sm" id="replyBtn">Responder</button> <button class="btn sm ghost" id="resolveBtn">✔ Resolver conversación</button></p>
+    </div>
+  </div>
+  <div class="stepper" data-title="Paso a paso: coautoría, menciones y resolución">
+    <div class="step"><h5>Guarda en la nube</h5><p>Abre o guarda el documento en OneDrive (o en la biblioteca de la dependencia) y verifica que <b>Autoguardado</b> esté en <b>Activado</b> (esquina superior izquierda).</p></div>
+    <div class="step"><h5>Comparte para editar</h5><p><kbd>Compartir</kbd> → Personas específicas → <b>Puede editar</b> → agrega a tus compañeros → <kbd>Enviar</kbd>.</p></div>
+    <div class="step"><h5>Editen al mismo tiempo</h5><p>Cada persona abre el vínculo (en web o «Abrir en la aplicación de escritorio»). Verán los avatares arriba a la derecha y las banderas de color en el texto.</p></div>
+    <div class="step"><h5>Menciona con @</h5><p>Inserta un comentario y escribe <b>@</b> + el nombre del compañero. Recibe un correo con el contexto y un enlace directo al comentario. Si no tenía acceso, Word te propone darle permiso.</p></div>
+    <div class="step"><h5>Asigna tareas</h5><p>En Word web/365, al mencionar puedes marcar <b>Asignar a</b> para convertir el comentario en tarea.</p></div>
+    <div class="step"><h5>Responde y resuelve</h5><p>Cuando el asunto quede atendido, <kbd>Resolver</kbd> la conversación: se oculta pero queda en el historial; puede reabrirse.</p></div>
+  </div>
+  <div class="note tip"><b>Buenas prácticas de coautoría</b>Divide el documento por secciones y responsables · No descargues copias para editar por separado · Usa comentarios en lugar de escribir en mayúsculas dentro del texto · Antes de la versión final, resuelve todos los comentarios y desactiva el modo revisión.</div>
+
+  <h3>Autoevaluación</h3>
+  <div class="quiz" data-quiz="q25"></div>
+  <div class="complete"><span class="muted">¿Terminaste el tema 2.5?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== TALLER ===================== -->
+<section class="sec" data-sec="taller" data-group="Aplicación" data-num="T" data-title="Taller de aplicación">
+  <div class="kicker">Taller · 30 min</div>
+  <h2 class="t">Taller de aplicación</h2>
+  <p class="lead">Usando combinación de correspondencia, genera citaciones personalizadas para 20 funcionarios a partir de una lista en Excel. Después, en parejas, revisa un memorando con control de cambios y comentarios, y comparte la versión final desde OneDrive con permiso de solo lectura.</p>
+  <div class="grid g3">
+    <div class="card"><span class="pill">Archivos que usarás</span><ul style="padding-left:18px;margin:8px 0 0;font-size:14.5px"><li>01_Lista_Funcionarios_Citacion.xlsx</li><li>02_Plantilla_Citacion_Base.docx</li><li>03_Memorando_Borrador_para_Revisar.docx</li></ul></div>
+    <div class="card"><span class="pill">Herramientas</span><p style="margin:8px 0 0">Excel y Word de escritorio, OneDrive (web o sincronizado), Outlook o Teams para enviar el vínculo.</p></div>
+    <div class="card"><span class="pill">Entregables</span><p style="margin:8px 0 0">1) Citaciones_Combinadas_[Nombre].docx · 2) Memorando revisado y su vínculo de solo lectura enviado al instructor.</p></div>
+  </div>
+  <h3>Lista de verificación – marca a medida que avanzas</h3>
+  <div class="grid g2">
+    <div class="card"><h4 style="margin-top:0">Parte A · Combinación (15 min)</h4>
+      <ul class="check" data-check="tA">
+        <li><input type="checkbox"><span>Abrí el Excel, revisé que los encabezados no tengan espacios, lo guardé y lo cerré.</span></li>
+        <li><input type="checkbox"><span>En la plantilla base inicié <b>Correspondencia › Cartas</b>.</span></li>
+        <li><input type="checkbox"><span>Conecté la hoja <b>Funcionarios$</b> como lista de destinatarios (20 registros).</span></li>
+        <li><input type="checkbox"><span>Reemplacé los 10 textos [Campo] por campos combinados y borré el recuadro de instrucciones.</span></li>
+        <li><input type="checkbox"><span>Apliqué el formato de fecha <code>\@ "d 'de' MMMM 'de' yyyy"</code>.</span></li>
+        <li><input type="checkbox"><span>Revisé la vista previa de al menos 3 registros (1, 11 y 20).</span></li>
+        <li><input type="checkbox"><span>Finalicé con <b>Editar documentos individuales › Todos</b> y guardé el resultado en OneDrive.</span></li>
+      </ul></div>
+    <div class="card"><h4 style="margin-top:0">Parte B · Revisión en parejas y compartir (15 min)</h4>
+      <ul class="check" data-check="tB">
+        <li><input type="checkbox"><span><b>Autor:</b> subí el memorando 03 a OneDrive y lo compartí con mi pareja como <b>Puede editar</b>.</span></li>
+        <li><input type="checkbox"><span><b>Revisor:</b> configuré mi nombre de usuario y activé <b>Control de cambios</b>.</span></li>
+        <li><input type="checkbox"><span><b>Revisor:</b> corregí ortografía, fecha y redacción, y dejé al menos 3 comentarios (uno con @mención).</span></li>
+        <li><input type="checkbox"><span><b>Autor:</b> acepté o rechacé cada cambio, respondí y resolví los comentarios.</span></li>
+        <li><input type="checkbox"><span>Renombré la versión final con la convención <b>AAAAMMDD_Memorando_Asunto</b>.</span></li>
+        <li><input type="checkbox"><span>Compartí la versión final con el instructor: <b>Personas específicas · Puede ver</b> (solo lectura).</span></li>
+        <li><input type="checkbox"><span>Retiré el permiso de edición de mi pareja en <b>Administrar acceso</b>.</span></li>
+      </ul></div>
+  </div>
+  <div class="note"><b>¿Qué debe corregir el revisor en el memorando 03?</b>Pistas: hay una fecha que no existe, palabras sin tilde, una palabra repetida, un error de «haber/a ver», una forma insegura de compartir y una mala práctica para nombrar versiones. ¡Encuéntralas!</div>
+
+  <div class="complete"><span class="muted">¿Entregaste los dos productos?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== RETROALIMENTACIÓN ===================== -->
+<section class="sec" data-sec="retro" data-group="Aplicación" data-num="R" data-title="Retroalimentación">
+  <div class="kicker">Cierre · 15 min</div>
+  <h2 class="t">Retroalimentación</h2>
+  <p class="lead">Errores frecuentes al compartir archivos y buenas prácticas para el manejo de versiones. Haz clic en cada tarjeta para ver la buena práctica.</p>
+  <div class="grid g3" id="flips"></div>
+  <h3>Buenas prácticas para el manejo de versiones</h3>
+  <div class="grid g2">
+    <div class="card"><h4 style="margin-top:0">✅ Haz esto</h4><ul style="padding-left:18px;margin:0">
+      <li>Un solo archivo «vivo» en OneDrive/SharePoint; el historial guarda las versiones.</li>
+      <li>Nombra con convención: <b>AAAAMMDD_TipoDocumento_Asunto</b> (ej.: 20261030_Memorando_ArchivoElectronico).</li>
+      <li>Si necesitas marcar hitos, usa sufijos <b>_v01, _v02</b> solo en documentos que salen de la nube.</li>
+      <li>Antes de una modificación grande, consulta el historial para saber desde dónde partes.</li>
+      <li>Al aprobar, genera el PDF final y conserva el .docx en la carpeta del expediente.</li>
+    </ul></div>
+    <div class="card"><h4 style="margin-top:0">⛔ Evita esto</h4><ul style="padding-left:18px;margin:0">
+      <li>Copias «final», «final2», «ahora_sí_final» o «copia de…».</li>
+      <li>Enviar adjuntos para editar: cada persona termina con una versión distinta.</li>
+      <li>Guardar en el escritorio del equipo o en memorias USB.</li>
+      <li>Caracteres especiales en nombres (# % & * : &lt; &gt; ? / \ |) y nombres muy largos.</li>
+      <li>Firmar o radicar un documento con marcas de revisión o comentarios sin resolver.</li>
+    </ul></div>
+  </div>
+
+  <div class="complete"><span class="muted">¿Revisaste las buenas prácticas?</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== EVALUACIÓN ===================== -->
+<section class="sec" data-sec="eval" data-group="Aplicación" data-num="E" data-title="Evaluación final">
+  <div class="kicker">Evaluación</div>
+  <h2 class="t">Evaluación final</h2>
+  <p class="lead">10 preguntas sobre todo el bloque. Responde y pulsa «Calificar».</p>
+  <div class="quiz" data-quiz="qf" data-final="1"></div>
+
+  <div class="complete"><span class="muted">Al aprobar con 7 o más, marca la sección.</span><button class="btn" data-done>Marcar como completada</button></div>
+</section>
+
+<!-- ===================== HERRAMIENTAS ===================== -->
+<section class="sec" data-sec="herr" data-group="Recursos" data-num="⚙" data-title="Herramientas y configuración">
+  <div class="kicker">Recursos</div>
+  <h2 class="t">Herramientas de software y configuración</h2>
+  <p class="lead">Lo que debe estar listo en el equipo de cada funcionario antes de la sesión.</p>
+  <div class="tscroll"><table class="tbl">
+    <tr><th>Herramienta</th><th>Versión / acceso</th><th>Uso en el bloque</th><th>Configuración recomendada</th></tr>
+    <tr><td><b>Cuenta Microsoft 365 institucional</b></td><td>Usuario @sena.edu.co con licencia asignada</td><td>Acceso a todas las aplicaciones y a OneDrive</td><td>Contraseña vigente; autenticación multifactor (MFA) configurada en el celular; perfil con foto y cargo.</td></tr>
+    <tr><td><b>Navegador</b></td><td>Microsoft Edge o Google Chrome (última versión)</td><td>Portal office.com, Outlook web, OneDrive web</td><td>Ventanas emergentes permitidas para *.office.com, *.sharepoint.com y *.microsoft.com; cookies de terceros habilitadas para estos dominios.</td></tr>
+    <tr><td><b>Outlook</b></td><td>Nuevo Outlook para Windows, Outlook clásico (Microsoft 365) o Outlook en la web</td><td>Firma, plantillas, respuestas automáticas, calendario, salas, programar envío</td><td>Zona horaria (UTC-05:00) Bogotá, Lima, Quito; idioma español (Colombia); firma predeterminada para nuevos mensajes.</td></tr>
+    <tr><td><b>OneDrive</b></td><td>Aplicación de sincronización de OneDrive (incluida en Windows 10/11) y OneDrive web</td><td>Guardar, sincronizar, compartir, versiones, papelera</td><td>Sesión iniciada con la cuenta institucional; «Archivos a petición» activado; copia de seguridad de Escritorio/Documentos si la política lo permite.</td></tr>
+    <tr><td><b>Word</b></td><td>Word de escritorio (Aplicaciones de Microsoft 365) + Word para la web</td><td>Estilos, TDC, plantillas, combinación, control de cambios, coautoría</td><td>Archivo › Opciones › General: <b>nombre de usuario e iniciales</b>; idioma de corrección Español (Colombia); Autoguardado activo en archivos de OneDrive.</td></tr>
+    <tr><td><b>Excel</b></td><td>Excel de escritorio o web</td><td>Origen de datos de la combinación</td><td>Configuración regional Español (Colombia) para fechas dd/mm/aaaa; datos en tabla con encabezados únicos.</td></tr>
+    <tr><td><b>Microsoft Teams</b> (opcional)</td><td>Escritorio o web</td><td>Compartir carpeta del taller y chat del grupo</td><td>Notificaciones activas para menciones; carpeta del curso en la pestaña Archivos.</td></tr>
+    <tr><td><b>Tipografías institucionales</b></td><td>Work Sans (principal) y Calibri (secundaria)</td><td>Plantillas, firmas y presentaciones</td><td>Instalar Work Sans desde el Manual de Identidad Visual del SENA o Google Fonts; si no está, Word usa Calibri.</td></tr>
+  </table></div>
+  <div class="note warn"><b>Antes de empezar</b>Si un participante no ve Word de escritorio, puede descargarlo desde <span class="path">office.com › Instalar aplicaciones</span> (si su licencia lo permite) o solicitarlo a la mesa de servicio de TI.</div>
+</section>
+
+<!-- ===================== GLOSARIO ===================== -->
+<section class="sec" data-sec="glos" data-group="Recursos" data-num="Aa" data-title="Glosario">
+  <div class="kicker">Recursos</div>
+  <h2 class="t">Glosario de términos</h2>
+  <label class="field" style="max-width:420px">Buscar término<input id="glSearch" placeholder="Ej.: versión, vínculo, campo…"></label>
+  <div id="glList" style="margin-top:10px"></div>
+</section>
+
+<!-- ===================== CIBERGRAFÍA ===================== -->
+<section class="sec" data-sec="ciber" data-group="Recursos" data-num="▶" data-title="Cibergrafía (videos)">
+  <div class="kicker">Recursos</div>
+  <h2 class="t">Cibergrafía</h2>
+  <p class="lead">Videos en español para reforzar cada tema (se abren en YouTube) y guías oficiales de Soporte de Microsoft en español.</p>
+  <div class="opt" id="vFilter"><button class="on" data-v="all">Todos</button><button data-v="2.1">2.1</button><button data-v="2.2">2.2 Outlook</button><button data-v="2.3">2.3 OneDrive</button><button data-v="2.4">2.4 Word</button><button data-v="2.5">2.5 Coautoría</button></div>
+  <div class="grid g3" id="videos"></div>
+  <h3>Guías oficiales de Soporte de Microsoft (español)</h3>
+  <div class="tscroll"><table class="tbl" id="supportTbl"><tr><th>Tema</th><th>Recurso</th></tr></table></div>
+  <p class="muted" style="font-size:13px">Enlaces verificados en octubre de 2026. Los videos pertenecen a sus autores; si alguno deja de estar disponible, use la guía oficial del mismo tema.</p>
+</section>
+
+<!-- ===================== BIBLIOGRAFÍA ===================== -->
+<section class="sec" data-sec="biblio" data-group="Recursos" data-num="📚" data-title="Bibliografía">
+  <div class="kicker">Recursos</div>
+  <h2 class="t">Bibliografía</h2>
+  <p class="lead">Referencias en formato APA 7.ª edición.</p>
+  <div class="card">
+    <h4 style="margin-top:0">Libros</h4>
+    <ul style="padding-left:18px">
+      <li>Gookin, D. (2021). <i>Word for dummies: Office 2021 edition</i>. John Wiley &amp; Sons.</li>
+      <li>Lambert, J. (2022). <i>Microsoft Word step by step (Office 2021 and Microsoft 365)</i>. Microsoft Press; Pearson Education.</li>
+      <li>Lambert, J., &amp; Frye, C. (2022). <i>Microsoft Office step by step (Office 2021 and Microsoft 365)</i>. Microsoft Press; Pearson Education.</li>
+      <li>Reed, J., Withee, K., &amp; Withee, R. (2019). <i>Office 365 for dummies</i> (3.ª ed.). John Wiley &amp; Sons.</li>
+    </ul>
+    <h4>Normatividad y documentos institucionales (Colombia)</h4>
+    <ul style="padding-left:18px">
+      <li>Congreso de la República de Colombia. (2000). <i>Ley 594 de 2000, por medio de la cual se dicta la Ley General de Archivos</i>.</li>
+      <li>Congreso de la República de Colombia. (2012). <i>Ley 1581 de 2012, por la cual se dictan disposiciones generales para la protección de datos personales</i>.</li>
+      <li>Congreso de la República de Colombia. (2014). <i>Ley 1712 de 2014, Ley de Transparencia y del Derecho de Acceso a la Información Pública Nacional</i>.</li>
+      <li>Presidencia de la República de Colombia. (2015). <i>Decreto 1080 de 2015, Decreto Único Reglamentario del Sector Cultura</i> (gestión documental).</li>
+      <li>Servicio Nacional de Aprendizaje – SENA. (s. f.). <i>Manual de identidad visual</i>. SENA.</li>
+      <li>Servicio Nacional de Aprendizaje – SENA. (s. f.). <i>GC-F-004 Formato plantilla de presentación</i>. Sistema Integrado de Gestión.</li>
+    </ul>
+    <h4>Documentación técnica</h4>
+    <ul style="padding-left:18px">
+      <li>Microsoft. (2026). <i>Soporte técnico de Microsoft 365 en español</i>. https://support.microsoft.com/es-es</li>
+      <li>Microsoft. (2026). <i>Opciones de planes de Microsoft 365 y Office 365</i>. Microsoft Learn. https://learn.microsoft.com/es-es/office365/servicedescriptions/office-365-platform-service-description/office-365-plan-options</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== ARCHIVOS ===================== -->
+<section class="sec" data-sec="files" data-group="Recursos" data-num="⬇" data-title="Archivos del taller">
+  <div class="kicker">Recursos</div>
+  <h2 class="t">Archivos del taller</h2>
+  <p class="lead">Descarga los archivos (deben estar en la carpeta <b>archivos</b> junto a este OVA).</p>
+  <div class="grid g2 files">
+    <a class="fl" href="archivos/01_Lista_Funcionarios_Citacion.xlsx" download><span class="ext x-xlsx">XLSX</span><span><b>01 Lista de funcionarios</b><br><span class="muted">Origen de datos: 20 funcionarios ficticios.</span></span></a>
+    <a class="fl" href="archivos/02_Plantilla_Citacion_Base.docx" download><span class="ext x-docx">DOCX</span><span><b>02 Plantilla de citación (base)</b><br><span class="muted">Documento principal con [Campos] por reemplazar.</span></span></a>
+    <a class="fl" href="archivos/03_Memorando_Borrador_para_Revisar.docx" download><span class="ext x-docx">DOCX</span><span><b>03 Memorando borrador</b><br><span class="muted">Para la revisión en parejas con control de cambios.</span></span></a>
+    <a class="fl" href="archivos/04_Practica_Estilos_y_Tabla_de_Contenido.docx" download><span class="ext x-docx">DOCX</span><span><b>04 Práctica de estilos y TDC</b><br><span class="muted">Procedimiento para aplicar estilos e insertar tabla de contenido.</span></span></a>
+    <a class="fl" href="archivos/05_Plantilla_Memorando.dotx" download><span class="ext x-dotx">DOTX</span><span><b>05 Plantilla de memorando</b><br><span class="muted">Plantilla reutilizable de Word.</span></span></a>
+    <a class="fl" href="archivos/06_Plantilla_Oficio.dotx" download><span class="ext x-dotx">DOTX</span><span><b>06 Plantilla de oficio</b><br><span class="muted">Plantilla reutilizable de Word.</span></span></a>
+    <a class="fl" href="archivos/07_Firma_Institucional_Modelo.html" download><span class="ext x-html">HTML</span><span><b>07 Modelo de firma institucional</b><br><span class="muted">Ábrelo, copia y pega en Outlook › Firmas.</span></span></a>
+  </div>
+
+</section>
+
+  </div>
+  </main>
+</div>
+</div>
+
+<script>
+const ROLE='participante';
+const DATA=[{"Consecutivo": "CIT-2026-001", "Tratamiento": "Señora", "Nombres": "Luz Marina", "Apellidos": "Rodríguez Peña", "Cargo": "Profesional Grado 06", "Dependencia": "Grupo de Gestión Documental", "Correo": "luz.rodriguez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-002", "Tratamiento": "Señor", "Nombres": "Carlos Andrés", "Apellidos": "Gómez Salazar", "Cargo": "Técnico Grado 02", "Dependencia": "Grupo de Talento Humano", "Correo": "carlos.gomez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-003", "Tratamiento": "Señora", "Nombres": "Diana Patricia", "Apellidos": "Martínez Ruiz", "Cargo": "Auxiliar Grado 01", "Dependencia": "Grupo de Apoyo Administrativo", "Correo": "diana.martinez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-004", "Tratamiento": "Señor", "Nombres": "Jorge Eliécer", "Apellidos": "Castro Mejía", "Cargo": "Profesional Grado 02", "Dependencia": "Grupo de Contratación", "Correo": "jorge.castro@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-005", "Tratamiento": "Señora", "Nombres": "Paola Andrea", "Apellidos": "Herrera Ospina", "Cargo": "Secretaria Grado 03", "Dependencia": "Subdirección de Centro", "Correo": "paola.herrera@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-006", "Tratamiento": "Señor", "Nombres": "Luis Fernando", "Apellidos": "Vargas Quintero", "Cargo": "Profesional Grado 04", "Dependencia": "Grupo Financiero", "Correo": "luis.vargas@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-007", "Tratamiento": "Señora", "Nombres": "Sandra Milena", "Apellidos": "López Cárdenas", "Cargo": "Técnico Grado 01", "Dependencia": "Grupo de Bienestar al Aprendiz", "Correo": "sandra.lopez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-008", "Tratamiento": "Señor", "Nombres": "Andrés Felipe", "Apellidos": "Moreno Ríos", "Cargo": "Auxiliar Grado 02", "Dependencia": "Almacén e Inventarios", "Correo": "andres.moreno@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-009", "Tratamiento": "Señora", "Nombres": "Claudia Marcela", "Apellidos": "Jiménez Torres", "Cargo": "Profesional Grado 08", "Dependencia": "Coordinación Académica", "Correo": "claudia.jimenez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-010", "Tratamiento": "Señor", "Nombres": "Óscar Javier", "Apellidos": "Ramírez Duarte", "Cargo": "Técnico Grado 03", "Dependencia": "Grupo de Infraestructura", "Correo": "oscar.ramirez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-04", "Hora": "8:00 a. m.", "Lugar": "Sala de Juntas 2 – Bloque Administrativo, piso 3"}, {"Consecutivo": "CIT-2026-011", "Tratamiento": "Señora", "Nombres": "Ana María", "Apellidos": "Suárez Benavides", "Cargo": "Profesional Grado 01", "Dependencia": "Grupo de Planeación", "Correo": "ana.suarez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-012", "Tratamiento": "Señor", "Nombres": "Julián David", "Apellidos": "Pineda Arango", "Cargo": "Auxiliar Grado 01", "Dependencia": "Grupo de Gestión Documental", "Correo": "julian.pineda@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-013", "Tratamiento": "Señora", "Nombres": "Yolanda", "Apellidos": "Cifuentes Rojas", "Cargo": "Secretaria Grado 02", "Dependencia": "Coordinación de Formación", "Correo": "yolanda.cifuentes@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-014", "Tratamiento": "Señor", "Nombres": "Hernán Darío", "Apellidos": "Acosta Velásquez", "Cargo": "Profesional Grado 06", "Dependencia": "Grupo Jurídico", "Correo": "hernan.acosta@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-015", "Tratamiento": "Señora", "Nombres": "Marcela", "Apellidos": "Patiño Giraldo", "Cargo": "Técnico Grado 02", "Dependencia": "Grupo de Talento Humano", "Correo": "marcela.patino@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-016", "Tratamiento": "Señor", "Nombres": "Fabián Ernesto", "Apellidos": "Rincón Leal", "Cargo": "Profesional Grado 02", "Dependencia": "Grupo Financiero", "Correo": "fabian.rincon@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-017", "Tratamiento": "Señora", "Nombres": "Natalia", "Apellidos": "Orozco Valencia", "Cargo": "Auxiliar Grado 02", "Dependencia": "Grupo de Contratación", "Correo": "natalia.orozco@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-018", "Tratamiento": "Señor", "Nombres": "Mauricio", "Apellidos": "Bermúdez Silva", "Cargo": "Técnico Grado 01", "Dependencia": "Almacén e Inventarios", "Correo": "mauricio.bermudez@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-019", "Tratamiento": "Señora", "Nombres": "Lorena Patricia", "Apellidos": "Mendoza Arias", "Cargo": "Profesional Grado 04", "Dependencia": "Grupo de Relaciones Corporativas", "Correo": "lorena.mendoza@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}, {"Consecutivo": "CIT-2026-020", "Tratamiento": "Señor", "Nombres": "Germán Alonso", "Apellidos": "Torres Henao", "Cargo": "Profesional Grado 01", "Dependencia": "Grupo de Apoyo Administrativo", "Correo": "german.torres@ejemplo.sena.edu.co", "Fecha_Citacion": "2026-11-05", "Hora": "2:00 p. m.", "Lugar": "Ambiente de Formación 204 – Bloque B"}];
+const K='ova-m365-b2-'+ROLE;
+const store={get(k,d){try{const v=localStorage.getItem(K+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(K+k,JSON.stringify(v))}catch(e){}}};
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- navigation ---------- */
+const secs=$$('section.sec'); const nav=$('#nav'); let lastGroup='';
+secs.forEach(s=>{
+  if(s.dataset.group!==lastGroup){lastGroup=s.dataset.group;const h=document.createElement('h6');h.textContent=lastGroup;nav.appendChild(h);}
+  const a=document.createElement('a');a.href='#'+s.dataset.sec;a.dataset.sec=s.dataset.sec;
+  a.innerHTML=`<span class="num">${s.dataset.num}</span><span>${s.dataset.title}</span>`;nav.appendChild(a);
+});
+function go(id){location.hash=id}
+function show(){
+  const id=(location.hash||'#inicio').slice(1); const s=secs.find(x=>x.dataset.sec===id)||secs[0];
+  secs.forEach(x=>x.classList.toggle('show',x===s));
+  $$('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.sec===s.dataset.sec));
+  $('#sidebar').classList.remove('open');$('#scrim').classList.remove('open');
+  $('#content').scrollTop=0; window.scrollTo({top:0});
+}
+window.addEventListener('hashchange',show);
+$('#menuBtn').onclick=()=>{$('#sidebar').classList.add('open');$('#scrim').classList.add('open')};
+$('#scrim').onclick=()=>{$('#sidebar').classList.remove('open');$('#scrim').classList.remove('open')};
+// route cards
+const rc=$('#routeCards');
+secs.filter(s=>s.dataset.group==='Temas'||s.dataset.group==='Aplicación').forEach(s=>{
+  const d=document.createElement('a');d.href='#'+s.dataset.sec;d.className='card';d.style.textDecoration='none';
+  d.innerHTML=`<span class="pill">${s.dataset.num}</span><h4 style="margin:8px 0 4px">${s.dataset.title}</h4><span class="muted" style="font-size:14px">${s.querySelector('.kicker').textContent}</span>`;rc.appendChild(d);
+});
+/* ---------- progress ---------- */
+let done=new Set(store.get('done',[]));
+const countable=secs.filter(s=>s.querySelector('[data-done]'));
+function renderProgress(){
+  $$('#nav a').forEach(a=>a.classList.toggle('done',done.has(a.dataset.sec)));
+  const p=Math.round(100*countable.filter(s=>done.has(s.dataset.sec)).length/countable.length);
+  $('#barFill').style.width=p+'%';$('#pct').textContent=p+'%';
+  $$('[data-done]').forEach(b=>{const id=b.closest('section').dataset.sec;b.textContent=done.has(id)?'✔ Completada':'Marcar como completada';b.classList.toggle('ghost',done.has(id))});
+}
+$$('[data-done]').forEach(b=>b.onclick=()=>{const id=b.closest('section').dataset.sec;done.has(id)?done.delete(id):done.add(id);store.set('done',[...done]);renderProgress();});
+/* ---------- theme (content only) ---------- */
+const content=$('#content');
+function setTheme(t){content.dataset.theme=t;$('#themeIco').textContent=t==='dark'?'☀️':'🌙';$('#themeTxt').textContent=t==='dark'?'Modo claro':'Modo oscuro';$('#themeBtn').setAttribute('aria-pressed',t==='dark');store.set('theme',t);}
+$('#themeBtn').onclick=()=>setTheme(content.dataset.theme==='dark'?'light':'dark');
+setTheme(store.get('theme','light'));
+/* ---------- tabs ---------- */
+$$('.tabs').forEach(t=>{
+  const btns=$$(':scope>.tablist>button',t), panels=$$(':scope>.tabpanel',t);
+  const sel=i=>{btns.forEach((b,j)=>b.setAttribute('aria-selected',i===j));panels.forEach((p,j)=>p.classList.toggle('on',i===j));};
+  btns.forEach((b,i)=>{b.setAttribute('role','tab');b.onclick=()=>sel(i)});sel(0);
+});
+/* ---------- steppers ---------- */
+$$('.stepper').forEach(st=>{
+  const steps=$$(':scope>.step',st); let i=0;
+  const head=document.createElement('div');head.className='shead';
+  head.innerHTML=`<b>📋 ${esc(st.dataset.title||'Paso a paso')}</b><div class="dots">${steps.map((_,k)=>`<i title="Paso ${k+1}">${k+1}</i>`).join('')}</div>`;
+  st.prepend(head);
+  const navb=document.createElement('div');navb.className='snav';
+  navb.innerHTML='<button class="btn sm ghost">← Anterior</button><button class="btn sm">Siguiente →</button>';st.appendChild(navb);
+  const [pb,nb]=$$('button',navb); const dots=$$('.dots i',head);
+  const seen=new Set();
+  const draw=()=>{seen.add(i);steps.forEach((s,k)=>s.classList.toggle('on',k===i));dots.forEach((d,k)=>{d.className=k===i?'on':(seen.has(k)?'seen':'')});pb.disabled=i===0;pb.style.visibility=i===0?'hidden':'visible';nb.textContent=i===steps.length-1?'✔ Listo':'Siguiente →';};
+  pb.onclick=()=>{if(i>0){i--;draw()}}; nb.onclick=()=>{if(i<steps.length-1){i++;draw()}else{nb.textContent='✔ ¡Completado!'}};
+  dots.forEach((d,k)=>d.onclick=()=>{i=k;draw()}); draw();
+});
+/* ---------- checklists ---------- */
+$$('.check[data-check]').forEach(ul=>{
+  const key='chk-'+ul.dataset.check; const st=store.get(key,[]);
+  $$('li',ul).forEach((li,i)=>{const cb=$('input',li);cb.checked=!!st[i];li.classList.toggle('ok',cb.checked);
+    cb.onchange=()=>{st[i]=cb.checked;li.classList.toggle('ok',cb.checked);store.set(key,st)}});
+});
+/* ---------- quizzes ---------- */
+const Q={
+ q21:[
+  {q:'¿Cuál afirmación describe mejor la relación entre Office 365 y Microsoft 365?',o:['Son productos sin relación','Microsoft 365 incluye los servicios de Office 365 y agrega otros (por ejemplo, Windows y seguridad en planes empresariales)','Office 365 es la versión más nueva de Microsoft 365','Microsoft 365 solo funciona sin internet'],a:1,f:'Microsoft 365 es la «sombrilla»: incluye Office 365 y, según el plan, Windows y herramientas de seguridad y administración.'},
+  {q:'Necesitas hacer una combinación de correspondencia completa con un Excel. ¿Qué versión de Word usas?',o:['Word para la web','Word de escritorio','Cualquiera, son idénticas','Word móvil'],a:1,f:'La combinación de correspondencia completa está en Word de escritorio.'},
+  {q:'¿Cuál es la dirección del portal de Microsoft 365?',o:['www.microsoft365.co','www.office.com','outlook.sena.co','onedrive.gov.co'],a:1,f:'office.com (también m365.cloud.microsoft) es el portal de inicio.'}],
+ q22:[
+  {q:'Saldrás a vacaciones del 15 al 26 de diciembre. ¿Qué configuras?',o:['Una regla que borre los correos','Respuestas automáticas con período definido y mensajes interno/externo','Una firma nueva','Reenvío de todo el correo a tu cuenta personal'],a:1,f:'Las respuestas automáticas programadas se activan y desactivan solas en las fechas definidas.'},
+  {q:'Quieres que un memorando llegue el lunes a las 7:00 a. m. aunque lo redactes el viernes. Usas…',o:['Programar envío / Retrasar entrega','Marcar como importante','Guardar como borrador y recordar enviarlo','Solicitar confirmación de lectura'],a:0,f:'Programar envío (nuevo Outlook/web) o Retrasar entrega (clásico).'},
+  {q:'¿Qué nivel de permiso de calendario permite que otra persona acepte reuniones en tu nombre?',o:['Puede ver cuándo estoy ocupado','Puede ver títulos y ubicaciones','Delegado','Puede ver todos los detalles'],a:2,f:'El delegado puede administrar invitaciones en tu nombre.'}],
+ q23:[
+  {q:'Debes enviar la versión final de un memorando para consulta de tu jefe sin que pueda modificarla. ¿Qué configuración eliges?',o:['Cualquier persona – Puede editar','Personas específicas – Puede ver','Personas de la organización – Puede editar','Adjuntarlo al correo'],a:1,f:'Personas específicas + Puede ver = solo lectura para quien lo necesita.'},
+  {q:'Borraste por error una carpeta hace 20 días. ¿Dónde la buscas?',o:['No se puede recuperar','En la papelera de reciclaje de OneDrive','En la carpeta Descargas','En el historial del navegador'],a:1,f:'La papelera de OneDrive de trabajo conserva elementos hasta 93 días.'},
+  {q:'Un compañero sobrescribió parte de tu informe. ¿Qué haces?',o:['Rehacer el informe','Restaurar una versión anterior desde el historial de versiones','Crear «informe_final2»','Pedir el archivo por correo'],a:1,f:'El historial de versiones permite revisar y restaurar sin perder las demás versiones.'}],
+ q24:[
+  {q:'¿Qué necesitas para que la tabla de contenido se genere automáticamente?',o:['Poner los títulos en negrita','Aplicar estilos de título (Título 1, Título 2…)','Subrayar los títulos','Escribir los números de página a mano'],a:1,f:'La TDC se basa en los estilos de título.'},
+  {q:'En la combinación, la fecha sale como 11/4/2026. ¿Cómo se corrige?',o:['Escribir la fecha a mano en cada carta','Agregar el modificador \\@ "d \'de\' MMMM \'de\' yyyy" al campo','Borrar la columna','Convertir el Excel a PDF'],a:1,f:'El modificador de formato de fecha en el código de campo resuelve el formato.'},
+  {q:'Antes de firmar un documento revisado con control de cambios debes…',o:['Ocultar las marcas con «Sin marcas»','Aceptar o rechazar todos los cambios y resolver/eliminar comentarios','Imprimirlo con las marcas','Desactivar el corrector'],a:1,f:'«Sin marcas» solo oculta: los cambios siguen dentro del archivo.'}],
+ q25:[
+  {q:'¿Qué requisito es indispensable para la coautoría en tiempo real?',o:['Enviar el archivo adjunto a todos','Archivo guardado en OneDrive o SharePoint y compartido con permiso de edición','Que todos usen el mismo computador','Guardar en memoria USB'],a:1,f:'La coautoría ocurre sobre el archivo en la nube.'},
+  {q:'¿Qué sucede cuando escribes @Nombre en un comentario?',o:['Nada','La persona recibe una notificación por correo con enlace al comentario','Se borra el comentario','El documento se bloquea'],a:1,f:'La @mención notifica y puede asignar tareas.'},
+  {q:'Una conversación de comentarios ya fue atendida. Lo recomendable es…',o:['Dejarla abierta','Resolverla','Escribir encima del texto','Copiar el documento'],a:1,f:'Resolver la oculta del margen, pero queda registrada y se puede reabrir.'}],
+ qf:[
+  {q:'Microsoft 365, frente a Office 365, se caracteriza por…',o:['Ser solo para hogares','Incluir Office 365 y servicios adicionales según el plan','No tener correo','Funcionar solo en Mac'],a:1,f:'Es el conjunto ampliado de servicios.'},
+  {q:'¿Dónde configuras la firma en el nuevo Outlook?',o:['Configuración › Cuentas › Firmas','Archivo › Imprimir','Calendario › Compartir','Vista › Zoom'],a:0,f:'Configuración › Cuentas › Firmas.'},
+  {q:'Para reservar una sala en Outlook, la sala debe…',o:['Tener impresora','Estar configurada como buzón de recurso','Tener Wi-Fi','Estar en el mismo piso'],a:1,f:'Las salas son buzones de recurso administrados por TI.'},
+  {q:'El permiso «Puede ver» en OneDrive equivale a…',o:['Edición total','Solo lectura','Eliminar el archivo','Cambiar permisos'],a:1,f:'Puede ver = solo lectura.'},
+  {q:'Un vínculo con fecha de expiración sirve para…',o:['Que el archivo se borre','Que el acceso deje de funcionar automáticamente en una fecha','Duplicar el archivo','Acelerar la descarga'],a:1,f:'Limita el tiempo de acceso.'},
+  {q:'¿Cuántos días permanecen los archivos eliminados en la papelera de OneDrive de trabajo?',o:['7','30','93','365'],a:2,f:'93 días en total.'},
+  {q:'La combinación de correspondencia une…',o:['Dos PDF','Un documento principal y un origen de datos','Dos correos','Un Excel y un PowerPoint'],a:1,f:'Documento principal + origen de datos (Excel).'},
+  {q:'¿Qué atajo activa el control de cambios en Word?',o:['Ctrl+Mayús+E','Ctrl+P','Alt+F4','Ctrl+Z'],a:0,f:'Ctrl+Mayús+E.'},
+  {q:'¿Cuál es una buena convención para nombrar archivos?',o:['final_final2.docx','20261030_Memorando_ArchivoElectronico.docx','documento nuevo (3).docx','MEMO!!!.docx'],a:1,f:'AAAAMMDD_TipoDocumento_Asunto.'},
+  {q:'Para editar un documento con tres compañeros a la vez, lo mejor es…',o:['Enviar tres adjuntos','Compartirlo desde OneDrive con «Puede editar» y trabajar en coautoría','Imprimirlo','Copiarlo a USB'],a:1,f:'Coautoría sobre un único archivo en la nube.'}]
+};
+const ABC='ABCD';
+$$('.quiz').forEach(qz=>{
+  const set=Q[qz.dataset.quiz]; const final=!!qz.dataset.final;
+  qz.innerHTML=set.map((it,i)=>`<div class="q" data-i="${i}"><p>${i+1}. ${esc(it.q)}</p>${it.o.map((o,j)=>`<label><input type="radio" name="${qz.dataset.quiz}-${i}" value="${j}"><span>${ABC[j]}. ${esc(o)}</span>${j===it.a?'<span class="key">✓ clave</span>':''}</label>`).join('')}<div class="fb"></div></div>`).join('')+
+   (final?'<button class="btn">Calificar</button> <button class="btn ghost">Reintentar</button><div class="score"></div>':'');
+  const check=(qd,showOnly)=>{const i=+qd.dataset.i,it=set[i];const sel=$('input:checked',qd);const fb=$('.fb',qd);
+    $$('label',qd).forEach((l,j)=>{l.classList.remove('right','wrong');if(sel&&j===it.a)l.classList.add('right');if(sel&&+sel.value===j&&j!==it.a)l.classList.add('wrong')});
+    if(sel){fb.classList.add('on');fb.innerHTML=(+sel.value===it.a?'<b style="color:var(--ok)">¡Correcto!</b> ':'<b style="color:var(--danger)">Revisa:</b> ')+esc(it.f)}
+    return sel&&+sel.value===it.a;};
+  if(!final){$$('.q',qz).forEach(qd=>$$('input',qd).forEach(r=>r.onchange=()=>check(qd)));}
+  else{const [cal,re]=$$(':scope>button',qz);
+    cal.onclick=()=>{let ok=0;$$('.q',qz).forEach(qd=>{if(check(qd))ok++});$('.score',qz).innerHTML=`Resultado: ${ok}/${set.length} – ${ok>=7?'✅ Aprobado. ¡Muy bien!':'🔁 Repasa los temas marcados y vuelve a intentarlo.'}`;store.set('final',ok)};
+    re.onclick=()=>{$$('input',qz).forEach(r=>r.checked=false);$$('label',qz).forEach(l=>l.classList.remove('right','wrong'));$$('.fb',qz).forEach(f=>f.classList.remove('on'));$('.score',qz).textContent=''};}
+});
+if(ROLE==='docente') document.body.classList.add('showkeys');
+/* ---------- classify desktop/web ---------- */
+(function(){
+  const items=[['Combinar correspondencia con un Excel de 20 registros','E'],['Revisar un documento desde el computador de otra sede','W'],['Trabajar en un avión sin conexión','E'],['Comentar rápido un informe compartido por Teams','W'],['Crear una plantilla .dotx con campos avanzados','E'],['Editar al mismo tiempo con tres compañeros sin instalar nada','W']];
+  const box=$('#classify');let ok=0;
+  box.innerHTML=items.map((it,i)=>`<div class="change" data-i="${i}" style="justify-content:space-between;border-bottom:1px dashed var(--border);padding:6px 0"><span>${esc(it[0])}</span><span><button class="btn sm ghost" data-v="E">🖥 Escritorio</button> <button class="btn sm ghost" data-v="W">🌐 Web</button> <b class="r"></b></span></div>`).join('')+'<p class="score" id="clsScore"></p>';
+  $$('.change',box).forEach(row=>$$('button',row).forEach(b=>b.onclick=()=>{const it=items[+row.dataset.i];const good=b.dataset.v===it[1];
+    $('.r',row).textContent=good?'✔':'✖ prueba otra';$('.r',row).style.color=good?'var(--ok)':'var(--danger)';
+    if(good&&!row.dataset.ok){row.dataset.ok=1;ok++;$('#clsScore').textContent=`Aciertos: ${ok}/${items.length}`+(ok===items.length?' 🎉':'')}}));
+})();
+/* ---------- signature ---------- */
+(function(){
+  const ids=['sgN','sgC','sgD','sgR','sgT','sgE'];
+  const logo='data:image/png;base64,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';
+  const html=()=>{const v=ids.map(i=>esc($('#'+i).value));
+    return `<table cellpadding="0" cellspacing="0" style="font-family:Calibri,Arial,sans-serif;color:#333333;font-size:10.5pt;border-collapse:collapse"><tr><td style="padding-right:12px;border-right:2px solid #39A900;vertical-align:top"><img src="${logo}" alt="SENA" width="54" style="display:block"></td><td style="padding-left:12px;vertical-align:top"><b style="font-size:12pt;color:#00304D">${v[0]}</b><br><span style="color:#007832;font-weight:bold">${v[1]}</span><br>${v[2]} · ${v[3]}<br>Servicio Nacional de Aprendizaje – SENA<br>Tel. ${v[4]} · <a href="mailto:${v[5]}" style="color:#007832">${v[5]}</a><br><a href="https://www.sena.edu.co" style="color:#007832">www.sena.edu.co</a></td></tr></table><p style="font-family:Calibri,Arial,sans-serif;font-size:8pt;color:#777777;margin:8px 0 0">Antes de imprimir este mensaje, piense en el medio ambiente. La información contenida en este correo es confidencial y de uso exclusivo del destinatario.</p>`};
+  const upd=()=>$('#sigPrev').innerHTML=html(); ids.forEach(i=>$('#'+i).oninput=upd); upd();
+  $('#sigCopy').onclick=async()=>{try{const h=html();await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([$('#sigPrev').innerText],{type:'text/plain'})})]);$('#sigMsg').textContent='✔ Copiada. Pégala en Outlook › Firmas.'}
+    catch(e){const r=document.createRange();r.selectNodeContents($('#sigPrev'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('#sigMsg').textContent='Seleccionada: presiona Ctrl+C para copiar.'}};
+})();
+/* ---------- share simulator ---------- */
+(function(){
+  const st={aud:'esp',perm:'ver',extra:new Set()};
+  $$('section[data-sec=m23] .opt').forEach(g=>$$('button',g).forEach(b=>b.onclick=()=>{
+    if(g.dataset.multi){b.classList.toggle('on');st.extra.has(b.dataset.v)?st.extra.delete(b.dataset.v):st.extra.add(b.dataset.v)}
+    else{$$('button',g).forEach(x=>x.classList.remove('on'));b.classList.add('on');st[g.dataset.g]=b.dataset.v}
+    calc();}));
+  function calc(){
+    let r={esp:15,org:40,any:80}[st.aud]+(st.perm==='edit'?20:0)-(st.extra.has('exp')?10:0)-(st.extra.has('dl')&&st.perm==='ver'?8:0);
+    r=Math.max(5,Math.min(100,r));
+    const bar=$('#riskBar');bar.style.width=r+'%';bar.style.background=r<35?'#39A900':r<65?'#E0A100':'#C62828';
+    const lvl=r<35?'Riesgo bajo ✅':r<65?'Riesgo medio ⚠️':'Riesgo alto ⛔';
+    $('#riskTxt').textContent=`${lvl} (${r}/100)`;
+    let tip='';
+    if(st.aud==='any') tip='Cualquier persona que reciba o reenvíe el vínculo podrá abrir el archivo, incluso fuera del SENA. Evítalo para documentos institucionales.';
+    else if(st.aud==='org') tip='Todo funcionario con el vínculo puede acceder. Úsalo para información de interés general interno, no para documentos con datos personales.';
+    else tip='Solo las personas que elijas podrán abrirlo, aunque el vínculo se reenvíe. Es la opción recomendada.';
+    if(st.perm==='edit') tip+=' Con «Puede editar» podrán modificar el contenido: úsalo solo durante la elaboración y retíralo al finalizar.';
+    else tip+=' «Puede ver» es ideal para versiones finales (solo lectura).';
+    if(st.extra.has('dl')&&st.perm==='edit') tip+=' (Bloquear descarga solo aplica con «Puede ver».)';
+    if(st.extra.has('exp')) tip+=' La fecha de expiración retira el acceso automáticamente (si la política institucional lo permite).';
+    $('#riskTip').textContent=tip;}
+  calc();
+})();
+/* ---------- versions ---------- */
+(function(){
+  let vers=[{v:'4.0',who:'Paola Herrera',when:'30/10/2026 4:12 p. m.',what:'Versión final aceptada'},{v:'3.0',who:'Julián Pineda (revisor)',when:'30/10/2026 11:40 a. m.',what:'Control de cambios y comentarios'},{v:'2.0',who:'Paola Herrera',when:'29/10/2026 3:05 p. m.',what:'Primer borrador completo'},{v:'1.0',who:'Paola Herrera',when:'29/10/2026 9:20 a. m.',what:'Creación del archivo'}];
+  const ul=$('#versions');
+  const draw=()=>{ul.innerHTML=vers.map((x,i)=>`<li class="${i===0?'cur':''}"><span class="v">${x.v}</span><span style="flex:1"><b>${esc(x.what)}</b><br><span class="muted" style="font-size:13px">${esc(x.who)} · ${x.when}</span></span>${i===0?'<span class="pill">Actual</span>':`<button class="btn sm ghost" data-i="${i}">Restaurar</button>`}</li>`).join('');
+    $$('button',ul).forEach(b=>b.onclick=()=>{const old=vers[+b.dataset.i];const n=(parseFloat(vers[0].v)+1).toFixed(1);vers.unshift({v:n,who:'Tú',when:'ahora',what:`Restaurada desde la versión ${old.v}: ${old.what}`});draw();$('#verMsg').textContent=`✔ Se creó la versión ${n} con el contenido de la ${old.v}. Ninguna versión se perdió.`});};
+  draw();
+})();
+/* ---------- styles & TOC ---------- */
+(function(){
+  const items=[['1. Objetivo',1],['2. Alcance',1],['3. Definiciones',1],['3.1 Comunicación oficial',2],['4. Desarrollo',1],['4.1 Recepción',2],['4.2 Radicación',2],['5. Controles',1]];
+  const applied=items.map(()=>0); const doc=$('#stylesDoc');
+  const draw=()=>{doc.innerHTML=items.map((it,i)=>`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin:4px 0"><span style="${applied[i]?(it[1]===1?'font:700 17px Work Sans,Calibri;color:#007832':'font:700 15px Work Sans,Calibri;color:#00304D;padding-left:12px'):'font-weight:700'}">${esc(it[0])}</span><button class="btn sm ${applied[i]?'':'ghost'}" data-i="${i}" style="${applied[i]?'background:#007832':''}">${applied[i]?'✔ Título '+it[1]:'Aplicar Título '+it[1]}</button></div><div style="height:8px;background:#EEF1F0;border-radius:3px;margin:2px 0 8px;width:${60+((i*13)%35)}%"></div>`).join('');
+    $$('button',doc).forEach(b=>b.onclick=()=>{applied[+b.dataset.i]^=1;draw()});
+    const toc=items.map((it,i)=>applied[i]?`<div style="display:flex;gap:6px;${it[1]===2?'padding-left:16px':''}"><span>${esc(it[0])}</span><span style="flex:1;border-bottom:1px dotted #999;margin-bottom:5px"></span><span>${i+2}</span></div>`:'').join('');
+    $('#tocOut').innerHTML=toc||'<span style="color:#888">No se encontraron entradas de tabla de contenido. Aplica estilos de título.</span>';};
+  draw();
+})();
+/* ---------- mail merge ---------- */
+(function(){
+  let i=0,prev=false;const M=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const f=(k)=>{const r=DATA[i];if(!prev)return `<span class="mf">«${k}»</span>`;let v=r[k];
+    if(k==='Fecha_Citacion'){const [y,m,d]=v.split('-').map(Number);v=$('#mmFmt').checked?`${d} de ${M[m-1]} de ${y}`:`${m}/${d}/${y}`;}return `<span class="val">${esc(v)}</span>`};
+  const draw=()=>{$('#mmDoc').innerHTML=`<div class="hdr"><img src="data:image/png;base64,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" alt=""><div><b>Servicio Nacional de Aprendizaje – SENA</b><br>Dirección Regional – Coordinación Administrativa</div></div>
+    <p style="text-align:right;margin:0"><b>Citación No.</b> ${f('Consecutivo')}</p><p>Bogotá D.C., 28 de octubre de 2026</p>
+    <p style="margin:0">${f('Tratamiento')}<br>${f('Nombres')} ${f('Apellidos')}<br>${f('Cargo')}<br>${f('Dependencia')}<br>Correo: ${f('Correo')}</p>
+    <p><b>Asunto:</b> Citación a la jornada «Productividad digital con Microsoft 365» – Bloque 2</p><p>Cordial saludo.</p>
+    <p>De manera atenta le informamos que ha sido convocado(a) a la jornada de formación… La sesión se realizará así:</p>
+    <ul><li><b>Fecha:</b> ${f('Fecha_Citacion')}</li><li><b>Hora:</b> ${f('Hora')}</li><li><b>Lugar:</b> ${f('Lugar')}</li></ul><p>Atentamente,<br><br><b>Coordinación Administrativa</b></p>`;
+    $('#mmIdx').textContent=`Registro ${i+1} / ${DATA.length}`;$('#mmToggle').textContent='👁 Vista previa de resultados: '+(prev?'SÍ':'NO');$('#mmToggle').classList.toggle('ghost',!prev);};
+  $('#mmToggle').onclick=()=>{prev=!prev;draw()};$('#mmPrev').onclick=()=>{i=(i+DATA.length-1)%DATA.length;draw()};$('#mmNext').onclick=()=>{i=(i+1)%DATA.length;draw()};$('#mmFmt').onchange=draw;draw();
+})();
+/* ---------- track changes ---------- */
+(function(){
+  const ch=[{d:'debera',i:'deberá',why:'Ortografía'},{d:'edicion',i:'edición',why:'Ortografía'},{d:'“Cualquier persona con el vínculo” para que todos puedan haber la información',i:'“Personas específicas” y el permiso “Puede ver”',why:'Seguridad'}];
+  const st=ch.map(()=>null);
+  const seg=k=>{const c=ch[k];if(st[k]==='a')return esc(c.i);if(st[k]==='r')return esc(c.d);return `<span class="del">${esc(c.d)}</span><span class="ins">${esc(c.i)}</span><sup style="color:#007832;font-weight:700">[${k+1}]</sup>`};
+  const draw=()=>{$('#tcDoc').innerHTML=`<p style="margin:0">Para esto, cada funcionario ${seg(0)} crear una carpeta con el nombre de su dependencia y compartirla con su jefe inmediato con permiso de ${seg(1)}. Los documentos finales se deben compartir con la opción ${seg(2)}.</p>
+    <p style="margin:10px 0 0;font-size:12.5px;color:#555;border-left:3px solid #39A900;padding-left:8px"><b>Comentario – Revisor:</b> @Pareja A, compartir con «Cualquier persona» expone información institucional; para versiones finales usar solo lectura.</p>`;
+    $('#tcBtns').innerHTML=ch.map((c,k)=>`<div class="change"><b>[${k+1}] ${c.why}:</b> <span class="muted">«${esc(c.i.slice(0,40))}${c.i.length>40?'…':''}»</span> ${st[k]?`<span class="pill">${st[k]==='a'?'Aceptado':'Rechazado'}</span>`:`<button class="btn sm" data-k="${k}" data-a="a">✔ Aceptar</button><button class="btn sm ghost" data-k="${k}" data-a="r">✖ Rechazar</button>`}</div>`).join('');
+    $$('#tcBtns button').forEach(b=>b.onclick=()=>{st[+b.dataset.k]=b.dataset.a;draw()});
+    const n=st.filter(Boolean).length;$('#tcMsg').textContent=n===ch.length?(st.every(x=>x==='a')?'✔ Documento limpio: todos los cambios aceptados. Ahora resuelve el comentario y compártelo como «Puede ver».':'Revisaste todo. Ojo: rechazaste un cambio que corregía un error real.'):`Cambios pendientes: ${ch.length-n}`;};
+  draw();
+})();
+/* ---------- co-authoring ---------- */
+(function(){
+  const doc=$('#coDoc');
+  const A='En cumplimiento del procedimiento de gestión documental, ', B='los documentos se almacenarán en OneDrive institucional.';
+  const C2='Las versiones finales se compartirán en modo solo lectura.';
+  let a=0,b=0;
+  function draw(){doc.innerHTML=`<p style="margin:0 0 8px">${esc(A.slice(0,a))}<span class="cursor" style="background:#7B3FBF"></span><span class="tag" style="background:#7B3FBF">Diana M.</span>${a>=A.length?esc(B):''}</p><p style="margin:0">${esc(C2.slice(0,b))}<span class="cursor" style="background:#0F7AA8"></span><span class="tag" style="background:#0F7AA8">Carlos G.</span></p>`}
+  setInterval(()=>{a=a>=A.length+12?0:a+1;b=b>=C2.length+12?0:b+1;draw()},140);draw();
+  const th=$('#thread');let replied=false,resolved=false;
+  const drawT=()=>{th.className='thread'+(resolved?' resolved':'');th.innerHTML=`<div class="msg"><span class="av" style="background:#7B3FBF">DM</span><div><b>Diana Martínez</b> <span class="muted" style="font-size:12px">hace 2 min</span><br><span class="mention">@Carlos Gómez</span> ¿puedes confirmar si la Tabla de Retención aplica para esta carpeta?</div></div>${replied?'<div class="msg" style="margin-left:24px"><span class="av" style="background:#0F7AA8">CG</span><div><b>Carlos Gómez</b> <span class="muted" style="font-size:12px">ahora</span><br>Sí, aplica la serie «Comunicaciones oficiales». Ya ajusté el párrafo.</div></div>':''}${resolved?'<p class="pill" style="margin:6px 0 0">✔ Conversación resuelta</p>':''}`};
+  $('#replyBtn').onclick=()=>{replied=true;drawT()};$('#resolveBtn').onclick=()=>{resolved=!resolved;$('#resolveBtn').textContent=resolved?'↺ Reabrir':'✔ Resolver conversación';drawT()};drawT();
+})();
+/* ---------- flip cards ---------- */
+(function(){
+  const F=[['Compartir con «Cualquier persona con el vínculo» un documento interno','Usa «Personas específicas» o «Personas del SENA». El vínculo de «Cualquier persona» funciona aunque se reenvíe fuera de la entidad.'],
+  ['Dar «Puede editar» cuando solo deben consultar','Para versiones finales, «Puede ver» (solo lectura). Edición solo durante la elaboración y por tiempo limitado.'],
+  ['Enviar el archivo como adjunto para que lo corrijan','Comparte el vínculo de OneDrive: todos trabajan sobre el mismo archivo y el historial guarda cada cambio.'],
+  ['No retirar accesos cuando termina el trabajo','Revisa «Administrar acceso» y quita permisos a quien ya no los necesita (contratistas, traslados, pares de revisión).'],
+  ['Compartir la carpeta completa en lugar del archivo','Comparte solo lo necesario. Compartir una carpeta da acceso a todo lo que se agregue después.'],
+  ['Crear «final», «final2», «final_ahora_sí»','Un solo archivo con convención AAAAMMDD_Tipo_Asunto y el historial de versiones para volver atrás.'],
+  ['Compartir documentos con datos personales sin control','La Ley 1581 de 2012 exige proteger los datos personales: comparte solo con quien está autorizado y en solo lectura.'],
+  ['Firmar un documento con cambios sin aceptar','Acepta/rechaza todo y resuelve comentarios; «Sin marcas» solo los oculta y siguen dentro del archivo.'],
+  ['Guardar en el escritorio del equipo o en USB','Guarda en OneDrive/SharePoint: copia de seguridad, versiones y acceso desde cualquier equipo.']];
+  $('#flips').innerHTML=F.map(x=>`<div class="flip" tabindex="0"><div class="in"><div class="f"><small style="color:var(--danger)">Error frecuente</small><b>${esc(x[0])}</b><span class="muted" style="font-size:12.5px;margin-top:8px">Clic para ver la buena práctica ↻</span></div><div class="b"><small style="color:var(--accent)">Buena práctica</small><span>${esc(x[1])}</span></div></div></div>`).join('');
+  $$('.flip').forEach(c=>{c.onclick=()=>c.classList.toggle('on');c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();c.classList.toggle('on')}}});
+})();
+/* ---------- glossary ---------- */
+(function(){
+  const G=[['Aplicaciones web','Versiones de Word, Excel, PowerPoint y Outlook que funcionan en el navegador sin instalar nada.'],['Autoguardado','Función que guarda automáticamente cada pocos segundos los archivos almacenados en OneDrive o SharePoint.'],['Buzón de recurso','Cuenta de Exchange que representa una sala o equipo; acepta o rechaza reservas automáticamente.'],['Calendario compartido','Calendario al que otras personas tienen acceso con un nivel de permiso definido.'],['Campo combinado','Marcador «Nombre» que Word reemplaza por el dato de cada fila del origen de datos.'],['Coautoría','Edición simultánea de un mismo documento por varias personas en tiempo real.'],['Combinación de correspondencia','Proceso que une un documento principal con un origen de datos para generar documentos personalizados.'],['Comentario','Nota en el margen de un documento para preguntar o sugerir sin cambiar el texto.'],['Control de cambios','Modo de Word que registra inserciones, eliminaciones y formato con el nombre del revisor.'],['Delegado','Persona con permiso para administrar el correo o calendario de otra, incluso aceptar reuniones.'],['Documento principal','Documento de Word con el texto fijo y los campos de combinación.'],['Escritorio (aplicación de)','Programa instalado en el equipo con todas las funciones de Office.'],['Estilo','Conjunto de formatos con nombre (Título 1, Normal) que se aplica de una vez.'],['Fecha de expiración','Fecha a partir de la cual un vínculo compartido deja de funcionar.'],['Firma institucional','Bloque de datos del funcionario al final del correo, conforme a la identidad visual.'],['Historial de versiones','Registro de las versiones guardadas de un archivo, que permite verlas y restaurarlas.'],['Mención (@)','Etiqueta a una persona en un comentario y le envía una notificación.'],['Microsoft 365','Suscripción en la nube que incluye Office 365 y, según el plan, Windows y herramientas de seguridad.'],['Modificador \\@','Instrucción en un código de campo que define el formato de una fecha.'],['Office 365','Suscripción con aplicaciones de Office y servicios en línea como Exchange, OneDrive y SharePoint.'],['OneDrive','Servicio de almacenamiento en la nube para archivos de trabajo personales.'],['Origen de datos','Lista (por ejemplo, Excel) con los datos para la combinación.'],['Papelera de reciclaje','Lugar donde quedan los archivos eliminados de OneDrive hasta 93 días.'],['Permiso «Puede editar»','Permite modificar, comentar y compartir según la configuración.'],['Permiso «Puede ver»','Permite abrir y leer sin modificar (solo lectura).'],['Plantilla (.dotx)','Archivo modelo que genera documentos nuevos con el mismo formato.'],['Programar envío','Función de Outlook que entrega un correo en una fecha y hora definidas.'],['Resolver comentario','Marcar una conversación como atendida; se oculta pero puede reabrirse.'],['Respuesta automática','Mensaje que Outlook envía automáticamente durante una ausencia.'],['SharePoint','Plataforma de sitios y bibliotecas de documentos para equipos y dependencias.'],['Sincronización','Proceso que mantiene iguales los archivos de OneDrive en la nube y en el equipo.'],['Tabla de contenido','Índice automático generado a partir de los estilos de título.'],['Vínculo para compartir','Dirección web que da acceso a un archivo o carpeta con permisos definidos.']];
+  const draw=q=>{q=(q||'').toLowerCase();const r=G.filter(g=>(g[0]+g[1]).toLowerCase().includes(q));$('#glList').innerHTML=r.map(g=>`<div class="gl-item"><b>${esc(g[0])}</b><br><span>${esc(g[1])}</span></div>`).join('')||'<p class="muted">Sin resultados.</p>'};
+  $('#glSearch').oninput=e=>draw(e.target.value);draw('');
+})();
+/* ---------- videos ---------- */
+(function(){
+  const V=[['2.1','AAR5SF8YHEc','Qué es Microsoft 365 – Curso de Microsoft 365','Edutin Academy · 9:05'],
+  ['2.1','uH4mfLD-utY','Trabajo colaborativo en Microsoft 365','Edutin Academy · 2:32'],
+  ['2.2','n4h9Mj0h920','Crear firma en Microsoft Outlook 365','Teleame'],
+  ['2.2','lfu5EXtBVfg','Mejora tu productividad: crea plantillas de correo en Outlook 365','liberbiz · 2:38'],
+  ['2.2','mV3jRpuyl_0','Configurar respuestas automáticas en Outlook','EXCELeINFO'],
+  ['2.2','YdZ6km__qY0','Outlook: cómo retrasar o programar el envío de un correo','BiMind · 1:24'],
+  ['2.2','6OGlwdbPTK0','Compartir calendario de Outlook','profeconomia · 1:59'],
+  ['2.2','FPVONqWJzv4','Outlook: ver la disponibilidad de tus compañeros para convocar una reunión','BiMind'],
+  ['2.2','AK_iYNsEfU0','Reserva de sala de reuniones en el calendario de Outlook','Mesa de Ayuda TI · 1:28'],
+  ['2.3','eoDnESUU6wI','Cómo compartir archivos y carpetas en OneDrive','Eric Efrain'],
+  ['2.3','99Wj2a_MmdE','OneDrive: cómo recuperar archivos eliminados y versiones anteriores','DOCTOR 365'],
+  ['2.4','D1UB0MzVH3M','Crear una combinación de correspondencia con Word y Excel','Informática Integral GT'],
+  ['2.4','IP4p_xG3u_Q','Cómo crear, actualizar y eliminar tablas de contenido en Word','Dapen Centro Estudios'],
+  ['2.4','iJ_B6zXrH1k','Insertar comentarios, revisar y control de cambios en Word','Usatusoft'],
+  ['2.5','iZ6cEBBXdSk','Cómo colaborar en documentos de Word con coautoría en tiempo real','Tutor']];
+  const box=$('#videos');
+  const draw=f=>{box.innerHTML=V.filter(v=>f==='all'||v[0]===f).map(v=>`<a class="vcard" href="https://www.youtube.com/watch?v=${v[1]}" target="_blank" rel="noopener"><div class="thumb"><img loading="lazy" src="https://i.ytimg.com/vi/${v[1]}/hqdefault.jpg" alt="Miniatura: ${esc(v[2])}" onerror="this.style.display='none'"><div class="play"><span></span></div></div><div class="vb"><span class="pill" style="margin-bottom:6px">Tema ${v[0]}</span><b>${esc(v[2])}</b><span>${esc(v[3])} · YouTube</span></div></a>`).join('')};
+  $$('#vFilter button').forEach(b=>b.onclick=()=>{$$('#vFilter button').forEach(x=>x.classList.remove('on'));b.classList.add('on');draw(b.dataset.v)});draw('all');
+  const S=[['2.1','Diferencia entre los planes de Microsoft 365 para el hogar o la empresa','https://support.microsoft.com/es-es/office/-cu%C3%A1l-es-la-diferencia-entre-los-planes-de-microsoft-365-para-el-hogar-o-la-empresa-31c36a5d-a13d-4b7d-9b1f-2076accbeeab'],
+  ['2.1','Opciones de planes de Microsoft 365 y Office 365 (Microsoft Learn)','https://learn.microsoft.com/es-es/office365/servicedescriptions/office-365-platform-service-description/office-365-plan-options'],
+  ['2.2','Cómo agregar y cambiar una firma de correo electrónico en Outlook','https://support.microsoft.com/es-es/outlook/mail/how-to-add-and-change-an-email-signature-in-outlook'],
+  ['2.2','Configurar respuestas automáticas fuera de la oficina en Outlook','https://support.microsoft.com/es-es/outlook/mail/how-to-set-up-out-of-office-automatic-replies-in-outlook'],
+  ['2.2','Retrasar o programar el envío de mensajes de correo electrónico en Outlook','https://support.microsoft.com/es-es/outlook/mail/delay-or-schedule-sending-email-messages-in-outlook'],
+  ['2.2','Compartir un calendario de Outlook con otras personas','https://support.microsoft.com/es-es/office/compartir-un-calendario-de-outlook-con-otras-personas-353ed2c1-3ec5-449d-8c73-6931a0adab88'],
+  ['2.2','Buscar una sala de conferencias','https://support.microsoft.com/es-es/office/buscar-una-sala-de-conferencias-1d1c576f-c6e8-4c80-b200-9f55a940ca1f'],
+  ['2.3','Compartir archivos y carpetas en Microsoft OneDrive','https://support.microsoft.com/es-es/onedrive/share-files-and-folders-in-microsoft-onedrive'],
+  ['2.3','Restaurar una versión anterior de un archivo almacenado en OneDrive','https://support.microsoft.com/es-es/onedrive/restore-a-previous-version-of-a-file-stored-in-onedrive'],
+  ['2.3','Restaurar archivos o carpetas eliminados en OneDrive','https://support.microsoft.com/es-es/onedrive/restore-deleted-files-or-folders-in-onedrive'],
+  ['2.4','Combinación de correspondencia con una hoja de cálculo de Excel','https://support.microsoft.com/es-es/word/mail-merge-using-an-excel-spreadsheet'],
+  ['2.4','Insertar una tabla de contenido','https://support.microsoft.com/es-es/word/training/insert-a-table-of-contents'],
+  ['2.4','Realizar un seguimiento de los cambios en Word','https://support.microsoft.com/es-es/office/realizar-un-seguimiento-de-los-cambios-en-word-197ba630-0f5f-4a8e-9a77-3712475e806a'],
+  ['2.5','Colaborar en Word','https://support.microsoft.com/es-es/word/training/collaborate-in-word'],
+  ['2.5','Usar las @menciones en comentarios para etiquetar a usuarios','https://support.microsoft.com/es-es/office/usar-las-menciones-en-comentarios-para-etiquetar-a-usuarios-o-para-recibir-comentarios-644bf689-31a0-4977-a4fb-afe01820c1fd'],
+  ['2.5','Ver versiones anteriores de los archivos de Office','https://support.microsoft.com/es-es/office/ver-versiones-anteriores-de-los-archivos-de-office-5c1e076f-a9c9-41b8-8ace-f77b9642e2c2']];
+  $('#supportTbl').insertAdjacentHTML('beforeend',S.map(s=>`<tr><td><span class="pill">${s[0]}</span></td><td><a href="${s[2]}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600">${esc(s[1])}</a></td></tr>`).join(''));
+})();
+renderProgress(); show();
+</script>
+</body>
+</html>
