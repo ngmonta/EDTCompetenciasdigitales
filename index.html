@@ -112,6 +112,43 @@ mark{background:color-mix(in srgb,var(--green) 30%,transparent);color:inherit;bo
 footer{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
 footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
 
+
+/* Días */
+.days{display:flex;gap:8px;overflow-x:auto;margin:0 0 22px;padding:10px 2px;scrollbar-width:thin;position:sticky;top:62px;z-index:5;background:var(--bg)}
+.day-tab{flex:1 0 auto;min-width:120px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;font-family:inherit;text-align:left;position:relative;transition:background .15s,border-color .15s}
+.day-tab b{font-size:16px}
+.day-tab span{font-size:12.5px;color:var(--muted)}
+.day-tab:hover{background:var(--surface-2)}
+.day-tab[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.day-tab[aria-selected="true"] span{color:rgba(255,255,255,.8)}
+:root[data-theme="dark"] .day-tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+:root[data-theme="dark"] .day-tab[aria-selected="true"] span{color:var(--on-accent)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .day-tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}:root:not([data-theme="light"]) .day-tab[aria-selected="true"] span{color:var(--on-accent)}}
+.day-tab:focus-visible,.jump:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.day-tab .hits{position:absolute;top:8px;right:10px;font-style:normal;font-size:11px;font-weight:700;background:var(--green);color:#fff;border-radius:999px;padding:1px 7px;display:none}
+.day-tab .hits.on{display:block}
+.day-h{margin-bottom:14px}
+.day-k{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--accent)}
+.day-h h2{margin:2px 0 4px;font-size:clamp(20px,3vw,26px);line-height:1.2}
+.day-h p{margin:0;color:var(--muted);font-size:14.5px}
+.jumps{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.jump{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);text-decoration:none;font-weight:600;font-size:14px;transition:background .15s,border-color .15s}
+.jump:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,var(--surface))}
+.jump .jn{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;font-size:12.5px;font-weight:800}
+:root[data-theme="dark"] .jump .jn{color:#0B141B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .jump .jn{color:#0B141B}}
+.card{scroll-margin-top:150px}
+.card.flash{box-shadow:0 0 0 3px var(--c),var(--shadow)}
+.searching .day{margin-bottom:34px}
+.searching .day-h p,.searching .jumps{display:none}
+.soon{opacity:.75}
+.soon:hover{transform:none}
+.topic.ghost{pointer-events:none}
+.topic.ghost .bar{height:10px;border-radius:6px;background:var(--surface-2);flex:1;max-width:70%}
+.btn.disabled{background:var(--surface-2);color:var(--muted);cursor:default;border:1px dashed var(--line)}
+.btn.disabled:hover{filter:none}
+@media (max-width:680px){.day-tab{min-width:104px;padding:10px 12px}}
+
 @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:680px){
   .theme .lbl{display:none}
@@ -145,28 +182,46 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
     <img class="hero-logo" src="data:image/png;base64,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" alt="">
     <span class="eyebrow"><i></i>Evento de Divulgación Tecnológica</span>
     <h1>Competencias Digitales, <span>Ofimática</span> y Formación Técnica Especializada</h1>
-    <p>Objetos Virtuales de Aprendizaje para funcionarios administrativos. Elija un bloque o vaya directamente al tema que necesita.</p>
+    <p>Objetos Virtuales de Aprendizaje para funcionarios administrativos. Elija el día, seleccione un OVA y vaya directamente al tema que necesita.</p>
     <div class="stats">
-      <div class="stat"><b>3</b><span>OVA</span></div>
-      <div class="stat"><b>16</b><span>Temas</span></div>
-      <div class="stat"><b>3</b><span>Talleres de aplicación</span></div>
+      <div class="stat"><b>5</b><span>Días</span></div>
+      <div class="stat"><b>6</b><span>OVA publicados</span></div>
+      <div class="stat"><b>32</b><span>Temas</span></div>
+      <div class="stat"><b>6</b><span>Talleres de aplicación</span></div>
     </div>
   </div>
 </section>
+
 
 <main class="wrap">
   <div class="toolbar">
     <label class="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Buscar un tema: Outlook, Teams, seguridad…" aria-label="Buscar tema" autocomplete="off">
+      <input id="q" type="search" placeholder="Buscar un tema: Outlook, BUSCARX, validación…" aria-label="Buscar tema en todos los días" autocomplete="off">
     </label>
     <span class="count" id="count" aria-live="polite"></span>
   </div>
 
-  <div class="grid" id="grid">
+  <nav class="days" role="tablist" aria-label="Días de la EDT">
+    <button class="day-tab" role="tab" data-day="1" type="button"><b>Día 1</b><span>3 OVA</span><em class="hits"></em></button>
+    <button class="day-tab" role="tab" data-day="2" type="button"><b>Día 2</b><span>3 OVA</span><em class="hits"></em></button>
+    <button class="day-tab" role="tab" data-day="3" type="button"><b>Día 3</b><span>Próximamente</span><em class="hits"></em></button>
+    <button class="day-tab" role="tab" data-day="4" type="button"><b>Día 4</b><span>Próximamente</span><em class="hits"></em></button>
+    <button class="day-tab" role="tab" data-day="5" type="button"><b>Día 5</b><span>Próximamente</span><em class="hits"></em></button>
+  </nav>
 
+  <section class="day" id="dia1" data-day="1">
+    <div class="day-h">
+      <div><span class="day-k">Día 1</span><h2>Productividad, Microsoft 365 y colaboración</h2><p>Seleccione un OVA para ver sus temas.</p></div>
+    </div>
+    <div class="jumps">
+      <a class="jump c1" href="#ova-bloque1"><span class="jn">1</span>TIC para la productividad</a>
+      <a class="jump c2" href="#ova-bloque2"><span class="jn">2</span>Microsoft 365</a>
+      <a class="jump c3" href="#ova-colab"><span class="jn">3</span>Herramientas colaborativas</a>
+    </div>
+    <div class="grid">
     <!-- OVA 1 -->
-    <article class="card c1">
+    <article class="card c1" id="ova-bloque1">
       <div class="card-h">
         <div class="num">1</div>
         <span class="tag">OVA · Bloque 1</span>
@@ -192,7 +247,7 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
     </article>
 
     <!-- OVA 2 -->
-    <article class="card c2">
+    <article class="card c2" id="ova-bloque2">
       <div class="card-h">
         <div class="num">2</div>
         <span class="tag">OVA · Bloque 2</span>
@@ -219,7 +274,7 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
     </article>
 
     <!-- OVA 3 -->
-    <article class="card c3">
+    <article class="card c3" id="ova-colab">
       <div class="card-h">
         <div class="num">3</div>
         <span class="tag">OVA · Herramientas colaborativas</span>
@@ -244,8 +299,277 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </article>
+    </div>
+  </section>
 
-  </div>
+  <section class="day" id="dia2" data-day="2" hidden>
+    <div class="day-h">
+      <div><span class="day-k">Día 2</span><h2>Excel intermedio, búsqueda y calidad de datos</h2><p>Seleccione un OVA para ver sus temas.</p></div>
+    </div>
+    <div class="jumps">
+      <a class="jump c1" href="#ova-excel"><span class="jn">1</span>Excel intermedio</a>
+      <a class="jump c2" href="#ova-busqueda"><span class="jn">2</span>Funciones de búsqueda</a>
+      <a class="jump c3" href="#ova-calidad"><span class="jn">3</span>Calidad y estructura de datos</a>
+    </div>
+    <div class="grid">
+    <article class="card c1" id="ova-excel">
+      <div class="card-h">
+        <div class="num">1</div>
+        <span class="tag">OVA · Excel intermedio</span>
+        <h2>Fundamentos de Excel intermedio</h2>
+        <p class="desc">Productividad, referencias, funciones lógicas, de texto y de fecha aplicadas a la gestión administrativa.</p>
+        <div class="meta"><span class="chip">7:30 – 9:45 a. m.</span><span class="chip">Excel</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><a class="topic main" href="OVA_Participante_Excel_Intermedio.html#s51"><span class="n">1.1</span><span class="t">Productividad en Excel</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Excel_Intermedio.html#s52"><span class="n">1.2</span><span class="t">Referencias relativas, absolutas y mixtas</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Excel_Intermedio.html#s53"><span class="n">1.3</span><span class="t">Funciones lógicas</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Excel_Intermedio.html#s54"><span class="n">1.4</span><span class="t">Funciones de texto</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Excel_Intermedio.html#s55"><span class="n">1.5</span><span class="t">Funciones de fecha</span><span class="arr">→</span></a></li>
+        <li class="grp">Aplicación</li>
+        <li><a class="topic" href="OVA_Participante_Excel_Intermedio.html#taller"><span class="n">T</span><span class="t">Taller: control de vencimiento de contratos</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Participante_Excel_Intermedio.html#retro"><span class="n">R</span><span class="t">Retroalimentación</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Participante_Excel_Intermedio.html#evaluacion"><span class="n">E</span><span class="t">Autoevaluación</span><span class="arr">→</span></a></li>
+      </ul>
+      <div class="card-f">
+        <a class="btn" href="OVA_Participante_Excel_Intermedio.html">Abrir OVA Excel intermedio
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </article>
+
+    <article class="card c2" id="ova-busqueda">
+      <div class="card-h">
+        <div class="num">2</div>
+        <span class="tag">OVA · Funciones de búsqueda</span>
+        <h2>Funciones de búsqueda y resumen de información</h2>
+        <p class="desc">BUSCARV, BUSCARX, INDICE y COINCIDIR, resumen condicional y matrices dinámicas.</p>
+        <div class="meta"><span class="chip">BUSCARX · SUMAR.SI.CONJUNTO · FILTRAR</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><a class="topic main" href="OVA_Funciones%20de%20Busqueda%20Participante.html#t1"><span class="n">2.1</span><span class="t">BUSCARV y sus limitaciones</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Funciones%20de%20Busqueda%20Participante.html#t2"><span class="n">2.2</span><span class="t">BUSCARX: búsqueda en cualquier dirección</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Funciones%20de%20Busqueda%20Participante.html#t3"><span class="n">2.3</span><span class="t">INDICE y COINCIDIR</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Funciones%20de%20Busqueda%20Participante.html#t4"><span class="n">2.4</span><span class="t">Funciones de resumen condicional</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Funciones%20de%20Busqueda%20Participante.html#t5"><span class="n">2.5</span><span class="t">Matrices dinámicas: UNICOS, FILTRAR y ORDENAR</span><span class="arr">→</span></a></li>
+        <li class="grp">Aplicación</li>
+        <li><a class="topic" href="OVA_Funciones%20de%20Busqueda%20Participante.html#taller"><span class="n">T</span><span class="t">Taller: informe de ejecución presupuestal</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Funciones%20de%20Busqueda%20Participante.html#retro"><span class="n">R</span><span class="t">Retroalimentación</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Funciones%20de%20Busqueda%20Participante.html#quiz"><span class="n">E</span><span class="t">Autoevaluación</span><span class="arr">→</span></a></li>
+      </ul>
+      <div class="card-f">
+        <a class="btn" href="OVA_Funciones%20de%20Busqueda%20Participante.html">Abrir OVA Funciones de búsqueda
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </article>
+
+    <article class="card c3" id="ova-calidad">
+      <div class="card-h">
+        <div class="num">3</div>
+        <span class="tag">OVA · Calidad y estructura de datos</span>
+        <h2>Calidad y estructura de los datos</h2>
+        <p class="desc">Tablas, validación, depuración, ordenar y filtrar, formato condicional y protección de libros.</p>
+        <div class="meta"><span class="chip">Tablas · Validación · Protección</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><a class="topic main" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#m1"><span class="n">3.1</span><span class="t">Tablas de Excel</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#m2"><span class="n">3.2</span><span class="t">Validación de datos</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#m3"><span class="n">3.3</span><span class="t">Depuración de datos</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#m4"><span class="n">3.4</span><span class="t">Ordenar y filtrar</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#m5"><span class="n">3.5</span><span class="t">Formato condicional avanzado</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#m6"><span class="n">3.6</span><span class="t">Protección de celdas, hojas y libros</span><span class="arr">→</span></a></li>
+        <li class="grp">Aplicación</li>
+        <li><a class="topic" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#taller"><span class="n">T</span><span class="t">Taller de aplicación</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#retro"><span class="n">R</span><span class="t">Retroalimentación: intercambio de formatos</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html#eval"><span class="n">E</span><span class="t">Evaluación final</span><span class="arr">→</span></a></li>
+      </ul>
+      <div class="card-f">
+        <a class="btn" href="OVA_Calidad%20y%20estructura%20de%20datos%20Participante.html">Abrir OVA Calidad de datos
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </article>
+    </div>
+  </section>
+
+  <section class="day" id="dia3" data-day="3" hidden>
+    <div class="day-h">
+      <div><span class="day-k">Día 3</span><h2>Próximamente</h2><p>Los OVA de este día se agregarán aquí con el mismo formato.</p></div>
+    </div>
+    <div class="grid">
+    <article class="card c1 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">1</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">1.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    <article class="card c2 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">2</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">2.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    <article class="card c3 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">3</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">3.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    </div>
+  </section>
+
+  <section class="day" id="dia4" data-day="4" hidden>
+    <div class="day-h">
+      <div><span class="day-k">Día 4</span><h2>Próximamente</h2><p>Los OVA de este día se agregarán aquí con el mismo formato.</p></div>
+    </div>
+    <div class="grid">
+    <article class="card c1 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">1</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">1.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    <article class="card c2 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">2</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">2.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    <article class="card c3 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">3</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">3.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    </div>
+  </section>
+
+  <section class="day" id="dia5" data-day="5" hidden>
+    <div class="day-h">
+      <div><span class="day-k">Día 5</span><h2>Próximamente</h2><p>Los OVA de este día se agregarán aquí con el mismo formato.</p></div>
+    </div>
+    <div class="grid">
+    <article class="card c1 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">1</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">1.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">1.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    <article class="card c2 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">2</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">2.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">2.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    <article class="card c3 soon" aria-hidden="true">
+      <div class="card-h">
+        <div class="num">3</div>
+        <span class="tag">OVA · Por definir</span>
+        <h2>Contenido en preparación</h2>
+        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
+        <div class="meta"><span class="chip">Próximamente</span></div>
+      </div>
+      <ul class="topics">
+        <li class="grp">Temas</li>
+        <li><span class="topic ghost"><span class="n">3.1</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.2</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.3</span><span class="bar"></span></span></li>
+        <li><span class="topic ghost"><span class="n">3.4</span><span class="bar"></span></span></li>
+      </ul>
+      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+    </article>
+    </div>
+  </section>
+
   <p class="empty" id="empty">No hay temas que coincidan con la búsqueda.</p>
 </main>
 
@@ -273,12 +597,37 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
   });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change",paint);
 
-  // Buscador de temas
-  var q=document.getElementById("q"), cards=[].slice.call(document.querySelectorAll(".card")),
-      count=document.getElementById("count"), empty=document.getElementById("empty");
+  var $$=function(s,c){return [].slice.call((c||document).querySelectorAll(s));};
+  var q=document.getElementById("q"), count=document.getElementById("count"), empty=document.getElementById("empty");
+  var tabs=$$(".day-tab"), days=$$(".day"), main=document.querySelector("main");
+  var active="1";
+
+  // Pestañas por día
+  function showDay(d,push){
+    active=String(d);
+    tabs.forEach(function(t){t.setAttribute("aria-selected",t.dataset.day===active?"true":"false");});
+    if(!q.value.trim()) days.forEach(function(s){s.hidden=s.dataset.day!==active;});
+    if(push){try{history.replaceState(null,"","#dia"+active);}catch(e){}}
+  }
+  tabs.forEach(function(t){t.addEventListener("click",function(){
+    if(q.value.trim()){q.value="";run();}
+    showDay(t.dataset.day,true);
+  });});
+
+  // Etiquetas de OVA: llevan a la tarjeta del OVA y la resaltan
+  $$(".jump").forEach(function(j){j.addEventListener("click",function(e){
+    var card=document.querySelector(j.getAttribute("href")); if(!card) return;
+    e.preventDefault();
+    card.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+    card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+    setTimeout(function(){card.classList.remove("flash");},1600);
+  });});
+
+  // Buscador de temas (en todos los días)
+  var cards=$$(".card:not(.soon)");
   var norm=function(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();};
-  cards.forEach(function(c){[].forEach.call(c.querySelectorAll(".topic .t"),function(t){t.dataset.raw=t.textContent;});});
-  var total=document.querySelectorAll(".topic").length;
+  cards.forEach(function(c){$$(".topic .t",c).forEach(function(t){t.dataset.raw=t.textContent;});});
+  var total=$$(".topic:not(.ghost)").length;
 
   function esc(s){return s.replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch];});}
   function highlight(raw,term){
@@ -288,27 +637,39 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
     return esc(raw.slice(0,i))+"<mark>"+esc(raw.slice(i,i+term.length))+"</mark>"+esc(raw.slice(i+term.length));
   }
   function run(){
-    var term=norm(q.value.trim()), shown=0, visibleCards=0;
+    var term=norm(q.value.trim()), shown=0, anyDay=false;
+    main.classList.toggle("searching",!!term);
     cards.forEach(function(c){
       var head=norm(c.querySelector(".card-h").textContent), headHit=term&&head.indexOf(term)>-1, n=0;
-      [].forEach.call(c.querySelectorAll(".topic"),function(a){
+      $$(".topic",c).forEach(function(a){
         var t=a.querySelector(".t"), hit=!term||headHit||norm(t.dataset.raw).indexOf(term)>-1;
         a.classList.toggle("hide",!hit);
         t.innerHTML=highlight(t.dataset.raw,headHit?"":term);
         if(hit){n++;shown++;}
       });
-      [].forEach.call(c.querySelectorAll(".grp"),function(g){
+      $$(".grp",c).forEach(function(g){
         var el=g.nextElementSibling, any=false;
         while(el&&!el.classList.contains("grp")){ if(!el.querySelector(".topic.hide")) any=true; el=el.nextElementSibling; }
         g.style.display=any?"":"none";
       });
       c.style.display=n?"":"none";
-      if(n) visibleCards++;
+      c.dataset.n=n;
     });
-    count.textContent=term?shown+" de "+total+" accesos directos":total+" accesos directos en 3 OVA";
-    empty.style.display=visibleCards?"none":"block";
+    days.forEach(function(s){
+      var hits=0; $$(".card:not(.soon)",s).forEach(function(c){hits+=+c.dataset.n||0;});
+      $$(".soon",s).forEach(function(c){c.style.display=term?"none":"";});
+      var badge=document.querySelector('.day-tab[data-day="'+s.dataset.day+'"] .hits');
+      badge.textContent=hits; badge.classList.toggle("on",!!term&&hits>0);
+      s.hidden=term?hits===0:s.dataset.day!==active;
+      if(!s.hidden) anyDay=true;
+    });
+    count.textContent=term?shown+" de "+total+" accesos directos":total+" accesos directos en 6 OVA";
+    empty.style.display=anyDay?"none":"block";
   }
   q.addEventListener("input",run);
+
+  var m=/^#dia([1-5])$/.exec(location.hash);
+  showDay(m?m[1]:"1",false);
   run();
 })();
 </script>

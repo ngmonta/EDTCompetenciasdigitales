@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OVA Participante · Búsqueda y resumen en Excel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/png;base64,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">
+<style>:root{
+  --verde:#39A900; --verde-osc:#007832; --azul:#00304D; --azul-2:#0b4a6f;
+  --bg:#f3f6f4; --surface:#ffffff; --surface-2:#f6faf3; --text:#1d2a33; --muted:#5b6b75;
+  --border:#dbe5dc; --accent:#39A900; --accent-text:#007832; --code-bg:#0f2533; --code-text:#e8f5e0;
+  --hl:#fff1b8; --hl-strong:#ffd84d; --spill:#2f80ed; --ok:#1f8a3b; --bad:#c0392b; --warn:#b7791f;
+  --shadow:0 2px 10px rgba(0,48,77,.08);
+  --radius:14px;
+}
+.main.dark{
+  --bg:#0c1820; --surface:#13252f; --surface-2:#18303c; --text:#e6eef2; --muted:#a3b5bf;
+  --border:#24404e; --accent:#5ccf1f; --accent-text:#7fe04a; --code-bg:#071119; --code-text:#d5f5c4;
+  --hl:#4a4110; --hl-strong:#7a6a10; --spill:#6aa8ff; --ok:#4cd07a; --bad:#ff7a6b; --warn:#f2c14e;
+  --shadow:0 2px 12px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Work Sans",Calibri,Carlito,"Segoe UI",Arial,sans-serif;background:#eaf0ec;color:#1d2a33;font-size:16px;line-height:1.55}
+a{color:inherit}
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:290px 1fr;grid-template-rows:auto 1fr;height:100vh}
+.topbar{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--azul);color:#fff;position:relative;z-index:5}
+.topbar img{width:48px;height:48px;border-radius:8px;display:block}
+.topbar .t1{font-weight:700;font-size:1.05rem;line-height:1.2}
+.topbar .t2{font-size:.82rem;opacity:.85}
+.role{margin-left:auto;display:flex;align-items:center;gap:12px}
+.badge{background:var(--verde);color:#fff;font-weight:600;font-size:.8rem;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.prog{display:flex;align-items:center;gap:8px;font-size:.8rem}
+.prog .bar{width:140px;height:8px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--verde);width:0;transition:width .4s}
+.toggle{background:transparent;border:1.5px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;font:inherit;font-size:.82rem;display:flex;gap:6px;align-items:center}
+.toggle:hover{background:rgba(255,255,255,.12)}
+.menu-btn{display:none;background:none;border:0;color:#fff;font-size:1.5rem;cursor:pointer}
+.sidebar{background:linear-gradient(180deg,var(--verde-osc),#005c26);color:#fff;overflow-y:auto;padding:14px 10px 30px}
+.sidebar h4{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin:16px 12px 6px}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;color:#fff;font:inherit;font-size:.92rem;padding:9px 12px;border-radius:10px;cursor:pointer;position:relative}
+.nav-btn:hover{background:rgba(255,255,255,.12)}
+.nav-btn.active{background:#fff;color:var(--verde-osc);font-weight:600}
+.nav-btn .ic{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.15);font-size:.8rem;font-weight:700;flex:none}
+.nav-btn.active .ic{background:var(--verde);color:#fff}
+.nav-btn.done::after{content:"✓";position:absolute;right:12px;font-size:.8rem;opacity:.9}
+.main{background:var(--bg);color:var(--text);overflow-y:auto;transition:background .3s,color .3s}
+.content{max-width:1180px;margin:0 auto;padding:28px 28px 80px}
+section.page{display:none;animation:fade .35s ease}
+section.page.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ---------- tipografía ---------- */
+h1,h2,h3{line-height:1.2;color:var(--text)}
+h1{font-size:2rem;margin:0 0 6px;font-weight:800}
+h2{font-size:1.45rem;margin:30px 0 10px;font-weight:700}
+h3{font-size:1.12rem;margin:22px 0 8px;font-weight:600}
+.kicker{color:var(--accent-text);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+.lead{font-size:1.08rem;color:var(--muted);max-width:820px}
+p,li{max-width:900px}
+/* ---------- componentes ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hero{background:linear-gradient(120deg,var(--azul) 0%,var(--azul-2) 55%,var(--verde-osc) 100%);color:#fff;border-radius:20px;padding:30px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.hero h1{color:#fff}
+.hero p{color:#e3f1ea;max-width:700px}
+.hero img{width:120px;border-radius:14px}
+.kpi{display:flex;flex-direction:column;gap:4px}
+.kpi b{font-size:1.7rem;color:var(--accent-text)}
+.kpi span{color:var(--muted);font-size:.88rem}
+.tile{cursor:pointer;transition:transform .15s,border-color .15s}
+.tile:hover{transform:translateY(-3px);border-color:var(--accent)}
+.tile .num{width:38px;height:38px;border-radius:10px;background:var(--verde);color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:10px}
+.tile h3{margin:0 0 6px}
+.tile p{margin:0;color:var(--muted);font-size:.92rem}
+.pill{display:inline-block;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--accent-text);margin:2px}
+.callout{border-left:5px solid var(--accent);background:var(--surface-2);padding:14px 18px;border-radius:0 12px 12px 0;margin:16px 0}
+.callout.warn{border-color:#f2a900}
+.callout.info{border-color:var(--spill)}
+.callout.doc{border-color:var(--azul-2)}
+.main.dark .callout.doc{border-color:#6aa8ff}
+.callout b:first-child{display:block;margin-bottom:4px}
+.formula{font-family:Consolas,"Cascadia Mono","Courier New",monospace;background:var(--code-bg);color:var(--code-text);padding:12px 16px;border-radius:10px;display:flex;align-items:center;gap:12px;overflow-x:auto;font-size:.95rem;margin:10px 0}
+.formula code{flex:1;white-space:pre}
+.formula .fn{color:#8fe35a;font-weight:700}
+.formula .arg{color:#ffd166}
+.copy{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:4px 10px;font-size:.78rem;cursor:pointer;font-family:"Work Sans",sans-serif;flex:none}
+.copy:hover{background:var(--verde)}
+code.i{font-family:Consolas,monospace;background:var(--surface-2);border:1px solid var(--border);padding:1px 6px;border-radius:6px;font-size:.9em;color:var(--accent-text)}
+.syntax{width:100%;border-collapse:collapse;margin:10px 0}
+.syntax td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.syntax td:first-child{font-family:Consolas,monospace;color:var(--accent-text);white-space:nowrap;font-weight:600}
+/* tabla excel */
+.xl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+table.xl{border-collapse:collapse;font-family:Calibri,Carlito,"Work Sans",sans-serif;font-size:.88rem;width:100%;min-width:520px}
+table.xl th,table.xl td{border:1px solid var(--border);padding:5px 9px;white-space:nowrap}
+table.xl thead th{background:var(--verde);color:#fff;font-weight:600;position:sticky;top:0}
+table.xl .rh{background:var(--surface-2);color:var(--muted);text-align:center;font-size:.75rem;width:30px}
+table.xl thead .ch{background:var(--surface-2);color:var(--muted);font-weight:500;font-size:.75rem}
+table.xl td.n{text-align:right}
+table.xl tr.hit td{background:var(--hl)}
+table.xl td.hitc{background:var(--hl-strong)!important;font-weight:700;outline:2px solid #e0a800}
+table.xl td.colsel{box-shadow:inset 0 0 0 9999px rgba(57,169,0,.12)}
+table.xl td.spill{background:rgba(47,128,237,.06)}
+.xl-wrap.spilled{border:2px solid var(--spill)}
+table.xl tr.dim td{opacity:.45}
+/* lab */
+.lab{border:2px solid var(--accent);border-radius:var(--radius);padding:18px;background:var(--surface);margin:18px 0}
+.lab-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.lab-h .tag{background:var(--verde);color:#fff;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:99px;letter-spacing:.06em}
+.lab-h h3{margin:0}
+.controls{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;align-items:flex-end}
+.controls label{display:flex;flex-direction:column;font-size:.8rem;color:var(--muted);gap:4px;font-weight:600}
+select,input[type=text],input[type=number],input[type=search]{font:inherit;font-size:.92rem;padding:8px 10px;border-radius:9px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);min-width:150px}
+select:focus,input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.btn{font:inherit;font-size:.9rem;font-weight:600;background:var(--verde);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:transparent;color:var(--accent-text);border:1.5px solid var(--accent)}
+.btn.sm{padding:6px 12px;font-size:.82rem}
+.result{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--surface-2);border:1px dashed var(--accent);border-radius:10px;padding:10px 14px;margin:10px 0}
+.result .lbl{font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase}
+.result .val{font-size:1.25rem;font-weight:700;color:var(--accent-text)}
+.result .val.err{color:var(--bad)}
+.explain{font-size:.9rem;color:var(--muted)}
+/* pasos */
+.steps{counter-reset:s;margin:12px 0}
+.step{border:1px solid var(--border);border-radius:12px;margin:10px 0;background:var(--surface);overflow:hidden}
+.step summary{cursor:pointer;padding:13px 16px;font-weight:600;list-style:none;display:flex;gap:12px;align-items:center}
+.step summary::-webkit-details-marker{display:none}
+.step summary::before{counter-increment:s;content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;font-size:.85rem;flex:none}
+.step[open] summary{border-bottom:1px solid var(--border);background:var(--surface-2)}
+.step .body{padding:14px 18px}
+/* tablas de contenido */
+table.std{width:100%;border-collapse:collapse;font-size:.92rem;background:var(--surface);border-radius:12px;overflow:hidden}
+table.std th{background:var(--azul);color:#fff;text-align:left;padding:10px 12px;font-weight:600}
+.main.dark table.std th{background:#0b3a57}
+table.std td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+table.std tr:nth-child(even) td{background:var(--surface-2)}
+.yes{color:var(--ok);font-weight:700}.no{color:var(--bad);font-weight:700}.mid{color:var(--warn);font-weight:700}
+/* videos */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{border:1.5px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:6px 14px;font:inherit;font-size:.84rem;cursor:pointer}
+.chip.on{background:var(--verde);border-color:var(--verde);color:#fff}
+.vid{display:flex;flex-direction:column;text-decoration:none;color:inherit;overflow:hidden;padding:0}
+.vid .th{position:relative;aspect-ratio:16/9;background:#0f2533}
+.vid .th img{width:100%;height:100%;object-fit:cover;display:block}
+.vid .th .play{position:absolute;inset:0;display:grid;place-items:center}
+.vid .th .play span{width:58px;height:40px;background:rgba(220,0,0,.9);border-radius:10px;display:grid;place-items:center;color:#fff;font-size:1.1rem}
+.vid:hover .play span{background:#f00}
+.vid .meta{padding:12px 14px}
+.vid .meta b{display:block;font-size:.93rem;line-height:1.35}
+.vid .meta small{color:var(--muted)}
+/* glosario */
+.gl-item{border-bottom:1px solid var(--border);padding:12px 4px}
+.gl-item b{color:var(--accent-text)}
+/* quiz */
+.q{margin:14px 0}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.opt{text-align:left;font:inherit;font-size:.93rem;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:rgba(31,138,59,.12)}
+.opt.wrong{border-color:var(--bad);background:rgba(192,57,43,.1)}
+.fb{font-size:.88rem;margin-top:6px;display:none}
+.score{font-size:1.2rem;font-weight:700}
+/* wizard */
+.wiz-q{font-size:1.1rem;font-weight:600;margin-bottom:12px}
+.wiz-opts{display:flex;flex-wrap:wrap;gap:10px}
+.wiz-ans{border-radius:12px;padding:16px;background:var(--surface-2);border:2px solid var(--accent)}
+/* checklist */
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--border)}
+.check input{margin-top:5px;accent-color:var(--verde);width:18px;height:18px}
+/* descargas */
+.dl{display:flex;gap:14px;align-items:center;text-decoration:none}
+.dl .xls{width:46px;height:52px;border-radius:8px;background:#1d6f42;color:#fff;font-weight:800;display:grid;place-items:center;font-size:.8rem;flex:none}
+.dl b{display:block}
+.dl small{color:var(--muted)}
+/* chart */
+.chart .row{display:grid;grid-template-columns:230px 1fr 60px;gap:10px;align-items:center;margin:6px 0;font-size:.86rem}
+.chart .track{background:var(--surface-2);border-radius:6px;height:20px;position:relative;border:1px solid var(--border)}
+.chart .fill{height:100%;border-radius:6px;transition:width .8s}
+.chart .mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--muted)}
+.sem{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:700}
+.sem.Alta{background:#c6efce;color:#006100}.sem.Media{background:#ffeb9c;color:#7f6000}.sem.Baja{background:#ffc7ce;color:#9c0006}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pager{display:flex;justify-content:space-between;margin-top:34px;gap:10px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--azul);color:#fff;padding:10px 18px;border-radius:10px;font-size:.88rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.tabs{display:flex;gap:6px;border-bottom:2px solid var(--border);margin:14px 0 0;flex-wrap:wrap}
+.tab{background:none;border:0;font:inherit;font-weight:600;color:var(--muted);padding:9px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab.on{color:var(--accent-text);border-color:var(--accent)}
+.tabpane{display:none;padding-top:14px}.tabpane.on{display:block}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.vs .card h3{margin-top:0}
+@media (max-width:1000px){
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;z-index:30;padding-top:20px;transform:translateX(-100%);transition:transform .25s}
+  .sidebar.open{transform:none}
+  .menu-btn{display:block}
+  .prog,.badge{display:none}
+  .content{padding:18px 16px 70px}
+  .g2,.g3,.g4,.vs{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr}
+  .hero img{display:none}
+  .chart .row{grid-template-columns:110px 1fr 50px}
+  .topbar .t2,#themeTxt{display:none}
+  .topbar{gap:10px;padding:8px 12px}
+  .topbar .t1{font-size:.88rem}
+  .topbar img{width:38px;height:38px}
+}
+@media print{.sidebar,.topbar,.pager{display:none}.app{display:block;height:auto}section.page{display:block!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+    <img src="data:image/png;base64,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" alt="Logosímbolo SENA">
+    <div>
+      <div class="t1">Funciones de búsqueda y resumen de información</div>
+      <div class="t2">Excel para la gestión administrativa · Funcionarios administrativos SENA</div>
+    </div>
+    <div class="role">
+      <span class="badge">Participante</span>
+      <div class="prog"><span id="progTxt">0%</span><div class="bar"><i id="progBar"></i></div></div>
+      <button class="toggle" id="themeBtn" aria-pressed="false" title="Cambiar el modo del área de contenido"><span id="themeIc">🌙</span><span id="themeTxt">Modo oscuro</span></button>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar" aria-label="Navegación del OVA">
+    <h4>Inicio</h4>
+    <button class="nav-btn" data-go="inicio"><span class="ic">⌂</span>Presentación</button>
+    
+    <h4>Explicación del tema</h4>
+    <button class="nav-btn" data-go="t1"><span class="ic">1</span>Búsqueda clásica: BUSCARV</button>
+    <button class="nav-btn" data-go="t2"><span class="ic">2</span>BUSCARX</button>
+    <button class="nav-btn" data-go="t3"><span class="ic">3</span>INDICE y COINCIDIR</button>
+    <button class="nav-btn" data-go="t4"><span class="ic">4</span>Resumen condicional</button>
+    <button class="nav-btn" data-go="t5"><span class="ic">5</span>Matrices dinámicas</button>
+    <h4>Aplicación</h4>
+    <button class="nav-btn" data-go="taller"><span class="ic">T</span>Taller de aplicación</button>
+    
+    <button class="nav-btn" data-go="retro"><span class="ic">R</span>Retroalimentación</button>
+    <button class="nav-btn" data-go="quiz"><span class="ic">?</span>Autoevaluación</button>
+    <h4>Recursos</h4>
+    <button class="nav-btn" data-go="herramientas"><span class="ic">⚙</span>Herramientas de software</button>
+    <button class="nav-btn" data-go="descargas"><span class="ic">↓</span>Archivos descargables</button>
+    <button class="nav-btn" data-go="videos"><span class="ic">▶</span>Cibergrafía (videos)</button>
+    <button class="nav-btn" data-go="biblio"><span class="ic">B</span>Bibliografía</button>
+    <button class="nav-btn" data-go="glosario"><span class="ic">A</span>Glosario</button>
+  </nav>
+
+  <main class="main" id="main">
+  <div class="content">
+
+<!-- ======================================================= INICIO -->
+<section class="page" id="inicio" data-title="Presentación">
+  <div class="hero">
+    <div>
+      <div class="kicker" style="color:#bfe9a6">Objeto Virtual de Aprendizaje · Versión participante</div>
+      <h1>Funciones de búsqueda y resumen de información</h1>
+      <p><b>Objetivo:</b> cruzar y resumir datos de diferentes fuentes para la elaboración de informes, utilizando funciones de búsqueda (BUSCARV, BUSCARX, INDICE y COINCIDIR), de resumen condicional y de matrices dinámicas en Microsoft Excel.</p>
+    </div>
+    <img src="data:image/png;base64,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" alt="SENA">
+  </div>
+
+  <div class="grid g4" style="margin-top:18px">
+    <div class="card kpi"><b>5</b><span>subtemas con laboratorio interactivo</span></div>
+    <div class="card kpi"><b>1</b><span>taller con 4 bases de datos reales en estructura</span></div>
+    <div class="card kpi"><b>3</b><span>libros de Excel descargables</span></div>
+    <div class="card kpi"><b>4 h</b><span>intensidad sugerida (2 h teoría + 2 h taller)</span></div>
+  </div>
+
+  <h2>Ruta de aprendizaje</h2>
+  <div class="grid g3">
+    <div class="card tile" data-go="t1"><div class="num">1</div><h3>Búsqueda clásica</h3><p>BUSCARV y sus limitaciones.</p></div>
+    <div class="card tile" data-go="t2"><div class="num">2</div><h3>BUSCARX</h3><p>Búsqueda en cualquier dirección, valores por defecto y coincidencias aproximadas.</p></div>
+    <div class="card tile" data-go="t3"><div class="num">3</div><h3>INDICE y COINCIDIR</h3><p>Alternativa flexible para versiones anteriores de Excel.</p></div>
+    <div class="card tile" data-go="t4"><div class="num">4</div><h3>Resumen condicional</h3><p>SUMAR.SI.CONJUNTO, CONTAR.SI.CONJUNTO y PROMEDIO.SI.CONJUNTO.</p></div>
+    <div class="card tile" data-go="t5"><div class="num">5</div><h3>Matrices dinámicas</h3><p>UNICOS, FILTRAR y ORDENAR para listados automáticos.</p></div>
+    <div class="card tile" data-go="taller"><div class="num">T</div><h3>Taller de aplicación</h3><p>Cruzar planta de personal con dependencias y resumir la ejecución presupuestal.</p></div>
+  </div>
+
+  <h2>¿Por qué es importante para su trabajo?</h2>
+  <div class="grid g3">
+    <div class="card"><h3 style="margin-top:0">Informes sin copiar y pegar</h3><p>Talento Humano, Contratación, Almacén y la Coordinación Administrativa y Financiera manejan bases separadas. Las funciones de búsqueda las conectan mediante un dato común (cédula, código de dependencia, número de RP).</p></div>
+    <div class="card"><h3 style="margin-top:0">Menos errores</h3><p>Una fórmula bien construida se actualiza sola cuando cambian los datos. Se eliminan errores de digitación y se gana trazabilidad: cualquier persona puede ver de dónde sale cada cifra.</p></div>
+    <div class="card"><h3 style="margin-top:0">Decisiones oportunas</h3><p>Un resumen por dependencia y por rubro permite detectar a tiempo la baja ejecución presupuestal y apoyar el seguimiento de la gestión del centro.</p></div>
+  </div>
+
+  <h2>Cómo usar este OVA</h2>
+  <div class="card">
+    <ol>
+      <li>Recorra los subtemas en orden con el menú lateral. Cada uno tiene <b>explicación</b>, <b>sintaxis</b>, <b>ejemplo paso a paso</b> y un <b>laboratorio interactivo</b> donde puede cambiar los datos y ver el resultado al instante.</li>
+      <li>Descargue los <a href="#" data-go="descargas">archivos de Excel</a> y practique en paralelo: el libro <i>01_Ejemplos_Practica</i> tiene las mismas tablas que verá aquí.</li>
+      <li>Desarrolle el <a href="#" data-go="taller">taller de aplicación</a> y compare sus resultados en la sesión de <a href="#" data-go="retro">retroalimentación</a>.</li>
+      <li>Use el botón <b>Modo oscuro</b> de la barra superior si prefiere leer con fondo oscuro.</li>
+    </ol>
+    <div class="callout info"><b>Separador de argumentos</b>En Excel configurado para Colombia (español) los argumentos se separan con <b>punto y coma (;)</b>. Si su equipo usa configuración en inglés, use coma (,) y los nombres en inglés (VLOOKUP, XLOOKUP, INDEX, MATCH, SUMIFS, FILTER, UNIQUE, SORT).</div>
+  </div>
+  
+</section>
+
+
+
+<!-- ======================================================= T1 BUSCARV -->
+<section class="page" id="t1" data-title="BUSCARV">
+  <div class="kicker">Subtema 1</div>
+  <h1>Búsqueda clásica: BUSCARV y sus limitaciones</h1>
+  <p class="lead">BUSCARV (búsqueda vertical) busca un valor en la <b>primera columna</b> de una tabla y devuelve el dato que está en la misma fila, en la columna que usted indique por número.</p>
+
+  <h2>Sintaxis</h2>
+  <div class="formula"><code><span class="fn">=BUSCARV</span>(<span class="arg">valor_buscado</span>; <span class="arg">matriz_tabla</span>; <span class="arg">indicador_columnas</span>; <span class="arg">[ordenado]</span>)</code><button class="copy">Copiar</button></div>
+  <table class="syntax">
+    <tr><td>valor_buscado</td><td>El dato que conoce y quiere encontrar (por ejemplo, la cédula).</td></tr>
+    <tr><td>matriz_tabla</td><td>El rango completo donde se busca. La columna de búsqueda <b>debe ser la primera</b> del rango. Fíjelo con $ para poder copiar la fórmula.</td></tr>
+    <tr><td>indicador_columnas</td><td>Número de la columna (contada desde la izquierda del rango) que contiene el dato a devolver.</td></tr>
+    <tr><td>[ordenado]</td><td><b>FALSO</b> = coincidencia exacta (lo usual para cédulas, códigos). <b>VERDADERO</b> = coincidencia aproximada (para tablas de rangos; la primera columna debe estar ordenada de menor a mayor).</td></tr>
+  </table>
+
+  <h2>Ejemplo paso a paso</h2>
+  <p>Archivo: <b>01_Ejemplos_Practica.xlsx</b>, hoja <b>1_BUSCARV</b>. Necesitamos el nombre del funcionario con cédula <b>1045678901</b>.</p>
+  <div class="steps">
+    <details class="step" open><summary>Identifique el dato común y la tabla</summary><div class="body">El dato que conocemos es la cédula (celda <code class="i">C17</code>). La tabla de funcionarios está en <code class="i">A4:F13</code> y la cédula está en su primera columna: BUSCARV es aplicable.</div></details>
+    <details class="step"><summary>Escriba la función y el valor buscado</summary><div class="body">Ubíquese en <code class="i">E17</code> y escriba <code class="i">=BUSCARV(C17;</code></div></details>
+    <details class="step"><summary>Seleccione la tabla y fíjela con F4</summary><div class="body">Seleccione <code class="i">A4:F13</code> y presione <b>F4</b> para convertirla en <code class="i">$A$4:$F$13</code>. Así, al copiar la fórmula hacia abajo, la tabla no se desplaza.</div></details>
+    <details class="step"><summary>Cuente la columna a devolver</summary><div class="body">Cédula = 1, Nombre = 2, Cargo = 3, Cod_Dep = 4, Dependencia = 5, Asignación = 6. Para el nombre escriba <b>2</b>.</div></details>
+    <details class="step"><summary>Indique coincidencia exacta y cierre</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARV</span>(C17; $A$4:$F$13; 2; FALSO)</code><button class="copy">Copiar</button></div>
+      Resultado: <b>Jorge Iván Castro</b>. Si cambia la cédula en C17, el nombre se actualiza automáticamente.</div></details>
+    <details class="step"><summary>Controle el error #N/D</summary><div class="body">Si la cédula no existe, BUSCARV devuelve <b>#N/D</b>. Envuélvala en SI.ERROR para mostrar un mensaje claro:
+      <div class="formula"><code><span class="fn">=SI.ERROR</span>(<span class="fn">BUSCARV</span>(C19; $A$4:$F$13; 2; FALSO); "No encontrado")</code><button class="copy">Copiar</button></div></div></details>
+    <details class="step"><summary>Coincidencia aproximada (tablas de rangos)</summary><div class="body">Para asignar el viático diario según la asignación básica, la tabla <code class="i">H4:I8</code> tiene el “valor desde” de cada rango, ordenado de menor a mayor:
+      <div class="formula"><code><span class="fn">=BUSCARV</span>(C20; $H$4:$I$8; 2; VERDADERO)</code><button class="copy">Copiar</button></div>
+      Con $5.480.000 devuelve <b>$280.000</b>, porque el mayor “valor desde” que no supera la asignación es $4.000.000. <i>(Tabla ilustrativa, no oficial.)</i></div></details>
+  </div>
+
+  <div class="lab" id="lab1">
+    <div class="lab-h"><span class="tag">LABORATORIO</span><h3>Simulador de BUSCARV</h3></div>
+    <div class="controls">
+      <label>valor_buscado
+        <select id="l1v"></select></label>
+      <label>indicador_columnas
+        <input type="number" id="l1c" min="1" max="8" value="2"></label>
+      <label>[ordenado]
+        <select id="l1o"><option value="0">FALSO (exacta)</option><option value="1">VERDADERO (aproximada)</option></select></label>
+    </div>
+    <div class="formula"><code id="l1f"></code><button class="copy">Copiar</button></div>
+    <div class="result"><span class="lbl">Resultado</span><span class="val" id="l1r"></span><span class="explain" id="l1e"></span></div>
+    <div class="xl-wrap"><table class="xl" id="l1t"></table></div>
+    <p class="explain">Pruebe: escoja “Mauricio López” como valor buscado para ver la limitación, o escriba una columna 7 para provocar #¡REF!.</p>
+  </div>
+
+  <h2>Limitaciones de BUSCARV</h2>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">1. Solo busca hacia la derecha</h3><p>La columna de búsqueda debe ser la primera del rango. Si conoce el nombre y necesita la cédula (que está a la izquierda), BUSCARV devuelve <b>#N/D</b>. Habría que reorganizar las columnas de la base.</p></div>
+    <div class="card"><h3 style="margin-top:0">2. Índice de columna fijo</h3><p>El número 2, 3 o 6 es “quemado”. Si alguien inserta o elimina una columna en la tabla, la fórmula devuelve un dato equivocado <b>sin mostrar error</b>: el riesgo más peligroso en un informe.</p></div>
+    <div class="card"><h3 style="margin-top:0">3. Aproximada por defecto</h3><p>Si omite el cuarto argumento, Excel asume VERDADERO (aproximada). Con datos desordenados el resultado puede ser incorrecto. Escriba siempre <b>FALSO</b> para búsquedas exactas.</p></div>
+    <div class="card"><h3 style="margin-top:0">4. Solo la primera coincidencia</h3><p>Si el valor está repetido, devuelve la primera fila que encuentra y no permite buscar de abajo hacia arriba (por ejemplo, el último registro).</p></div>
+  </div>
+  <div class="callout warn"><b>Errores frecuentes</b><b>#N/D</b> el valor no existe o tiene espacios o formato distinto (número guardado como texto) · <b>#¡REF!</b> el indicador de columnas supera las columnas del rango · <b>#¡VALOR!</b> indicador de columnas menor que 1.</div>
+</section>
+
+<!-- ======================================================= T2 BUSCARX -->
+<section class="page" id="t2" data-title="BUSCARX">
+  <div class="kicker">Subtema 2</div>
+  <h1>BUSCARX: búsqueda en cualquier dirección</h1>
+  <p class="lead">BUSCARX reemplaza a BUSCARV y BUSCARH. Separa el rango donde se busca del rango que se devuelve, por eso puede buscar hacia la izquierda, hacia arriba o hacia abajo, y trae un valor por defecto cuando no encuentra el dato.</p>
+  <div class="callout info"><b>Disponibilidad</b>Microsoft 365, Excel 2021, Excel 2024 y Excel para la web. En Excel 2019 o anteriores aparece #¿NOMBRE?: use INDICE + COINCIDIR (subtema 3).</div>
+
+  <h2>Sintaxis</h2>
+  <div class="formula"><code><span class="fn">=BUSCARX</span>(<span class="arg">valor_buscado</span>; <span class="arg">matriz_buscada</span>; <span class="arg">matriz_devuelta</span>; <span class="arg">[si_no_se_encuentra]</span>; <span class="arg">[modo_de_coincidencia]</span>; <span class="arg">[modo_de_búsqueda]</span>)</code><button class="copy">Copiar</button></div>
+  <table class="syntax">
+    <tr><td>valor_buscado</td><td>Dato que conoce.</td></tr>
+    <tr><td>matriz_buscada</td><td>Una sola columna (o fila) donde se busca.</td></tr>
+    <tr><td>matriz_devuelta</td><td>Columna(s) con el resultado. Puede estar a la izquierda o a la derecha, e incluso abarcar varias columnas.</td></tr>
+    <tr><td>[si_no_se_encuentra]</td><td>Texto o valor a mostrar si no hay coincidencia (reemplaza SI.ERROR).</td></tr>
+    <tr><td>[modo_de_coincidencia]</td><td><b>0</b> exacta (predeterminado) · <b>-1</b> exacta o siguiente menor · <b>1</b> exacta o siguiente mayor · <b>2</b> comodines (* ?).</td></tr>
+    <tr><td>[modo_de_búsqueda]</td><td><b>1</b> del primero al último (predeterminado) · <b>-1</b> del último al primero · <b>2</b> y <b>-2</b> búsqueda binaria en datos ordenados.</td></tr>
+  </table>
+
+  <h2>Ejemplo paso a paso</h2>
+  <p>Archivo <b>01_Ejemplos_Practica.xlsx</b>, hoja <b>2_BUSCARX</b>.</p>
+  <div class="steps">
+    <details class="step" open><summary>Búsqueda básica: nombre a partir de la cédula</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARX</span>(C17; $A$4:$A$13; $B$4:$B$13)</code><button class="copy">Copiar</button></div>
+      Solo se seleccionan dos columnas: donde se busca (cédulas) y lo que se devuelve (nombres). No hay que contar columnas. Resultado: <b>Jorge Iván Castro</b>.</div></details>
+    <details class="step"><summary>Búsqueda hacia la izquierda: cédula a partir del nombre</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARX</span>(C18; $B$4:$B$13; $A$4:$A$13)</code><button class="copy">Copiar</button></div>
+      Lo que con BUSCARV era imposible, aquí es inmediato: “Mauricio López” → <b>1067890123</b>.</div></details>
+    <details class="step"><summary>Valor por defecto sin SI.ERROR</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARX</span>(C19; $A$4:$A$13; $B$4:$B$13; "No registrado")</code><button class="copy">Copiar</button></div>
+      Con una cédula inexistente se muestra <b>No registrado</b> en lugar de #N/D.</div></details>
+    <details class="step"><summary>Coincidencia aproximada (tabla de rangos)</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARX</span>(C20; $H$4:$H$8; $I$4:$I$8; ; -1)</code><button class="copy">Copiar</button></div>
+      El modo <b>-1</b> busca el valor exacto o el siguiente menor. Observe el punto y coma doble: se omite el 4.º argumento. Con $5.480.000 → <b>$280.000</b>. A diferencia de BUSCARV, no exige que la tabla esté ordenada.</div></details>
+    <details class="step"><summary>Último registro: buscar de abajo hacia arriba</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARX</span>(C21; $D$4:$D$13; $B$4:$B$13; ; 0; -1)</code><button class="copy">Copiar</button></div>
+      Último funcionario registrado en la dependencia D03 → <b>Óscar Hernández</b>. Útil para traer el último pago, la última novedad o el último contrato.</div></details>
+    <details class="step"><summary>Devolver varias columnas a la vez</summary><div class="body">
+      <div class="formula"><code><span class="fn">=BUSCARX</span>(C22; $A$4:$A$13; $C$4:$E$13)</code><button class="copy">Copiar</button></div>
+      Una sola fórmula trae Cargo, Cod_Dep y Dependencia; el resultado se <b>desborda</b> a las celdas de la derecha (deben estar vacías).</div></details>
+  </div>
+
+  <div class="lab" id="lab2">
+    <div class="lab-h"><span class="tag">LABORATORIO</span><h3>Simulador de BUSCARX</h3></div>
+    <div class="controls">
+      <label>matriz_buscada (columna)<select id="l2s"></select></label>
+      <label>valor_buscado<select id="l2v"></select></label>
+      <label>matriz_devuelta (columna)<select id="l2d"></select></label>
+      <label>[si_no_se_encuentra]<input type="text" id="l2n" value="No registrado"></label>
+      <label>[modo_de_búsqueda]<select id="l2m"><option value="1">1 · primero a último</option><option value="-1">-1 · último a primero</option></select></label>
+    </div>
+    <div class="formula"><code id="l2f"></code><button class="copy">Copiar</button></div>
+    <div class="result"><span class="lbl">Resultado</span><span class="val" id="l2r"></span><span class="explain" id="l2e"></span></div>
+    <div class="xl-wrap"><table class="xl" id="l2t"></table></div>
+    <p class="explain">Pruebe: busque por “Cod_Dep” el valor D03 y cambie el modo de búsqueda entre 1 y -1. Luego devuelva la columna “Cédula” (a la izquierda).</p>
+  </div>
+
+  <h2>BUSCARV frente a BUSCARX</h2>
+  <table class="std">
+    <tr><th>Característica</th><th>BUSCARV</th><th>BUSCARX</th></tr>
+    <tr><td>Buscar hacia la izquierda</td><td class="no">No</td><td class="yes">Sí</td></tr>
+    <tr><td>Resiste insertar o eliminar columnas</td><td class="no">No (índice fijo)</td><td class="yes">Sí (rangos independientes)</td></tr>
+    <tr><td>Valor si no se encuentra</td><td class="mid">Requiere SI.ERROR</td><td class="yes">Argumento propio</td></tr>
+    <tr><td>Coincidencia predeterminada</td><td class="mid">Aproximada (riesgo)</td><td class="yes">Exacta</td></tr>
+    <tr><td>Buscar el último registro</td><td class="no">No</td><td class="yes">Sí (modo -1)</td></tr>
+    <tr><td>Devolver varias columnas</td><td class="no">No</td><td class="yes">Sí (desbordamiento)</td></tr>
+    <tr><td>Compatibilidad</td><td class="yes">Todas las versiones</td><td class="mid">M365, 2021 y posteriores</td></tr>
+  </table>
+</section>
+
+<!-- ======================================================= T3 INDICE COINCIDIR -->
+<section class="page" id="t3" data-title="INDICE y COINCIDIR">
+  <div class="kicker">Subtema 3</div>
+  <h1>INDICE y COINCIDIR: la alternativa flexible</h1>
+  <p class="lead">Antes de BUSCARX, la combinación INDICE + COINCIDIR era la forma profesional de buscar. Sigue siendo indispensable cuando el archivo se comparte con equipos que tienen Excel 2010, 2013, 2016 o 2019, y es la mejor opción para búsquedas de <b>doble entrada</b> (fila y columna).</p>
+
+  <h2>Las dos piezas</h2>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">COINCIDIR: ¿en qué posición está?</h3>
+      <div class="formula"><code><span class="fn">=COINCIDIR</span>(<span class="arg">valor_buscado</span>; <span class="arg">matriz_buscada</span>; <span class="arg">[tipo]</span>)</code></div>
+      <p>Devuelve un <b>número</b>: la posición del valor dentro de la lista. Tipo <b>0</b> = exacta (use siempre 0 para códigos y cédulas).</p></div>
+    <div class="card"><h3 style="margin-top:0">INDICE: ¿qué hay en esa posición?</h3>
+      <div class="formula"><code><span class="fn">=INDICE</span>(<span class="arg">matriz</span>; <span class="arg">núm_fila</span>; <span class="arg">[núm_columna]</span>)</code></div>
+      <p>Devuelve el <b>contenido</b> de la celda ubicada en la fila (y columna) indicada dentro del rango.</p></div>
+  </div>
+  <div class="callout"><b>La combinación</b>COINCIDIR encuentra la fila; INDICE trae el dato de esa fila en otra columna: <code class="i">=INDICE(columna_resultado; COINCIDIR(dato; columna_búsqueda; 0))</code></div>
+
+  <h2>Ejemplo paso a paso</h2>
+  <p>Archivo <b>01_Ejemplos_Practica.xlsx</b>, hoja <b>3_INDICE_COINCIDIR</b>.</p>
+  <div class="steps">
+    <details class="step" open><summary>Ubique la posición con COINCIDIR</summary><div class="body">
+      <div class="formula"><code><span class="fn">=COINCIDIR</span>(C17; $A$4:$A$13; 0)</code><button class="copy">Copiar</button></div>
+      La cédula 1067890123 está en la posición <b>6</b> de la lista.</div></details>
+    <details class="step"><summary>Lea una celda con INDICE</summary><div class="body">
+      <div class="formula"><code><span class="fn">=INDICE</span>($A$4:$F$13; 3; 2)</code><button class="copy">Copiar</button></div>
+      Fila 3, columna 2 de la tabla → <b>Luisa Fernanda Díaz</b>.</div></details>
+    <details class="step"><summary>Combine: nombre a partir de la cédula</summary><div class="body">
+      <div class="formula"><code><span class="fn">=INDICE</span>($B$4:$B$13; <span class="fn">COINCIDIR</span>(C19; $A$4:$A$13; 0))</code><button class="copy">Copiar</button></div>
+      Resultado: <b>Sandra Milena Vargas</b>. Note que no se usa número de columna fijo: si se insertan columnas, la fórmula sigue funcionando.</div></details>
+    <details class="step"><summary>Hacia la izquierda: cédula a partir del nombre</summary><div class="body">
+      <div class="formula"><code><span class="fn">=INDICE</span>($A$4:$A$13; <span class="fn">COINCIDIR</span>(C20; $B$4:$B$13; 0))</code><button class="copy">Copiar</button></div>
+      “Diana Marcela Soto” → <b>1078901234</b>.</div></details>
+    <details class="step"><summary>Búsqueda de doble entrada (fila y columna)</summary><div class="body">
+      La tabla <code class="i">H3:L8</code> tiene la apropiación (millones) por dependencia (filas) y rubro (columnas).
+      <div class="formula"><code><span class="fn">=INDICE</span>($I$4:$L$8; <span class="fn">COINCIDIR</span>(C21; $H$4:$H$8; 0); <span class="fn">COINCIDIR</span>(D21; $I$3:$L$3; 0))</code><button class="copy">Copiar</button></div>
+      Gestión de Bienes + Mantenimiento → <b>140</b> millones.</div></details>
+  </div>
+
+  <div class="lab" id="lab3">
+    <div class="lab-h"><span class="tag">LABORATORIO</span><h3>Búsqueda de doble entrada</h3></div>
+    <div class="controls">
+      <label>Dependencia (fila)<select id="l3r"></select></label>
+      <label>Rubro (columna)<select id="l3c"></select></label>
+    </div>
+    <div class="formula"><code id="l3f"></code><button class="copy">Copiar</button></div>
+    <div class="result"><span class="lbl">COINCIDIR fila</span><span class="val" id="l3a"></span><span class="lbl">COINCIDIR columna</span><span class="val" id="l3b"></span><span class="lbl">INDICE</span><span class="val" id="l3x"></span></div>
+    <div class="xl-wrap"><table class="xl" id="l3t"></table></div>
+  </div>
+</section>
+
+<!-- ======================================================= T4 RESUMEN -->
+<section class="page" id="t4" data-title="Resumen condicional">
+  <div class="kicker">Subtema 4</div>
+  <h1>Funciones de resumen condicional</h1>
+  <p class="lead">Sirven para totalizar, contar o promediar <b>solo los registros que cumplen una o varias condiciones</b>: el corazón de cualquier informe por dependencia, rubro, fecha o estado.</p>
+
+  <h2>Sintaxis</h2>
+  <div class="formula"><code><span class="fn">=SUMAR.SI.CONJUNTO</span>(<span class="arg">rango_suma</span>; <span class="arg">rango_criterios1</span>; <span class="arg">criterio1</span>; <span class="arg">[rango_criterios2; criterio2]</span>; …)</code><button class="copy">Copiar</button></div>
+  <div class="formula"><code><span class="fn">=CONTAR.SI.CONJUNTO</span>(<span class="arg">rango_criterios1</span>; <span class="arg">criterio1</span>; <span class="arg">[rango_criterios2; criterio2]</span>; …)</code><button class="copy">Copiar</button></div>
+  <div class="formula"><code><span class="fn">=PROMEDIO.SI.CONJUNTO</span>(<span class="arg">rango_promedio</span>; <span class="arg">rango_criterios1</span>; <span class="arg">criterio1</span>; …)</code><button class="copy">Copiar</button></div>
+  <div class="callout"><b>Regla de oro</b>Todos los rangos deben tener el <b>mismo tamaño</b> (por ejemplo, filas 4 a 23). Hasta 127 pares de rango-criterio. Todas las condiciones se cumplen a la vez (lógica “Y”).</div>
+
+  <h2>Cómo escribir criterios</h2>
+  <table class="std">
+    <tr><th>Necesito…</th><th>Criterio</th><th>Ejemplo</th></tr>
+    <tr><td>Igual a un texto</td><td><code class="i">"Talento Humano"</code> o una celda</td><td><code class="i">C4:C23; C27</code></td></tr>
+    <tr><td>Mayor que un número</td><td><code class="i">"&gt;5000000"</code></td><td><code class="i">E4:E23; "&gt;"&amp;C30</code></td></tr>
+    <tr><td>Desde una fecha</td><td><code class="i">"&gt;="&amp;celda_fecha</code></td><td><code class="i">A4:A23; "&gt;="&amp;C32</code></td></tr>
+    <tr><td>Distinto de</td><td><code class="i">"&lt;&gt;Pagado"</code></td><td><code class="i">H2:H264; "&lt;&gt;Pagado"</code></td></tr>
+    <tr><td>Que empiece por</td><td><code class="i">"2.1.2*"</code></td><td>comodín * = cualquier texto</td></tr>
+    <tr><td>Celdas no vacías</td><td><code class="i">"&lt;&gt;"</code></td><td>cuenta registros diligenciados</td></tr>
+  </table>
+  <p class="explain">Cuando el criterio combina un operador con una celda, el operador va entre comillas y se une con <b>&amp;</b>: <code class="i">"&gt;="&amp;C32</code>.</p>
+
+  <h2>Ejemplo paso a paso</h2>
+  <p>Archivo <b>01_Ejemplos_Practica.xlsx</b>, hoja <b>4_RESUMEN</b> (20 registros presupuestales).</p>
+  <div class="steps">
+    <details class="step" open><summary>Total por una dependencia</summary><div class="body">
+      <div class="formula"><code><span class="fn">=SUMAR.SI.CONJUNTO</span>($E$4:$E$23; $C$4:$C$23; C27)</code><button class="copy">Copiar</button></div>
+      Talento Humano → <b>$26.750.000</b>.</div></details>
+    <details class="step"><summary>Total por dependencia y rubro (dos criterios)</summary><div class="body">
+      <div class="formula"><code><span class="fn">=SUMAR.SI.CONJUNTO</span>($E$4:$E$23; $C$4:$C$23; C28; $D$4:$D$23; D28)</code><button class="copy">Copiar</button></div>
+      Gestión de Bienes + Mantenimiento → <b>$19.700.000</b>.</div></details>
+    <details class="step"><summary>Contar registros</summary><div class="body">
+      <div class="formula"><code><span class="fn">=CONTAR.SI.CONJUNTO</span>($C$4:$C$23; C29)</code><button class="copy">Copiar</button></div>
+      Contratación tiene <b>4</b> registros.</div></details>
+    <details class="step"><summary>Contar con operador</summary><div class="body">
+      <div class="formula"><code><span class="fn">=CONTAR.SI.CONJUNTO</span>($E$4:$E$23; "&gt;"&amp;C30; $D$4:$D$23; D30)</code><button class="copy">Copiar</button></div>
+      Registros del rubro Servicios mayores a $5.000.000 → <b>7</b>.</div></details>
+    <details class="step"><summary>Promedio condicionado</summary><div class="body">
+      <div class="formula"><code><span class="fn">=PROMEDIO.SI.CONJUNTO</span>($E$4:$E$23; $C$4:$C$23; C31; $D$4:$D$23; D31)</code><button class="copy">Copiar</button></div>
+      Promedio de Talento Humano en Servicios → <b>$9.900.000</b>. Si ningún registro cumple, devuelve #¡DIV/0!; contrólelo con SI.ERROR.</div></details>
+    <details class="step"><summary>Rango de fechas</summary><div class="body">
+      <div class="formula"><code><span class="fn">=SUMAR.SI.CONJUNTO</span>($E$4:$E$23; $A$4:$A$23; "&gt;="&amp;C32; $A$4:$A$23; "&lt;="&amp;D32)</code><button class="copy">Copiar</button></div>
+      Primer semestre 2026 → <b>$108.640.000</b>. El mismo rango se usa dos veces con criterios distintos.</div></details>
+  </div>
+
+  <div class="lab" id="lab4">
+    <div class="lab-h"><span class="tag">LABORATORIO</span><h3>Constructor de resúmenes condicionales</h3></div>
+    <div class="controls">
+      <label>Función<select id="l4f"><option value="S">SUMAR.SI.CONJUNTO</option><option value="C">CONTAR.SI.CONJUNTO</option><option value="P">PROMEDIO.SI.CONJUNTO</option></select></label>
+      <label>Dependencia<select id="l4d"></select></label>
+      <label>Rubro<select id="l4r"></select></label>
+      <label>Valor mayor que<select id="l4v"><option value="0">(sin condición)</option><option value="2000000">$2.000.000</option><option value="5000000">$5.000.000</option><option value="10000000">$10.000.000</option></select></label>
+    </div>
+    <div class="formula"><code id="l4x"></code><button class="copy">Copiar</button></div>
+    <div class="result"><span class="lbl">Resultado</span><span class="val" id="l4o"></span><span class="explain" id="l4e"></span></div>
+    <div class="xl-wrap"><table class="xl" id="l4t"></table></div>
+  </div>
+</section>
+
+<!-- ======================================================= T5 MATRICES -->
+<section class="page" id="t5" data-title="Matrices dinámicas">
+  <div class="kicker">Subtema 5</div>
+  <h1>Matrices dinámicas: UNICOS, FILTRAR y ORDENAR</h1>
+  <p class="lead">Una sola fórmula devuelve <b>muchos resultados</b> que se “desbordan” automáticamente en las celdas vecinas. Si los datos de origen cambian, el listado se actualiza solo: ideal para listados de dependencias, terceros, contratos vencidos o rubros.</p>
+  <div class="callout info"><b>Desbordamiento (spill)</b>El resultado ocupa el rango necesario y aparece con un borde azul. Si alguna celda de destino tiene contenido, aparece el error <b>#¡DESBORDAMIENTO!</b>: libere esas celdas. Para referirse a todo el resultado use el operador <b>#</b> (por ejemplo <code class="i">X4#</code>).</div>
+
+  <h2>Sintaxis</h2>
+  <div class="formula"><code><span class="fn">=UNICOS</span>(<span class="arg">matriz</span>; <span class="arg">[por_columna]</span>; <span class="arg">[exactamente_una_vez]</span>)</code><button class="copy">Copiar</button></div>
+  <div class="formula"><code><span class="fn">=FILTRAR</span>(<span class="arg">matriz</span>; <span class="arg">incluir</span>; <span class="arg">[si_está_vacío]</span>)</code><button class="copy">Copiar</button></div>
+  <div class="formula"><code><span class="fn">=ORDENAR</span>(<span class="arg">matriz</span>; <span class="arg">[índice_de_orden]</span>; <span class="arg">[orden: 1 asc / -1 desc]</span>; <span class="arg">[por_columna]</span>)</code><button class="copy">Copiar</button></div>
+  <p class="explain">En FILTRAR, para combinar condiciones use <b>*</b> como “Y” y <b>+</b> como “O”: <code class="i">(C4:C23="Contratación")*(E4:E23&gt;1000000)</code>.</p>
+
+  <h2>Ejemplo paso a paso</h2>
+  <p>Archivo <b>01_Ejemplos_Practica.xlsx</b>, hoja <b>5_MATRICES</b>. Escriba cada fórmula solo en la celda amarilla.</p>
+  <div class="steps">
+    <details class="step" open><summary>Lista de dependencias sin repetir</summary><div class="body">
+      <div class="formula"><code><span class="fn">=UNICOS</span>(C4:C23)</code><button class="copy">Copiar</button></div>
+      En H4 aparecen las 5 dependencias que tienen registros, una sola vez cada una.</div></details>
+    <details class="step"><summary>Rubros únicos y ordenados</summary><div class="body">
+      <div class="formula"><code><span class="fn">=ORDENAR</span>(<span class="fn">UNICOS</span>(D4:D23))</code><button class="copy">Copiar</button></div>
+      Las funciones se anidan: primero se quitan duplicados y luego se ordena de la A a la Z.</div></details>
+    <details class="step"><summary>Filtrar registros grandes</summary><div class="body">
+      <div class="formula"><code><span class="fn">=FILTRAR</span>(A4:E23; E4:E23&gt;10000000; "Sin resultados")</code><button class="copy">Copiar</button></div>
+      Devuelve las filas completas (5 columnas) con valor superior a $10.000.000.</div></details>
+    <details class="step"><summary>Filtrar por dependencia y ordenar de mayor a menor</summary><div class="body">
+      <div class="formula"><code><span class="fn">=ORDENAR</span>(<span class="fn">FILTRAR</span>(A4:E23; C4:C23=S2; "Sin resultados"); 5; -1)</code><button class="copy">Copiar</button></div>
+      Cambie la dependencia en la lista desplegable de S2 y el listado se reconstruye solo.</div></details>
+    <details class="step"><summary>Resumen automático con el operador #</summary><div class="body">
+      <div class="formula"><code>X4: <span class="fn">=ORDENAR</span>(<span class="fn">UNICOS</span>(C4:C23))
+Y4: <span class="fn">=CONTAR.SI.CONJUNTO</span>(C4:C23; X4#)
+Z4: <span class="fn">=SUMAR.SI.CONJUNTO</span>(E4:E23; C4:C23; X4#)</code><button class="copy">Copiar</button></div>
+      <code class="i">X4#</code> significa “todo lo que desbordó X4”. Si aparece una nueva dependencia en los datos, el resumen crece automáticamente.</div></details>
+  </div>
+
+  <div class="lab" id="lab5">
+    <div class="lab-h"><span class="tag">LABORATORIO</span><h3>Taller de desbordamiento</h3></div>
+    <div class="tabs" id="l5tabs">
+      <button class="tab on" data-k="u">UNICOS</button>
+      <button class="tab" data-k="f">FILTRAR</button>
+      <button class="tab" data-k="o">ORDENAR</button>
+      <button class="tab" data-k="c">Combinado</button>
+    </div>
+    <div class="controls" style="margin-top:12px" id="l5ctl"></div>
+    <div class="formula"><code id="l5x"></code><button class="copy">Copiar</button></div>
+    <div class="grid g2">
+      <div><b class="explain">Datos de origen</b><div class="xl-wrap" style="max-height:380px;overflow:auto"><table class="xl" id="l5src"></table></div></div>
+      <div><b class="explain">Resultado desbordado</b><div class="xl-wrap" style="max-height:380px;overflow:auto"><table class="xl" id="l5out"></table></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= TALLER -->
+<section class="page" id="taller" data-title="Taller">
+  <div class="kicker">Taller de aplicación</div>
+  <h1>Informe resumen de ejecución presupuestal por dependencia</h1>
+  
+  <p class="lead"><b>Situación:</b> la Subdirección del Centro de Formación solicita para el comité directivo un informe con corte al <b>30 de septiembre de 2026</b> que muestre, por dependencia, el personal de planta, la nómina mensual y la ejecución presupuestal por rubro. Hoy la información está en cuatro bases separadas.</p>
+  <div class="grid g3">
+    <div class="card kpi"><b>Cruzar</b><span>la base de planta de personal con la de dependencias</span></div>
+    <div class="card kpi"><b>Resumir</b><span>la ejecución presupuestal por rubro y por dependencia</span></div>
+    <div class="card kpi"><b>Producto</b><span>Informe resumen por dependencia + conclusiones</span></div>
+  </div>
+
+  <h2>Las bases de datos del libro 03_Taller_Bases_de_Datos.xlsx</h2>
+  <table class="std">
+    <tr><th>Hoja</th><th>Registros</th><th>Campos</th><th>Campo de enlace</th></tr>
+    <tr><td><b>Dependencias</b></td><td>12</td><td>Cod_Dep, Dependencia, Tipo, Responsable (cargo), Centro de costo</td><td>Cod_Dep</td></tr>
+    <tr><td><b>Planta_Personal</b></td><td>72</td><td>Cédula, Nombres y apellidos, Cargo, Grado, Tipo de vinculación, Cod_Dep, Asignación básica, <i>Dependencia (cruce)</i></td><td>Cod_Dep</td></tr>
+    <tr><td><b>Apropiacion</b></td><td>72</td><td>Cod_Dep, Rubro, Valor apropiado</td><td>Cod_Dep + Rubro</td></tr>
+    <tr><td><b>Ejecucion</b></td><td>263</td><td>N° RP, Fecha, Cod_Dep, Rubro, Objeto, Valor comprometido, Valor obligado, Estado, <i>Dependencia (cruce)</i></td><td>Cod_Dep + Rubro</td></tr>
+  </table>
+  <div class="tabs" id="baseTabs">
+    <button class="tab on" data-k="dep">Dependencias</button>
+    <button class="tab" data-k="pla">Planta_Personal</button>
+    <button class="tab" data-k="apr">Apropiacion</button>
+    <button class="tab" data-k="eje">Ejecucion</button>
+  </div>
+  <div class="xl-wrap" style="margin-top:10px;max-height:300px;overflow:auto"><table class="xl" id="basePrev"></table></div>
+  <p class="explain">Vista previa de las primeras filas. Todos los datos son ficticios y se crearon con fines formativos.</p>
+
+  
+
+  <h2>Desarrollo paso a paso</h2>
+  <p>Marque cada paso a medida que lo complete. Use el libro <b>03_Taller_Bases_de_Datos.xlsx</b>; las celdas amarillas esperan su fórmula.</p>
+  <div class="card" id="tallerCheck">
+    <div class="steps" style="margin:0">
+      <details class="step" open><summary>Cruce la planta con las dependencias (BUSCARX)</summary><div class="body">
+        En <b>Planta_Personal!H2</b> traiga el nombre de la dependencia a partir de Cod_Dep (F2), buscando en la hoja Dependencias. Use un valor por defecto: <i>"Sin dependencia asignada"</i>. Copie hacia abajo.
+        
+        <p class="explain">Pista: <code class="i">=BUSCARX(F2; Dependencias!$A$2:$A$13; …; …)</code>. Filtre la columna H: ¿cuántos funcionarios no tienen dependencia válida?</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Cruce la ejecución con las dependencias (BUSCARV)</summary><div class="body">
+        En <b>Ejecucion!I2</b> traiga el nombre de la dependencia con <b>BUSCARV</b> para comparar ambas funciones.
+        
+        <p class="explain">Pista: aquí funciona porque Cod_Dep es la primera columna de Dependencias. ¿Qué número de columna necesita?</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Genere la lista de dependencias del informe (ORDENAR + UNICOS)</summary><div class="body">
+        En <b>Informe_Dependencia!A6</b> escriba una sola fórmula que liste los códigos de dependencia sin repetir y ordenados.
+        
+        <p class="explain">Pista: anide UNICOS dentro de ORDENAR. Si aparece #¡DESBORDAMIENTO!, borre el contenido de A7:A17.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Complete nombre y tipo de la dependencia</summary><div class="body">
+        Columna B (Dependencia) con BUSCARX y columna C (Tipo) con INDICE + COINCIDIR.
+        
+        <p class="explain">Pista: para C use <code class="i">=INDICE(columna Tipo; COINCIDIR(A6; columna Cod_Dep; 0))</code>.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Resuma la planta de personal por dependencia</summary><div class="body">
+        D: número de funcionarios (CONTAR.SI.CONJUNTO). E: nómina mensual = suma de asignaciones básicas (SUMAR.SI.CONJUNTO).
+        
+        <p class="explain">Pista: el rango de criterio es la columna Cod_Dep de Planta_Personal (F2:F73). No olvide los $.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Resuma la ejecución presupuestal con fecha de corte</summary><div class="body">
+        F: apropiado. G: comprometido y H: obligado, ambos <b>hasta la fecha de corte</b> de la celda C3.
+        
+        <p class="explain">Pista: el criterio de fecha se escribe <code class="i">"&lt;="&amp;$C$3</code>. Cambie la fecha de corte a 30/06/2026 y observe cómo cambia el informe.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Calcule indicadores y semáforo</summary><div class="body">
+        I: % de ejecución = comprometido / apropiado. J: saldo. K: n.° de compromisos. L: compromiso promedio. M: semáforo (Alta ≥ 80 %, Media ≥ 60 %, Baja &lt; 60 %).
+        
+        <p class="explain">Pista: para M anide dos funciones SI. En Colombia el decimal es coma: 0,8.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Construya la matriz dependencia × rubro</summary><div class="body">
+        En <b>Matriz_Rubros</b> cruce cada dependencia (filas) con cada rubro (encabezados de columna) usando SUMAR.SI.CONJUNTO con dos criterios y referencias mixtas.
+        
+        <p class="explain">Pista: use <code class="i">$A5</code> (columna fija) y <code class="i">C$4</code> (fila fija) para poder copiar una sola fórmula a toda la matriz.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Genere listados automáticos (FILTRAR y ORDENAR)</summary><div class="body">
+        En <b>Consultas</b>: funcionarios de la dependencia elegida en B4, dependencias con ejecución baja, ranking de ejecución y funcionarios sin dependencia válida.
+        
+        <p class="explain">Pista: empiece con <code class="i">=FILTRAR(Planta_Personal!$A$2:$G$73; Planta_Personal!$F$2:$F$73=B4; "Sin funcionarios")</code> y luego envuélvala en ORDENAR para organizar por la columna 7 (asignación) de mayor a menor. Cambie B4 y observe. Para el ranking pruebe ORDENARPOR.</p>
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+      <details class="step"><summary>Escriba las conclusiones</summary><div class="body">
+        En la hoja <b>Conclusiones</b> registre al menos 3 hallazgos (por ejemplo, qué dependencias tienen ejecución baja, qué rubro concentra más recursos, qué problemas de calidad de datos encontró) e indique qué función usó y <b>por qué la eligió</b>.
+        <label class="check"><input type="checkbox" data-step> <span>Paso completado</span></label></div></details>
+    </div>
+    <div class="result"><span class="lbl">Avance del taller</span><span class="val" id="tallerPct">0 %</span><span class="explain">pasos completados</span></div>
+  </div>
+
+  <h2>Producto esperado</h2>
+  <div class="card">
+    <p><b>Informe resumen por dependencia</b> (hoja Informe_Dependencia) con 12 dependencias y 13 columnas, fila de totales, semáforo con formato condicional, matriz dependencia × rubro, listados automáticos y mínimo 3 conclusiones justificadas.</p>
+    <div class="xl-wrap"><table class="xl"><thead><tr><th>Cod_Dep</th><th>Dependencia</th><th>Tipo</th><th>N° func.</th><th>Nómina mensual</th><th>Apropiado</th><th>Comprometido</th><th>Obligado</th><th>% Ejec.</th><th>Saldo</th><th>N° comp.</th><th>Promedio</th><th>Semáforo</th></tr></thead>
+    <tbody><tr><td>D01</td><td>Subdirección de Centro</td><td>Estratégica</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td class="n">?</td><td>?</td></tr>
+    <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr></tbody></table></div>
+    <p class="explain">Dato de control para verificar su trabajo: el total apropiado del centro es <b>$7.465.000.000</b> y en total hay <b>70</b> funcionarios con dependencia válida.</p>
+    
+  </div>
+</section>
+
+
+
+<!-- ======================================================= RETRO -->
+<section class="page" id="retro" data-title="Retroalimentación">
+  <div class="kicker">Retroalimentación</div>
+  <h1>Comparación de soluciones y criterios para elegir la función adecuada</h1>
+  <p class="lead">El mismo resultado puede obtenerse con funciones diferentes. Lo importante es elegir la que sea <b>correcta, compatible, mantenible y fácil de auditar</b> por otras personas de su dependencia.</p>
+
+  <h2>¿Qué función uso? Asistente de decisión</h2>
+  <div class="card" id="wizard"></div>
+
+  <h2>Criterios para elegir la función</h2>
+  <table class="std">
+    <tr><th>Necesidad</th><th>Primera opción</th><th>Alternativa compatible</th><th>Evite</th></tr>
+    <tr><td>Traer un dato de otra tabla por un código</td><td>BUSCARX</td><td>INDICE + COINCIDIR</td><td>Copiar y pegar manualmente</td></tr>
+    <tr><td>El dato a devolver está a la izquierda</td><td>BUSCARX</td><td>INDICE + COINCIDIR</td><td>BUSCARV (no puede)</td></tr>
+    <tr><td>Asignar un valor según rangos (tablas de tarifas)</td><td>BUSCARX con modo -1</td><td>BUSCARV con VERDADERO (tabla ordenada)</td><td>SI anidados largos</td></tr>
+    <tr><td>Cruce por fila y columna (matriz)</td><td>INDICE + doble COINCIDIR</td><td>BUSCARX anidado</td><td>Índices escritos a mano</td></tr>
+    <tr><td>Totalizar con una o varias condiciones</td><td>SUMAR.SI.CONJUNTO</td><td>Tabla dinámica</td><td>Filtrar y sumar a mano</td></tr>
+    <tr><td>Contar registros con condiciones</td><td>CONTAR.SI.CONJUNTO</td><td>Tabla dinámica</td><td>CONTAR.SI repetido</td></tr>
+    <tr><td>Listado que se actualice solo</td><td>FILTRAR / UNICOS / ORDENAR</td><td>Filtro avanzado o tabla dinámica</td><td>Quitar duplicados manual cada mes</td></tr>
+    <tr><td>El archivo se compartirá con Excel 2016/2019</td><td>INDICE + COINCIDIR, SUMAR.SI.CONJUNTO</td><td>BUSCARV con FALSO</td><td>BUSCARX, FILTRAR, UNICOS</td></tr>
+  </table>
+
+  <h2>Comparación de soluciones entre grupos</h2>
+  <p>Cada grupo presenta en máximo 3 minutos cómo resolvió los pasos clave. Use esta plantilla para registrar y comparar (puede editarla aquí mismo):</p>
+  <div class="xl-wrap"><table class="xl" id="cmpTable"><thead><tr><th>Paso</th><th>Grupo 1</th><th>Grupo 2</th><th>Grupo 3</th><th>Grupo 4</th><th>¿Mismo resultado?</th></tr></thead><tbody>
+    <tr><td>Cruce planta-dependencias</td><td contenteditable="true">BUSCARX</td><td contenteditable="true">BUSCARV</td><td contenteditable="true">INDICE+COINCIDIR</td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+    <tr><td>Lista de dependencias</td><td contenteditable="true">ORDENAR(UNICOS)</td><td contenteditable="true">Manual</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+    <tr><td>Comprometido al corte</td><td contenteditable="true">SUMAR.SI.CONJUNTO</td><td contenteditable="true">Tabla dinámica</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+    <tr><td>Dependencias con baja ejecución</td><td contenteditable="true">FILTRAR</td><td contenteditable="true">Filtro manual</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+    <tr><td>Total apropiado del centro</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+  </tbody></table></div>
+  <p class="explain">Las celdas son editables durante la sesión (no se guardan al cerrar la página).</p>
+
+  <h2>Preguntas orientadoras para la discusión</h2>
+  <div class="grid g2">
+    <div class="card"><ol style="margin:0;padding-left:20px">
+      <li>¿Qué grupo obtuvo 72 funcionarios y cuál 70? ¿Por qué la diferencia?</li>
+      <li>Si mañana se inserta una columna en la base de Dependencias, ¿qué fórmulas se dañan y cuáles no?</li>
+      <li>¿Qué pasa con el informe si se cambia la fecha de corte al 30 de junio?</li>
+    </ol></div>
+    <div class="card"><ol start="4" style="margin:0;padding-left:20px">
+      <li>¿Qué solución sería más fácil de entender para un compañero que reciba el archivo?</li>
+      <li>¿Qué solución funcionaría en un equipo con Excel 2016?</li>
+      <li>¿Qué informe de su dependencia podría automatizar con lo aprendido?</li>
+    </ol></div>
+  </div>
+
+  
+</section>
+
+<!-- ======================================================= QUIZ -->
+<section class="page" id="quiz" data-title="Autoevaluación">
+  <div class="kicker">Autoevaluación</div>
+  <h1>Compruebe lo aprendido</h1>
+  <p class="lead">10 preguntas con retroalimentación inmediata. Puede reiniciar el cuestionario cuantas veces quiera.</p>
+  <div id="quizBox"></div>
+  <div class="result"><span class="lbl">Puntaje</span><span class="val score" id="quizScore">0 / 10</span><span class="explain" id="quizMsg">Responda todas las preguntas.</span><button class="btn sm sec" id="quizReset">Reiniciar</button></div>
+</section>
+
+<!-- ======================================================= HERRAMIENTAS -->
+<section class="page" id="herramientas" data-title="Herramientas de software">
+  <div class="kicker">Recursos</div>
+  <h1>Herramientas de software y configuración</h1>
+  <p class="lead">Verifique que su equipo cumpla estas condiciones antes de iniciar. Si tiene dudas sobre la versión instalada o permisos, consulte con la mesa de ayuda de tecnología de su regional o centro.</p>
+  <table class="std">
+    <tr><th>Herramienta</th><th>Versión</th><th>Uso en el OVA</th><th>Configuración recomendada</th><th>Funciones disponibles</th></tr>
+    <tr><td><b>Microsoft Excel (Microsoft 365)</b></td><td>Actualizada (Canal actual)</td><td>Herramienta principal: ejemplos, taller e informe.</td><td>Idioma de edición: Español (Colombia). Archivo › Opciones › Fórmulas › Cálculo del libro: <b>Automático</b>. Archivo › Cuenta › Opciones de actualización › Actualizar ahora.</td><td class="yes">Todas</td></tr>
+    <tr><td><b>Microsoft Excel 2021 / 2024</b></td><td>2021 o posterior</td><td>Igual que Microsoft 365.</td><td>Igual que la anterior. Verifique en Archivo › Cuenta › Acerca de Excel.</td><td class="yes">Todas</td></tr>
+    <tr><td><b>Microsoft Excel 2016 / 2019</b></td><td>2016-2019</td><td>Puede realizar BUSCARV, INDICE+COINCIDIR y resumen condicional.</td><td>Use INDICE+COINCIDIR en lugar de BUSCARX; liste dependencias manualmente; use filtros o tabla dinámica en lugar de FILTRAR.</td><td class="mid">Sin BUSCARX ni matrices dinámicas</td></tr>
+    <tr><td><b>Excel para la web</b></td><td>Navegador actualizado</td><td>Alternativa si no tiene Excel de escritorio.</td><td>Ingrese con su cuenta institucional de Microsoft 365 (si está habilitada) en office.com y cargue los archivos a OneDrive. Configure la región en Configuración › Idioma y región.</td><td class="yes">Todas</td></tr>
+    <tr><td><b>Configuración regional de Windows</b></td><td>Windows 10 / 11</td><td>Define el separador de argumentos.</td><td>Configuración › Hora e idioma › Región › Configuración adicional: Símbolo decimal <b>,</b> · Separador de listas <b>;</b> (estándar para Colombia).</td><td>—</td></tr>
+    <tr><td><b>LibreOffice Calc</b></td><td>24.8 o posterior</td><td>Alternativa de software libre.</td><td>Herramientas › Opciones › LibreOffice Calc › Fórmula: sintaxis Excel A1. Las versiones anteriores a la 24.8 no incluyen BUSCARX, FILTRAR, ORDENAR ni UNICOS. Los nombres de funciones pueden variar.</td><td class="mid">Según versión</td></tr>
+    <tr><td><b>Google Sheets</b></td><td>Web</td><td>Alternativa colaborativa en la nube.</td><td>Archivo › Configuración › Configuración regional: Colombia. Al importar el .xlsx revise que las fórmulas se conviertan correctamente.</td><td class="mid">BUSCARX, FILTER, UNIQUE, SORT (con diferencias)</td></tr>
+    <tr><td><b>Navegador web</b></td><td>Chrome, Edge o Firefox recientes</td><td>Visualizar este OVA y los videos.</td><td>JavaScript habilitado. Conexión a internet para fuentes tipográficas y miniaturas de video.</td><td>—</td></tr>
+    <tr><td><b>Power Query (Obtener y transformar)</b></td><td>Incluido en Excel 2016+</td><td>Opcional: limpiar y combinar bases grandes antes de aplicar las fórmulas.</td><td>Datos › Obtener datos. Útil cuando las bases superan decenas de miles de filas.</td><td>Complementario</td></tr>
+  </table>
+  <h2>Atajos de teclado útiles</h2>
+  <div class="grid g4">
+    <div class="card kpi"><b>F4</b><span>Alterna referencias absolutas / mixtas ($)</span></div>
+    <div class="card kpi"><b>Ctrl + T</b><span>Convierte un rango en tabla</span></div>
+    <div class="card kpi"><b>Mayús + F3</b><span>Abre el asistente de funciones</span></div>
+    <div class="card kpi"><b>Ctrl + Mayús + L</b><span>Activa o desactiva filtros</span></div>
+    <div class="card kpi"><b>F9</b><span>Evalúa una parte de la fórmula (en la barra de fórmulas)</span></div>
+    <div class="card kpi"><b>Ctrl + `</b><span>Muestra las fórmulas en lugar de resultados</span></div>
+    <div class="card kpi"><b>Ctrl + Inicio</b><span>Vuelve a la celda A1</span></div>
+    <div class="card kpi"><b>Alt + =</b><span>Autosuma</span></div>
+  </div>
+</section>
+
+<!-- ======================================================= DESCARGAS -->
+<section class="page" id="descargas" data-title="Archivos descargables">
+  <div class="kicker">Recursos</div>
+  <h1>Archivos descargables</h1>
+  <p class="lead">Los archivos se encuentran en la carpeta <b>archivos</b> junto a este OVA. Si los enlaces no abren, búsquelos directamente en esa carpeta.</p>
+  <div class="grid g2">
+    <a class="card dl" href="archivos/01_Ejemplos_Practica.xlsx" download><span class="xls">XLSX</span><span><b>01 · Ejemplos de práctica</b><small>5 hojas, una por subtema, con celdas amarillas para resolver.</small></span></a>
+    <a class="card dl" href="archivos/02_Ejemplos_Resueltos.xlsx" download><span class="xls">XLSX</span><span><b>02 · Ejemplos resueltos</b><small>Las mismas hojas con todas las fórmulas resueltas para comparar.</small></span></a>
+    <a class="card dl" href="archivos/03_Taller_Bases_de_Datos.xlsx" download><span class="xls">XLSX</span><span><b>03 · Taller: bases de datos</b><small>Dependencias, planta, apropiación, ejecución y plantilla del informe.</small></span></a>
+    
+  </div>
+  <div class="callout"><b>Al abrir los archivos</b>Si Excel muestra “Vista protegida”, haga clic en <b>Habilitar edición</b>. Las fórmulas se recalculan automáticamente al abrir.</div>
+</section>
+
+<!-- ======================================================= VIDEOS -->
+<section class="page" id="videos" data-title="Cibergrafía">
+  <div class="kicker">Cibergrafía</div>
+  <h1>Videos de apoyo en español</h1>
+  <p class="lead">Selección de videos en YouTube y guías oficiales de Microsoft en español. Haga clic en la miniatura para abrir el video en una pestaña nueva.</p>
+  <div class="filters" id="vidFilters"></div>
+  <div class="grid g3" id="vidGrid"></div>
+  <h2>Documentación oficial de Microsoft (español)</h2>
+  <table class="std" id="msDocs"></table>
+  <p class="explain">Enlaces verificados en octubre de 2026. Los videos pertenecen a sus autores; el SENA no es responsable de su contenido ni de cambios posteriores en la plataforma.</p>
+</section>
+
+<!-- ======================================================= BIBLIO -->
+<section class="page" id="biblio" data-title="Bibliografía">
+  <div class="kicker">Bibliografía</div>
+  <h1>Bibliografía</h1>
+  <p class="lead">Referencias en formato APA (7.ª edición).</p>
+  <div class="card">
+    <p>Alexander, M., Kusleika, R. y Walkenbach, J. (2018). <i>Excel 2019 bible</i>. Wiley.</p>
+    <p>Jelen, B. (2018). <i>Excel dynamic arrays straight to the point</i>. Holy Macro! Books.</p>
+    <p>Winston, W. L. (2021). <i>Microsoft Excel data analysis and business modeling</i> (7.ª ed.). Microsoft Press.</p>
+    <p>Microsoft. (s. f.). <i>Función BUSCARV</i>. Soporte de Microsoft. <a href="https://support.microsoft.com/es-es/office/funci%C3%B3n-buscarv-0bbc8083-26fe-4963-8ab8-93a18ad188a1" target="_blank" rel="noopener">https://support.microsoft.com/es-es/office/función-buscarv-0bbc8083-26fe-4963-8ab8-93a18ad188a1</a></p>
+    <p>Microsoft. (s. f.). <i>Función BUSCARX</i>. Soporte de Microsoft. <a href="https://support.microsoft.com/es-es/excel/functions/xlookup-function" target="_blank" rel="noopener">https://support.microsoft.com/es-es/excel/functions/xlookup-function</a></p>
+    <p>Microsoft. (s. f.). <i>Buscar valores con BUSCARV, INDICE o COINCIDIR</i>. Soporte de Microsoft. <a href="https://support.microsoft.com/es-es/office/buscar-valores-con-buscarv-indice-o-coincidir-68297403-7c3c-4150-9e3c-4d348188976b" target="_blank" rel="noopener">https://support.microsoft.com/es-es/office/buscar-valores-con-buscarv-indice-o-coincidir-68297403-7c3c-4150-9e3c-4d348188976b</a></p>
+    <p>Microsoft. (s. f.). <i>Función SUMAR.SI.CONJUNTO</i>. Soporte de Microsoft. <a href="https://support.microsoft.com/es-es/excel/functions/sumifs-function" target="_blank" rel="noopener">https://support.microsoft.com/es-es/excel/functions/sumifs-function</a></p>
+    <p>Microsoft. (s. f.). <i>Fórmulas de matriz dinámicas y comportamiento de matriz desbordada</i>. Soporte de Microsoft. <a href="https://support.microsoft.com/es-es/office/f%C3%B3rmulas-de-matriz-din%C3%A1micas-y-comportamiento-de-matriz-desbordada-205c6b06-03ba-4151-89a1-87a7eb36e531" target="_blank" rel="noopener">https://support.microsoft.com/es-es/office/fórmulas-de-matriz-dinámicas-y-comportamiento-de-matriz-desbordada-205c6b06-03ba-4151-89a1-87a7eb36e531</a></p>
+    <p>Campos, S. A. (s. f.). <i>ORDENAR, ORDENARPOR y FILTRAR: funciones de matrices dinámicas en Excel</i>. EXCELeINFO. <a href="https://www.exceleinfo.com/ordenar-ordenarpor-y-filtrar-funciones-de-matrices-dinamicas-en-excel/" target="_blank" rel="noopener">https://www.exceleinfo.com/ordenar-ordenarpor-y-filtrar-funciones-de-matrices-dinamicas-en-excel/</a></p>
+    <p>Hazlo con Excel. (s. f.). <i>Matrices dinámicas en Excel: qué son y cómo usarlas</i>. <a href="https://hazloconexcel.com/matrices-dinamicas/" target="_blank" rel="noopener">https://hazloconexcel.com/matrices-dinamicas/</a></p>
+    <p>Servicio Nacional de Aprendizaje [SENA]. (s. f.). <i>Manual de identidad visual</i>. SENA.</p>
+  </div>
+</section>
+
+<!-- ======================================================= GLOSARIO -->
+<section class="page" id="glosario" data-title="Glosario">
+  <div class="kicker">Glosario</div>
+  <h1>Glosario de términos</h1>
+  <input type="search" id="glSearch" placeholder="Buscar un término…" style="width:100%;max-width:420px;margin:8px 0 14px">
+  <div class="card" id="glList"></div>
+</section>
+
+<div class="pager"><button class="btn sec" id="prevBtn">← Anterior</button><button class="btn" id="nextBtn">Siguiente →</button></div>
+<div class="foot"><span>SENA · Servicio Nacional de Aprendizaje · OVA “Funciones de búsqueda y resumen de información” · 2026</span><span>Datos ficticios con fines exclusivamente formativos</span></div>
+  </div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const DATA = {"func": [[1012345678, "Ana María Rojas", "Profesional G08", "D03", "Grupo de Talento Humano", 5480000], [1023456789, "Carlos Pérez Gómez", "Técnico G03", "D04", "Grupo de Contratación", 3150000], [1034567890, "Luisa Fernanda Díaz", "Auxiliar G01", "D05", "Gestión de Bienes", 2380000], [1045678901, "Jorge Iván Castro", "Profesional G12", "D02", "Coordinación Administrativa y Financiera", 6740000], [1056789012, "Paola Andrea Ruiz", "Coordinador G06", "D02", "Coordinación Administrativa y Financiera", 8250000], [1067890123, "Mauricio López", "Técnico G05", "D03", "Grupo de Talento Humano", 3620000], [1078901234, "Diana Marcela Soto", "Profesional G02", "D06", "Relaciones Corporativas", 4410000], [1089012345, "Andrés Felipe Mora", "Auxiliar G03", "D04", "Grupo de Contratación", 2560000], [1090123456, "Sandra Milena Vargas", "Profesional G10", "D05", "Gestión de Bienes", 6120000], [1101234567, "Óscar Hernández", "Técnico G01", "D03", "Grupo de Talento Humano", 2890000]], "matriz": [[45, 30, 22, 120], [18, 12, 15, 210], [96, 140, 10, 60], [25, 8, 40, 95], [60, 55, 35, 180]], "depEj": ["Talento Humano", "Contratación", "Gestión de Bienes", "Relaciones Corporativas", "Admin. y Financiera"], "rubEj": ["Materiales", "Mantenimiento", "Viáticos", "Servicios"], "mov": [["15/01/2026", "D03", "Talento Humano", "Servicios", 12500000], ["22/01/2026", "D05", "Gestión de Bienes", "Mantenimiento", 8400000], ["03/02/2026", "D04", "Contratación", "Servicios", 15800000], ["10/02/2026", "D03", "Talento Humano", "Viáticos", 1850000], ["18/02/2026", "D02", "Admin. y Financiera", "Materiales", 3250000], ["02/03/2026", "D05", "Gestión de Bienes", "Materiales", 6900000], ["11/03/2026", "D06", "Relaciones Corporativas", "Viáticos", 2740000], ["25/03/2026", "D03", "Talento Humano", "Materiales", 1200000], ["07/04/2026", "D02", "Admin. y Financiera", "Servicios", 21000000], ["16/04/2026", "D04", "Contratación", "Materiales", 980000], ["29/04/2026", "D05", "Gestión de Bienes", "Mantenimiento", 11300000], ["08/05/2026", "D06", "Relaciones Corporativas", "Servicios", 9600000], ["20/05/2026", "D03", "Talento Humano", "Servicios", 7300000], ["04/06/2026", "D02", "Admin. y Financiera", "Mantenimiento", 4500000], ["17/06/2026", "D04", "Contratación", "Viáticos", 1320000], ["01/07/2026", "D05", "Gestión de Bienes", "Servicios", 5200000], ["14/07/2026", "D02", "Admin. y Financiera", "Viáticos", 2100000], ["05/08/2026", "D06", "Relaciones Corporativas", "Materiales", 1650000], ["21/08/2026", "D03", "Talento Humano", "Mantenimiento", 3900000], ["09/09/2026", "D04", "Contratación", "Servicios", 13400000]], "bases": {"dep": {"h": ["Cod_Dep", "Dependencia", "Tipo", "Responsable (cargo)", "Centro de costo"], "r": [["D01", "Subdirección de Centro", "Estratégica", "Subdirector(a) de Centro", "CC-1001"], ["D02", "Coordinación Administrativa y Financiera", "Apoyo", "Coordinador(a) Administrativo(a)", "CC-1002"], ["D03", "Grupo de Talento Humano", "Apoyo", "Coordinador(a) de Talento Humano", "CC-1003"], ["D04", "Grupo de Contratación", "Apoyo", "Coordinador(a) de Contratación", "CC-1004"], ["D05", "Gestión de Bienes y Almacén", "Apoyo", "Profesional de Almacén", "CC-1005"], ["D06", "Relaciones Corporativas", "Misional", "Coordinador(a) de Relaciones Corporativas", "CC-1006"], ["D07", "Coordinación Académica", "Misional", "Coordinador(a) Académico(a)", "CC-1007"], ["D08", "Agencia Pública de Empleo", "Misional", "Coordinador(a) APE", "CC-1008"], ["D09", "Emprendimiento y Fondo Emprender", "Misional", "Coordinador(a) de Emprendimiento", "CC-1009"], ["D10", "Certificación de Competencias", "Misional", "Coordinador(a) de Certificación", "CC-1010"], ["D11", "Bienestar al Aprendiz", "Misional", "Profesional de Bienestar", "CC-1011"], ["D12", "Gestión Documental", "Apoyo", "Profesional de Gestión Documental", "CC-1012"]], "f": []}, "pla": {"h": ["Cédula", "Nombres y apellidos", "Cargo", "Grado", "Tipo de vinculación", "Cod_Dep", "Asignación básica", "Dependencia (cruce)"], "r": [[1354035891, "Viviana Moreno López", "Secretario(a)", "G02", "Carrera administrativa", "D12", 2470000, "?"], [1362870792, "Viviana Moreno Cárdenas", "Técnico", "G05", "Carrera administrativa", "D12", 3620000, "?"], [1154330833, "Natalia Torres Martínez", "Profesional", "G08", "Carrera administrativa", "D04", 5480000, "?"], [1324816423, "Andrés Martínez Gómez", "Profesional", "G08", "Carrera administrativa", "D11", 5480000, "?"], [1363165425, "Gloria Cárdenas Ospina", "Técnico", "G03", "Provisional", "D13", 3150000, "?"], [1170520919, "Marcela González Ortiz", "Secretario(a)", "G02", "Carrera administrativa", "D04", 2470000, "?"], [1207046931, "Patricia Mejía Velásquez", "Profesional", "G06", "Carrera administrativa", "D06", 5120000, "?"], [1034240208, "Juliana Sánchez Castro", "Técnico", "G05", "Carrera administrativa", "D02", 3620000, "?"], [1092984427, "Viviana Muñoz Castro", "Profesional", "G08", "Provisional", "D03", 5480000, "?"], [1098026422, "Mauricio Ortiz Sánchez", "Técnico", "G03", "Carrera administrativa", "D03", 3150000, "?"]], "f": ["", "", "", "", "", "", "$", ""]}, "apr": {"h": ["Cod_Dep", "Rubro", "Valor apropiado"], "r": [["D01", "2.1.2.01 Materiales y suministros", 57000000], ["D01", "2.1.2.02 Mantenimiento", 152000000], ["D01", "2.1.2.03 Viáticos y gastos de viaje", 20000000], ["D01", "2.1.2.04 Prestación de servicios", 203000000], ["D01", "2.1.2.05 Equipos y tecnología", 25000000], ["D01", "2.1.2.06 Bienestar y capacitación", 24000000], ["D02", "2.1.2.01 Materiales y suministros", 29000000], ["D02", "2.1.2.02 Mantenimiento", 93000000], ["D02", "2.1.2.03 Viáticos y gastos de viaje", 59000000], ["D02", "2.1.2.04 Prestación de servicios", 285000000], ["D02", "2.1.2.05 Equipos y tecnología", 114000000], ["D02", "2.1.2.06 Bienestar y capacitación", 62000000]], "f": ["", "", "$"]}, "eje": {"h": ["N° RP", "Fecha", "Cod_Dep", "Rubro", "Objeto", "Valor comprometido", "Valor obligado", "Estado", "Dependencia (cruce)"], "r": [["RP-2026-0001", "13/01/2026", "D04", "2.1.2.06 Bienestar y capacitación", "Actividad de integración", 9169000.0, 0, "Comprometido", "?"], ["RP-2026-0002", "13/01/2026", "D09", "2.1.2.04 Prestación de servicios", "Servicio de vigilancia", 20594000.0, 14733000.0, "Obligado parcial", "?"], ["RP-2026-0003", "14/01/2026", "D09", "2.1.2.04 Prestación de servicios", "Servicio de vigilancia", 43753000.0, 34518000.0, "Obligado parcial", "?"], ["RP-2026-0004", "17/01/2026", "D11", "2.1.2.05 Equipos y tecnología", "Impresoras multifuncionales", 84405000.0, 36603000.0, "Obligado parcial", "?"], ["RP-2026-0005", "18/01/2026", "D05", "2.1.2.03 Viáticos y gastos de viaje", "Viaje a evento nacional", 5994000.0, 0, "Comprometido", "?"], ["RP-2026-0006", "18/01/2026", "D07", "2.1.2.04 Prestación de servicios", "Contrato de apoyo a la gestión", 36914000.0, 22498000.0, "Obligado parcial", "?"], ["RP-2026-0007", "18/01/2026", "D07", "2.1.2.03 Viáticos y gastos de viaje", "Comisión de servicios regional", 4553000.0, 2459000.0, "Obligado parcial", "?"], ["RP-2026-0008", "20/01/2026", "D04", "2.1.2.03 Viáticos y gastos de viaje", "Desplazamiento a municipios", 8586000.0, 8586000.0, "Pagado", "?"], ["RP-2026-0009", "23/01/2026", "D11", "2.1.2.01 Materiales y suministros", "Tóner y consumibles de impresión", 3936000.0, 3936000.0, "Pagado", "?"], ["RP-2026-0010", "24/01/2026", "D11", "2.1.2.02 Mantenimiento", "Mantenimiento de vehículos", 14952000.0, 12814000.0, "Obligado parcial", "?"], ["RP-2026-0011", "25/01/2026", "D10", "2.1.2.06 Bienestar y capacitación", "Actividad de integración", 30114000.0, 30114000.0, "Pagado", "?"], ["RP-2026-0012", "27/01/2026", "D12", "2.1.2.02 Mantenimiento", "Reparaciones locativas", 10174000.0, 10174000.0, "Pagado", "?"]], "f": ["", "", "", "", "", "$", "$", "", ""]}}, "videos": [{"id": "ysJ5a_KgOqI", "t": "BUSCARV", "title": "BUSCARV en Excel: cómo usarlo paso a paso (fácil y rápido)", "ch": "MN Group"}, {"id": "5BmFpmoBjw8", "t": "BUSCARV", "title": "Extraer datos a partir de una lista. Función BUSCARV en Excel", "ch": "Saber Programas"}, {"id": "2fLJtARJ-Z0", "t": "BUSCARX", "title": "¿Por qué BUSCARX es mejor que BUSCARV?", "ch": "Tutorial Excel"}, {"id": "5ecix4v-Mwk", "t": "BUSCARX", "title": "Cómo usar BUSCARX en Excel para reemplazar BUSCARV", "ch": "Ingeniería & Oficina Pro Tech"}, {"id": "zsKS3Sivofg", "t": "BUSCARX", "title": "Curso Fórmulas en Excel · Cap. 8 · BUSCARV, BUSCARH y BUSCARX", "ch": "Sergio Alejandro Campos · EXCELeINFO"}, {"id": "rSsbexOSlxE", "t": "INDICE y COINCIDIR", "title": "Curso Excel: función INDICE y COINCIDIR", "ch": "El Tío Tech"}, {"id": "CrWbBwnCzC4", "t": "INDICE y COINCIDIR", "title": "Buscar con las funciones INDICE y COINCIDIR en Excel", "ch": "Excel Total"}, {"id": "JkRLnEm42fw", "t": "Resumen condicional", "title": "[Aprende Excel] Función SUMAR.SI.CONJUNTO", "ch": "Aglaia Consulting"}, {"id": "v2FjTSE4pH4", "t": "Resumen condicional", "title": "CONTAR SI CONJUNTO y SUMAR SI CONJUNTO: sumar y contar celdas con varias condiciones", "ch": "Generación Aprende"}, {"id": "t5ChW0EtXSs", "t": "Resumen condicional", "title": "Cómo usar fácilmente la función CONTAR SI CONJUNTO en Excel + ejercicio", "ch": "Francisco Ochoa Excel"}, {"id": "hpGBPaY3ppA", "t": "Matrices dinámicas", "title": "Función ÚNICOS en Excel (valores únicos, quitar duplicados)", "ch": "El Tío Tech"}, {"id": "bWn1vs_gbbE", "t": "Matrices dinámicas", "title": "Excel: funciones FILTRAR y ORDENAR en Office 2021 y 365", "ch": "tic formador"}, {"id": "WlA8_FLwwF8", "t": "Matrices dinámicas", "title": "Cómo hacer búsquedas dinámicas en Excel usando la función FILTRAR", "ch": "El Inge Francisco"}, {"id": "MnNf1iiuSJo", "t": "Matrices dinámicas", "title": "La nueva función FILTRAR en Excel", "ch": "Ceciliabx"}], "docs": [["Función BUSCARV", "https://support.microsoft.com/es-es/office/funci%C3%B3n-buscarv-0bbc8083-26fe-4963-8ab8-93a18ad188a1"], ["Función BUSCARX", "https://support.microsoft.com/es-es/excel/functions/xlookup-function"], ["Buscar valores con BUSCARV, INDICE o COINCIDIR", "https://support.microsoft.com/es-es/office/buscar-valores-con-buscarv-indice-o-coincidir-68297403-7c3c-4150-9e3c-4d348188976b"], ["Función COINCIDIR", "https://support.microsoft.com/es-es/office/funci%C3%B3n-coincidir-e8dffd45-c762-47d6-bf89-533f4a37673a"], ["Función SUMAR.SI.CONJUNTO", "https://support.microsoft.com/es-es/excel/functions/sumifs-function"], ["Formas de contar valores en una hoja de cálculo", "https://support.microsoft.com/es-es/excel/ways-to-count-values-in-a-worksheet"], ["Función FILTRAR", "https://support.microsoft.com/es-es/office/funci%C3%B3n-filtrar-f4f7cb66-82eb-4767-8f7c-4877ad80c759"], ["Función UNICOS", "https://support.microsoft.com/es-es/excel/functions/unique-function"], ["Función ORDENAR", "https://support.microsoft.com/es-es/office/funci%C3%B3n-ordenar-22f63bd0-ccc8-492f-953d-c20e8e44b86c"], ["Función ORDENARPOR", "https://support.microsoft.com/es-es/office/funci%C3%B3n-ordenarpor-cd2d7a62-1b93-435c-b561-d6a35134f28f"], ["Fórmulas de matriz dinámicas y comportamiento de matriz desbordada", "https://support.microsoft.com/es-es/office/f%C3%B3rmulas-de-matriz-din%C3%A1micas-y-comportamiento-de-matriz-desbordada-205c6b06-03ba-4151-89a1-87a7eb36e531"], ["Cómo corregir un error #¡DESBORDAMIENTO!", "https://support.microsoft.com/es-es/excel/how-to-correct-a-spill-error"]], "glosario": [["Apropiación presupuestal", "Monto de recursos autorizado para una dependencia y un rubro durante la vigencia fiscal."], ["Argumento", "Cada valor que recibe una función entre paréntesis, separado por punto y coma (;) en Excel en español (Colombia)."], ["BUSCARV", "Función que busca un valor en la primera columna de un rango y devuelve el dato de la misma fila en la columna indicada por número (VLOOKUP en inglés)."], ["BUSCARX", "Función moderna de búsqueda que separa el rango de búsqueda y el de resultado; busca en cualquier dirección y admite valor por defecto (XLOOKUP)."], ["Campo de enlace (llave)", "Dato común entre dos tablas que permite cruzarlas, por ejemplo la cédula o el código de dependencia. Debe ser único en la tabla maestra."], ["Coincidencia aproximada", "Búsqueda que devuelve el valor exacto o el más cercano (menor o mayor) cuando no existe el exacto. Útil en tablas de rangos o tarifas."], ["Coincidencia exacta", "Búsqueda que solo devuelve resultado si encuentra exactamente el mismo valor. Es la adecuada para cédulas, códigos y números de documento."], ["COINCIDIR", "Función que devuelve la posición de un valor dentro de un rango (MATCH)."], ["Compromiso / registro presupuestal (RP)", "Afectación definitiva de la apropiación que respalda un contrato u obligación con un tercero."], ["CONTAR.SI.CONJUNTO", "Cuenta las celdas que cumplen uno o varios criterios simultáneamente (COUNTIFS)."], ["Criterio", "Condición que debe cumplir un registro para incluirse en un resumen: un texto, un número, una celda o un operador como \">=\"&C3."], ["Cruce de bases", "Proceso de relacionar dos o más tablas mediante un campo común para traer información de una a otra."], ["Desbordamiento (spill)", "Comportamiento de las matrices dinámicas: una fórmula devuelve varios valores que ocupan automáticamente celdas vecinas."], ["#¡DESBORDAMIENTO!", "Error que aparece cuando el rango donde debe mostrarse un resultado dinámico tiene celdas ocupadas."], ["Ejecución presupuestal", "Grado en que se han comprometido u obligado los recursos apropiados. Se expresa como porcentaje: comprometido / apropiado."], ["FILTRAR", "Función de matriz dinámica que devuelve las filas de un rango que cumplen una condición (FILTER)."], ["INDICE", "Función que devuelve el contenido de una celda según su número de fila y columna dentro de un rango (INDEX)."], ["Matriz dinámica", "Fórmula que devuelve un conjunto de valores y se ajusta automáticamente al tamaño del resultado. Disponible en Microsoft 365 y Excel 2021+."], ["#N/D", "Error “no disponible”: la función de búsqueda no encontró el valor buscado."], ["#¿NOMBRE?", "Error que indica que Excel no reconoce el nombre de la función (mal escrita o no disponible en esa versión)."], ["Obligación", "Monto del compromiso que ya se encuentra exigible por haberse recibido el bien o servicio."], ["Operador #", "Referencia a todo el rango desbordado de una fórmula dinámica, por ejemplo X4#."], ["ORDENAR", "Función de matriz dinámica que ordena un rango por una columna, ascendente (1) o descendente (-1) (SORT)."], ["ORDENARPOR", "Ordena un rango según los valores de otro rango o columna (SORTBY)."], ["PROMEDIO.SI.CONJUNTO", "Calcula el promedio de los valores que cumplen uno o varios criterios (AVERAGEIFS)."], ["Referencia absoluta", "Referencia fija con signo $ (por ejemplo $A$2:$A$73) que no cambia al copiar la fórmula. Se aplica con la tecla F4."], ["Referencia mixta", "Referencia que fija solo la columna ($A5) o solo la fila (C$4). Indispensable para construir matrices de resumen con una sola fórmula."], ["Rubro presupuestal", "Clasificación del gasto dentro del presupuesto (por ejemplo, materiales y suministros, viáticos, prestación de servicios)."], ["SI.ERROR", "Función que muestra un valor alternativo cuando una fórmula genera error (IFERROR)."], ["SUMAR.SI.CONJUNTO", "Suma los valores que cumplen uno o varios criterios simultáneamente (SUMIFS)."], ["Tabla maestra", "Tabla de referencia con valores únicos (por ejemplo, Dependencias) de la cual otras tablas toman información."], ["UNICOS", "Función de matriz dinámica que devuelve la lista de valores sin repetir de un rango (UNIQUE)."]]};
+const ROLE = "participante";
+(function(){
+"use strict";
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const fmt$ = v => "$" + Math.round(v).toLocaleString("es-CO");
+const fmtN = v => Number(v).toLocaleString("es-CO");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const toast = msg => { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 1800); };
+
+/* ------------------------------------------------ navegación */
+const pages = $$("section.page");
+const order = pages.map(p => p.id);
+const visited = new Set();
+function go(id){
+  if(!order.includes(id)) id = order[0];
+  pages.forEach(p => p.classList.toggle("show", p.id === id));
+  $$(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.go === id));
+  visited.add(id);
+  $$(".nav-btn").forEach(b => { if(visited.has(b.dataset.go) && b.dataset.go !== id) b.classList.add("done"); });
+  const pct = Math.round(visited.size / order.length * 100);
+  $("#progBar").style.width = pct + "%"; $("#progTxt").textContent = pct + "%";
+  const i = order.indexOf(id);
+  $("#prevBtn").style.visibility = i > 0 ? "visible" : "hidden";
+  $("#nextBtn").style.visibility = i < order.length - 1 ? "visible" : "hidden";
+  if(i < order.length - 1) $("#nextBtn").textContent = (pages[i+1].dataset.title || "Siguiente") + " →";
+  $("#main").scrollTop = 0;
+  $("#sidebar").classList.remove("open");
+  if(history.replaceState) history.replaceState(null, "", "#" + id);
+}
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]");
+  if(g){ e.preventDefault(); go(g.dataset.go); }
+});
+$("#prevBtn").onclick = () => { const i = order.indexOf($("section.page.show").id); if(i > 0) go(order[i-1]); };
+$("#nextBtn").onclick = () => { const i = order.indexOf($("section.page.show").id); if(i < order.length-1) go(order[i+1]); };
+$("#menuBtn").onclick = e => { e.stopPropagation(); $("#sidebar").classList.toggle("open"); };
+$("#main").addEventListener("click", () => $("#sidebar").classList.remove("open"));
+
+/* ------------------------------------------------ modo oscuro (área de contenido) */
+$("#themeBtn").onclick = () => {
+  const on = $("#main").classList.toggle("dark");
+  $("#themeBtn").setAttribute("aria-pressed", on);
+  $("#themeIc").textContent = on ? "☀️" : "🌙";
+  $("#themeTxt").textContent = on ? "Modo claro" : "Modo oscuro";
+};
+
+/* ------------------------------------------------ copiar fórmulas */
+document.addEventListener("click", e => {
+  const b = e.target.closest(".copy"); if(!b) return;
+  const code = b.parentElement.querySelector("code").innerText.replace(/^[A-Z]+\d+:\s/gm, "");
+  const done = () => toast("Fórmula copiada");
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(code).then(done, () => fallback(code, done)); }
+  else fallback(code, done);
+});
+function fallback(text, cb){ const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); }catch(e){} ta.remove(); cb(); }
+
+/* ------------------------------------------------ utilidades de tabla tipo Excel */
+const LET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function xlTable(el, heads, rows, opt={}){
+  const c0 = opt.col0 || 0, r0 = opt.row0 || 3, fmts = opt.fmts || [];
+  let h = '<thead><tr><th class="ch"></th>' + heads.map((_, i) => `<th class="ch">${LET[c0+i]}</th>`).join("") + "</tr>";
+  h += `<tr><th class="rh">${r0}</th>` + heads.map(x => `<th>${esc(x)}</th>`).join("") + "</tr></thead><tbody>";
+  rows.forEach((r, i) => {
+    h += `<tr data-i="${i}"><td class="rh">${r0+1+i}</td>` + r.map((v, j) => {
+      const f = fmts[j]; let t = v;
+      if(f === "$") t = fmt$(v); else if(f === "n") t = fmtN(v); else if(f === "%") t = (v*100).toFixed(1).replace(".", ",") + " %";
+      return `<td data-j="${j}" class="${typeof v === "number" ? "n" : ""}">${esc(t)}</td>`;
+    }).join("") + "</tr>";
+  });
+  el.innerHTML = h + "</tbody>";
+}
+function clearHl(el){ $$("tr", el).forEach(tr => tr.classList.remove("hit", "dim")); $$("td", el).forEach(td => td.classList.remove("hitc", "colsel", "spill")); }
+const cell = (el, i, j) => $(`tr[data-i="${i}"] td[data-j="${j}"]`, el);
+function fillSelect(sel, items, val){ sel.innerHTML = items.map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join(""); if(val !== undefined) sel.value = val; }
+
+/* ------------------------------------------------ LAB 1 · BUSCARV */
+const F = DATA.func, FH = ["Cédula", "Nombre", "Cargo", "Cod_Dep", "Dependencia", "Asignación básica"], FF = ["", "", "", "", "", "$"];
+(function(){
+  const t = $("#l1t"); if(!t) return;
+  xlTable(t, FH, F, {fmts: FF});
+  const opts = F.map(r => [r[0], r[0] + " · " + r[1]]);
+  opts.push(["1999999999", "1999999999 (no existe)"], ["Mauricio López", "\"Mauricio López\" (texto)"], ["5480000", "5480000 (una asignación)"]);
+  fillSelect($("#l1v"), opts, String(F[3][0]));
+  function run(){
+    clearHl(t);
+    const raw = $("#l1v").value, v = isNaN(raw) ? raw : Number(raw), col = parseInt($("#l1c").value, 10), approx = $("#l1o").value === "1";
+    const vs = typeof v === "string" ? `"${v}"` : v;
+    $("#l1f").innerHTML = `<span class="fn">=BUSCARV</span>(${vs}; $A$4:$F$13; ${isNaN(col) ? "" : col}; ${approx ? "VERDADERO" : "FALSO"})`;
+    const R = $("#l1r"), E = $("#l1e"); R.classList.remove("err");
+    $$("tr", t).forEach(tr => { const td = $('td[data-j="0"]', tr); if(td) td.classList.add("colsel"); });
+    if(isNaN(col) || col < 1){ R.textContent = "#¡VALOR!"; R.classList.add("err"); E.textContent = "El indicador de columnas debe ser 1 o mayor."; return; }
+    if(col > 6){ R.textContent = "#¡REF!"; R.classList.add("err"); E.textContent = "El rango solo tiene 6 columnas."; return; }
+    let idx = -1;
+    if(!approx){ idx = F.findIndex(r => r[0] === v); }
+    else if(typeof v === "number"){ // aproximada: mayor valor <= v (asume orden ascendente)
+      for(let i = 0; i < F.length; i++){ if(F[i][0] <= v) idx = i; else break; }
+    }
+    if(idx < 0){
+      R.textContent = "#N/D"; R.classList.add("err");
+      E.textContent = typeof v === "string" ? "BUSCARV busca solo en la PRIMERA columna (Cédula). Un nombre nunca se encontrará ahí: esta es su principal limitación." : "El valor no existe en la primera columna.";
+      return;
+    }
+    $(`tr[data-i="${idx}"]`, t).classList.add("hit");
+    cell(t, idx, col-1).classList.add("hitc");
+    const out = F[idx][col-1];
+    R.textContent = FF[col-1] === "$" ? fmt$(out) : out;
+    E.textContent = approx ? "Coincidencia aproximada: toma la última fila cuyo valor es menor o igual. ¡Cuidado! Si los datos no están ordenados, el resultado puede ser incorrecto." : `Encontró la cédula en la fila ${idx+4} y devolvió la columna ${col} (${FH[col-1]}).`;
+  }
+  ["#l1v", "#l1c", "#l1o"].forEach(s => $(s).addEventListener("input", run)); run();
+})();
+
+/* ------------------------------------------------ LAB 2 · BUSCARX */
+(function(){
+  const t = $("#l2t"); if(!t) return;
+  xlTable(t, FH, F, {fmts: FF});
+  const colOpts = FH.map((h, i) => [i, `${LET[i]} · ${h}`]);
+  fillSelect($("#l2s"), colOpts, 0); fillSelect($("#l2d"), colOpts, 1);
+  function loadVals(){
+    const c = +$("#l2s").value; const seen = [];
+    F.forEach(r => { if(!seen.includes(r[c])) seen.push(r[c]); });
+    const o = seen.map(v => [v, c === 5 ? fmt$(v) : v]); o.push(["__no", "(valor que no existe)"]);
+    fillSelect($("#l2v"), o);
+    if(c === 3) $("#l2v").value = "D03";
+  }
+  function run(){
+    clearHl(t);
+    const s = +$("#l2s").value, d = +$("#l2d").value, mode = +$("#l2m").value, nf = $("#l2n").value;
+    let raw = $("#l2v").value; const v = raw === "__no" ? "XYZ" : (typeof F[0][s] === "number" ? Number(raw) : raw);
+    const L = LET[s], D = LET[d];
+    const vs = typeof v === "string" ? `"${v}"` : v;
+    $("#l2f").innerHTML = `<span class="fn">=BUSCARX</span>(${vs}; $${L}$4:$${L}$13; $${D}$4:$${D}$13${nf ? `; "${esc(nf)}"` : ""}${mode === -1 ? (nf ? "" : ";") + "; 0; -1" : ""})`;
+    $$("tr", t).forEach(tr => { const a = $(`td[data-j="${s}"]`, tr); if(a) a.classList.add("colsel"); });
+    let idx = -1;
+    if(mode === 1) idx = F.findIndex(r => r[s] === v); else for(let i = F.length-1; i >= 0; i--) if(F[i][s] === v){ idx = i; break; }
+    const R = $("#l2r"), E = $("#l2e"); R.classList.remove("err");
+    if(idx < 0){ if(nf){ R.textContent = nf; E.textContent = "No hubo coincidencia: se muestra el valor del argumento si_no_se_encuentra."; } else { R.textContent = "#N/D"; R.classList.add("err"); E.textContent = "Sin coincidencia y sin valor por defecto."; } return; }
+    $(`tr[data-i="${idx}"]`, t).classList.add("hit"); cell(t, idx, d).classList.add("hitc");
+    R.textContent = FF[d] === "$" ? fmt$(F[idx][d]) : F[idx][d];
+    const dir = d < s ? "hacia la IZQUIERDA (imposible con BUSCARV)" : d > s ? "hacia la derecha" : "en la misma columna";
+    const cnt = F.filter(r => r[s] === v).length;
+    E.textContent = `Fila ${idx+4}: devolvió el dato ${dir}.` + (cnt > 1 ? ` Hay ${cnt} coincidencias; con modo ${mode} se toma la ${mode === 1 ? "primera" : "última"}.` : "");
+  }
+  $("#l2s").addEventListener("input", () => { loadVals(); run(); });
+  ["#l2v", "#l2d", "#l2n", "#l2m"].forEach(s => $(s).addEventListener("input", run));
+  loadVals(); run();
+})();
+
+/* ------------------------------------------------ LAB 3 · INDICE + COINCIDIR */
+(function(){
+  const t = $("#l3t"); if(!t) return;
+  const M = DATA.matriz, deps = DATA.depEj, rubs = DATA.rubEj;
+  xlTable(t, ["Dependencia \\ Rubro"].concat(rubs), deps.map((d, i) => [d].concat(M[i])), {col0: 7});
+  fillSelect($("#l3r"), deps.map(d => [d, d]), "Gestión de Bienes");
+  fillSelect($("#l3c"), rubs.map(d => [d, d]), "Mantenimiento");
+  function run(){
+    clearHl(t);
+    const r = deps.indexOf($("#l3r").value), c = rubs.indexOf($("#l3c").value);
+    $("#l3f").innerHTML = `<span class="fn">=INDICE</span>($I$4:$L$8; <span class="fn">COINCIDIR</span>("${esc(deps[r])}"; $H$4:$H$8; 0); <span class="fn">COINCIDIR</span>("${esc(rubs[c])}"; $I$3:$L$3; 0))`;
+    $("#l3a").textContent = r+1; $("#l3b").textContent = c+1; $("#l3x").textContent = M[r][c] + " millones";
+    $(`tr[data-i="${r}"]`, t).classList.add("hit");
+    $$("tbody tr", t).forEach(tr => { const td = $(`td[data-j="${c+1}"]`, tr); if(td) td.classList.add("colsel"); });
+    cell(t, r, c+1).classList.add("hitc");
+  }
+  ["#l3r", "#l3c"].forEach(s => $(s).addEventListener("input", run)); run();
+})();
+
+/* ------------------------------------------------ LAB 4 · RESUMEN CONDICIONAL */
+const MOV = DATA.mov; // [fecha, cod, dep, rubro, valor]
+const MH = ["Fecha", "Cod_Dep", "Dependencia", "Rubro", "Valor"], MF = ["", "", "", "", "$"];
+(function(){
+  const t = $("#l4t"); if(!t) return;
+  xlTable(t, MH, MOV, {fmts: MF});
+  fillSelect($("#l4d"), [["*", "(todas)"]].concat(DATA.depEj.map(d => [d, d])), "Talento Humano");
+  fillSelect($("#l4r"), [["*", "(todos)"]].concat(DATA.rubEj.map(d => [d, d])));
+  function run(){
+    clearHl(t);
+    const fn = $("#l4f").value, d = $("#l4d").value, r = $("#l4r").value, v = +$("#l4v").value;
+    const crit = [];
+    if(d !== "*") crit.push(`$C$4:$C$23; "${esc(d)}"`);
+    if(r !== "*") crit.push(`$D$4:$D$23; "${esc(r)}"`);
+    if(v > 0) crit.push(`$E$4:$E$23; "&gt;${v}"`);
+    const name = {S: "SUMAR.SI.CONJUNTO", C: "CONTAR.SI.CONJUNTO", P: "PROMEDIO.SI.CONJUNTO"}[fn];
+    const R = $("#l4o"), E = $("#l4e"); R.classList.remove("err");
+    if(!crit.length){ $("#l4x").innerHTML = `<span class="fn">=${name}</span>(…)`; R.textContent = "Elija al menos un criterio"; R.classList.add("err"); E.textContent = ""; return; }
+    $("#l4x").innerHTML = `<span class="fn">=${name}</span>(${fn === "C" ? "" : "$E$4:$E$23; "}${crit.join("; ")})`;
+    const hits = [];
+    MOV.forEach((m, i) => { const ok = (d === "*" || m[2] === d) && (r === "*" || m[3] === r) && (v === 0 || m[4] > v); $(`tr[data-i="${i}"]`, t).classList.add(ok ? "hit" : "dim"); if(ok){ hits.push(m[4]); cell(t, i, 4).classList.add("hitc"); } });
+    const sum = hits.reduce((a, b) => a + b, 0);
+    if(fn === "S"){ R.textContent = fmt$(sum); }
+    else if(fn === "C"){ R.textContent = hits.length; }
+    else { if(!hits.length){ R.textContent = "#¡DIV/0!"; R.classList.add("err"); } else R.textContent = fmt$(sum / hits.length); }
+    E.textContent = `${hits.length} de ${MOV.length} registros cumplen todos los criterios a la vez (filas resaltadas).`;
+  }
+  ["#l4f", "#l4d", "#l4r", "#l4v"].forEach(s => $(s).addEventListener("input", run)); run();
+})();
+
+/* ------------------------------------------------ LAB 5 · MATRICES DINÁMICAS */
+(function(){
+  const src = $("#l5src"); if(!src) return;
+  xlTable(src, MH, MOV, {fmts: MF});
+  let mode = "u";
+  const ctl = $("#l5ctl");
+  function controls(){
+    if(mode === "u") ctl.innerHTML = `<label>Columna<select id="u1"><option value="2">C · Dependencia</option><option value="3">D · Rubro</option><option value="1">B · Cod_Dep</option></select></label>`;
+    if(mode === "f") ctl.innerHTML = `<label>Condición sobre<select id="f1"><option value="v">E · Valor &gt; monto</option><option value="d">C · Dependencia =</option><option value="r">D · Rubro =</option></select></label><label>Monto / texto<select id="f2"></select></label>`;
+    if(mode === "o") ctl.innerHTML = `<label>índice_de_orden<select id="o1"><option value="5">5 · Valor</option><option value="1">1 · Fecha</option><option value="3">3 · Dependencia</option></select></label><label>orden<select id="o2"><option value="-1">-1 · descendente</option><option value="1">1 · ascendente</option></select></label>`;
+    if(mode === "c") ctl.innerHTML = `<label>Resumen automático por<select id="c1"><option value="2">Dependencia</option><option value="3">Rubro</option></select></label>`;
+    $$("select", ctl).forEach(s => s.addEventListener("input", () => { if(s.id === "f1") f2opts(); run(); }));
+    if(mode === "f") f2opts();
+  }
+  function f2opts(){
+    const k = $("#f1").value, s = $("#f2");
+    if(k === "v") fillSelect(s, [[5000000, "$5.000.000"], [10000000, "$10.000.000"], [15000000, "$15.000.000"], [50000000, "$50.000.000 (sin resultados)"]], 10000000);
+    else fillSelect(s, (k === "d" ? DATA.depEj : DATA.rubEj).map(x => [x, x]));
+  }
+  function out(heads, rows, fmts, srcRows, srcCol){
+    const o = $("#l5out");
+    xlTable(o, heads, rows, {fmts, col0: 7});
+    $$("tbody td:not(.rh)", o).forEach(td => td.classList.add("spill"));
+    o.parentElement.classList.add("spilled");
+    clearHl(src);
+    if(srcRows) MOV.forEach((m, i) => $(`tr[data-i="${i}"]`, src).classList.add(srcRows.includes(i) ? "hit" : "dim"));
+    if(srcCol !== undefined) $$("tbody tr", src).forEach(tr => { const td = $(`td[data-j="${srcCol}"]`, tr); if(td) td.classList.add("colsel"); });
+  }
+  function run(){
+    const X = $("#l5x");
+    if(mode === "u"){
+      const c = +$("#u1").value, L = LET[c]; const u = []; MOV.forEach(m => { if(!u.includes(m[c])) u.push(m[c]); });
+      X.innerHTML = `<span class="fn">=UNICOS</span>(${L}4:${L}23)`;
+      out([MH[c]], u.map(x => [x]), [], null, c);
+    }
+    if(mode === "f"){
+      const k = $("#f1").value, val = $("#f2").value; let idx = [], cond;
+      if(k === "v"){ idx = MOV.map((m, i) => m[4] > +val ? i : -1).filter(i => i >= 0); cond = `E4:E23&gt;${val}`; }
+      else { const c = k === "d" ? 2 : 3; idx = MOV.map((m, i) => m[c] === val ? i : -1).filter(i => i >= 0); cond = `${LET[c]}4:${LET[c]}23="${esc(val)}"`; }
+      X.innerHTML = `<span class="fn">=FILTRAR</span>(A4:E23; ${cond}; "Sin resultados")`;
+      if(idx.length) out(MH, idx.map(i => MOV[i]), MF, idx); else out(["Resultado"], [["Sin resultados"]], [], []);
+    }
+    if(mode === "o"){
+      const k = +$("#o1").value, ord = +$("#o2").value;
+      const rows = MOV.slice().sort((a, b) => { const x = a[k-1], y = b[k-1]; return (x > y ? 1 : x < y ? -1 : 0) * ord; });
+      X.innerHTML = `<span class="fn">=ORDENAR</span>(A4:E23; ${k}; ${ord})`;
+      out(MH, rows, MF, null, k-1);
+    }
+    if(mode === "c"){
+      const c = +$("#c1").value, L = LET[c]; const u = []; MOV.forEach(m => { if(!u.includes(m[c])) u.push(m[c]); }); u.sort((a, b) => a.localeCompare(b, "es"));
+      const rows = u.map(x => { const f = MOV.filter(m => m[c] === x); return [x, f.length, f.reduce((a, m) => a + m[4], 0)]; });
+      X.innerHTML = `H4: <span class="fn">=ORDENAR</span>(<span class="fn">UNICOS</span>(${L}4:${L}23))\nI4: <span class="fn">=CONTAR.SI.CONJUNTO</span>(${L}4:${L}23; H4#)\nJ4: <span class="fn">=SUMAR.SI.CONJUNTO</span>(E4:E23; ${L}4:${L}23; H4#)`;
+      out([MH[c], "N° registros", "Total"], rows, ["", "n", "$"], null, c);
+    }
+  }
+  $$("#l5tabs .tab").forEach(b => b.onclick = () => { $$("#l5tabs .tab").forEach(x => x.classList.toggle("on", x === b)); mode = b.dataset.k; controls(); run(); });
+  controls(); run();
+})();
+
+/* ------------------------------------------------ vista previa de bases del taller */
+(function(){
+  const t = $("#basePrev"); if(!t) return;
+  const B = DATA.bases;
+  function show(k){ const b = B[k]; xlTable(t, b.h, b.r, {fmts: b.f, row0: 1}); }
+  $$("#baseTabs .tab").forEach(b => b.onclick = () => { $$("#baseTabs .tab").forEach(x => x.classList.toggle("on", x === b)); show(b.dataset.k); });
+  show("dep");
+})();
+
+/* ------------------------------------------------ checklist del taller */
+(function(){
+  const boxes = $$("#tallerCheck input[data-step]"); if(!boxes.length) return;
+  const upd = () => { const n = boxes.filter(b => b.checked).length; $("#tallerPct").textContent = Math.round(n / boxes.length * 100) + " %"; if(n === boxes.length) toast("¡Taller completo! Prepárese para la retroalimentación"); };
+  boxes.forEach(b => b.addEventListener("change", upd));
+})();
+
+/* ------------------------------------------------ solucionario (docente) */
+(function(){
+  if(!DATA.sol) return;
+  const S = DATA.sol;
+  const tot = S.rows.reduce((a, r) => { a.ap += r[5]; a.co += r[6]; a.fu += r[3]; return a; }, {ap: 0, co: 0, fu: 0});
+  $("#kAp").textContent = fmt$(tot.ap); $("#kCo").textContent = fmt$(tot.co);
+  $("#kPc").textContent = (tot.co / tot.ap * 100).toFixed(1).replace(".", ",") + " %"; $("#kFu").textContent = tot.fu;
+  const H = ["Cod_Dep", "Dependencia", "Tipo", "N° func.", "Nómina mensual", "Apropiado", "Comprometido", "Obligado", "% Ejec.", "Saldo", "N° comp.", "Promedio", "Semáforo"];
+  const fm = ["", "", "", "n", "$", "$", "$", "$", "%", "$", "n", "$", ""];
+  xlTable($("#solTable"), H, S.rows, {fmts: fm, row0: 5});
+  $$("#solTable tbody tr").forEach(tr => { const td = $('td[data-j="12"]', tr); td.innerHTML = `<span class="sem ${td.textContent}">${td.textContent}</span>`; });
+  const ch = $("#solChart");
+  const col = p => p >= .8 ? "#39A900" : p >= .6 ? "#f2b705" : "#d64545";
+  ch.innerHTML = S.rows.slice().sort((a, b) => b[8] - a[8]).map(r => `<div class="row"><span>${esc(r[1])}</span><div class="track"><div class="fill" style="width:${(r[8]*100).toFixed(1)}%;background:${col(r[8])}"></div><div class="mark" style="left:60%"></div></div><b>${(r[8]*100).toFixed(1).replace(".", ",")}%</b></div>`).join("");
+  xlTable($("#solRub"), ["Rubro", "Apropiado", "Comprometido", "% Ejecución"], S.rub, {fmts: ["", "$", "$", "%"], row0: 20});
+})();
+
+/* ------------------------------------------------ asistente de decisión */
+(function(){
+  const w = $("#wizard"); if(!w) return;
+  const T = {
+    start: {q: "¿Qué necesita hacer con los datos?", o: [["Traer un dato de otra tabla", "q1"], ["Totalizar, contar o promediar con condiciones", "q4"], ["Obtener un listado que se actualice solo", "q5"]]},
+    q1: {q: "¿Su Excel es Microsoft 365, 2021 o posterior (y quienes reciben el archivo también)?", o: [["Sí", "q2"], ["No / no estoy seguro", "q3"]]},
+    q2: {q: "¿Qué tipo de búsqueda es?", o: [["Por un código o cédula (exacta)", "r_bx"], ["Según rangos (tabla de tarifas)", "r_bxa"], ["Por fila y columna (matriz)", "r_ic2"], ["El último registro de una lista", "r_bxl"]]},
+    q3: {q: "¿El dato que busca está en la primera columna y el resultado a su derecha?", o: [["Sí, y la tabla no cambiará", "r_bv"], ["No, o la estructura puede cambiar", "r_ic"]]},
+    q4: {q: "¿Qué resultado necesita?", o: [["Sumar valores", "r_sum"], ["Contar registros", "r_cnt"], ["Promediar valores", "r_avg"]]},
+    q5: {q: "¿Qué tipo de listado?", o: [["Valores sin repetir", "r_uni"], ["Registros que cumplen una condición", "r_fil"], ["Datos ordenados", "r_ord"]]},
+    r_bx: {a: "BUSCARX", f: "=BUSCARX(valor; columna_búsqueda; columna_resultado; \"No encontrado\")", w: "Busca en cualquier dirección, no depende del número de columna y maneja el ‘no encontrado’."},
+    r_bxa: {a: "BUSCARX con modo de coincidencia -1", f: "=BUSCARX(valor; columna_desde; columna_tarifa; ; -1)", w: "Devuelve el valor exacto o el siguiente menor, sin exigir orden."},
+    r_ic2: {a: "INDICE + doble COINCIDIR", f: "=INDICE(matriz; COINCIDIR(fila; encabezados_fila; 0); COINCIDIR(col; encabezados_col; 0))", w: "La forma más clara y compatible para búsquedas de doble entrada."},
+    r_bxl: {a: "BUSCARX con modo de búsqueda -1", f: "=BUSCARX(valor; columna_búsqueda; columna_resultado; ; 0; -1)", w: "Busca de abajo hacia arriba: trae el registro más reciente."},
+    r_bv: {a: "BUSCARV con FALSO (o INDICE + COINCIDIR)", f: "=BUSCARV(valor; $A$2:$F$100; n; FALSO)", w: "Funciona en todas las versiones. Escriba siempre FALSO y fije el rango con $."},
+    r_ic: {a: "INDICE + COINCIDIR", f: "=INDICE(columna_resultado; COINCIDIR(valor; columna_búsqueda; 0))", w: "Compatible con todas las versiones, busca a la izquierda y resiste cambios de columnas."},
+    r_sum: {a: "SUMAR.SI.CONJUNTO", f: "=SUMAR.SI.CONJUNTO(rango_suma; rango1; criterio1; rango2; criterio2)", w: "Suma con una o varias condiciones simultáneas."},
+    r_cnt: {a: "CONTAR.SI.CONJUNTO", f: "=CONTAR.SI.CONJUNTO(rango1; criterio1; rango2; criterio2)", w: "Cuenta registros que cumplen todas las condiciones."},
+    r_avg: {a: "PROMEDIO.SI.CONJUNTO (con SI.ERROR)", f: "=SI.ERROR(PROMEDIO.SI.CONJUNTO(rango_prom; rango1; criterio1); 0)", w: "Promedia solo los registros que cumplen; SI.ERROR evita #¡DIV/0!."},
+    r_uni: {a: "UNICOS (y ORDENAR)", f: "=ORDENAR(UNICOS(rango))", w: "Lista sin duplicados que crece cuando aparecen nuevos valores. En versiones anteriores: Datos › Quitar duplicados."},
+    r_fil: {a: "FILTRAR", f: "=FILTRAR(tabla; condición; \"Sin resultados\")", w: "Extrae las filas que cumplen; combine condiciones con * (Y) y + (O)."},
+    r_ord: {a: "ORDENAR / ORDENARPOR", f: "=ORDENAR(tabla; columna; -1)", w: "Ordena sin alterar la base original."}
+  };
+  function render(k, path){
+    const n = T[k];
+    let h = path.length ? `<p class="explain">${path.map(esc).join(" › ")}</p>` : "";
+    if(n.q){ h += `<div class="wiz-q">${n.q}</div><div class="wiz-opts">` + n.o.map(([t, to], i) => `<button class="btn sec" data-to="${to}" data-t="${esc(t)}">${esc(t)}</button>`).join("") + "</div>"; }
+    else { h += `<div class="wiz-ans"><div class="kicker">Función recomendada</div><h3 style="margin:4px 0 8px">${n.a}</h3><div class="formula"><code>${esc(n.f)}</code><button class="copy">Copiar</button></div><p style="margin:6px 0 0">${n.w}</p></div>`; }
+    if(k !== "start") h += `<p><button class="btn sm" data-to="start" data-reset="1">↺ Empezar de nuevo</button></p>`;
+    w.innerHTML = h;
+    $$("button[data-to]", w).forEach(b => b.onclick = () => render(b.dataset.to, b.dataset.reset ? [] : path.concat(b.dataset.t)));
+  }
+  render("start", []);
+})();
+
+/* ------------------------------------------------ rúbrica (docente) */
+(function(){
+  const box = $("#rubCalc"); if(!box) return;
+  const crit = ["Cruce de bases", "Resumen condicional", "Matrices dinámicas", "Presentación", "Conclusiones"];
+  box.innerHTML = crit.map((c, i) => `<label>${c}<select data-r="${i}"><option value="0">—</option><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label>`).join("");
+  const upd = () => { const t = $$("select", box).reduce((a, s) => a + (+s.value), 0); $("#rubTot").textContent = t + " / 25"; $("#rubTxt").textContent = t >= 21 ? "Desempeño excelente" : t >= 16 ? "Buen desempeño" : t >= 12 ? "Desempeño aceptable: refuerce los criterios bajos" : t > 0 ? "Requiere plan de mejoramiento" : ""; };
+  $$("select", box).forEach(s => s.addEventListener("input", upd));
+})();
+
+/* ------------------------------------------------ quiz */
+(function(){
+  const box = $("#quizBox"); if(!box) return;
+  const Q = [
+    ["¿Cuál es la principal limitación de BUSCARV?", ["No funciona con números", "Solo busca en la primera columna del rango y devuelve datos a la derecha", "No permite referencias absolutas", "Solo funciona en Excel 365"], 1, "BUSCARV busca siempre en la primera columna; no puede devolver datos que estén a la izquierda."],
+    ["En =BUSCARV(C2;$A$2:$F$50;4;FALSO), ¿qué indica el 4?", ["La fila del resultado", "El número de coincidencias", "La columna del rango que se devuelve", "El tipo de coincidencia"], 2, "El tercer argumento es el indicador de columnas, contado desde la izquierda del rango."],
+    ["¿Qué argumento de BUSCARX reemplaza el uso de SI.ERROR?", ["matriz_devuelta", "si_no_se_encuentra", "modo_de_búsqueda", "modo_de_coincidencia"], 1, "El 4.º argumento define qué mostrar cuando no hay coincidencia."],
+    ["Necesita el ÚLTIMO pago registrado de un contratista. ¿Qué usa?", ["BUSCARV con VERDADERO", "BUSCARX con modo_de_búsqueda -1", "CONTAR.SI.CONJUNTO", "UNICOS"], 1, "El modo de búsqueda -1 recorre la lista de abajo hacia arriba."],
+    ["¿Qué devuelve COINCIDIR(\"D05\";A2:A13;0)?", ["El nombre de la dependencia D05", "La posición de D05 dentro del rango", "VERDADERO o FALSO", "El número de veces que aparece D05"], 1, "COINCIDIR devuelve una posición (número); INDICE la usa para traer el dato."],
+    ["Un compañero tiene Excel 2016. ¿Qué combinación le sirve para buscar hacia la izquierda?", ["BUSCARX", "FILTRAR", "INDICE + COINCIDIR", "UNICOS + ORDENAR"], 2, "INDICE + COINCIDIR funciona en todas las versiones y busca en cualquier dirección."],
+    ["¿Cuál fórmula suma el valor de Talento Humano en el rubro Viáticos?", ["=SUMAR.SI.CONJUNTO(E:E;C:C;\"Talento Humano\";D:D;\"Viáticos\")", "=SUMAR.SI.CONJUNTO(C:C;E:E;\"Talento Humano\")", "=CONTAR.SI.CONJUNTO(E:E;\"Viáticos\")", "=SUMA(SI(C:C=\"Talento Humano\"))"], 0, "Primero va el rango a sumar y luego los pares rango-criterio."],
+    ["¿Cómo se escribe el criterio “fecha menor o igual a la celda C3”?", ["\"<=C3\"", "<=C3", "\"<=\"&C3", "\"C3<=\""], 2, "El operador va entre comillas y se concatena con & a la celda."],
+    ["Aparece #¡DESBORDAMIENTO! después de escribir =UNICOS(C2:C100). ¿Qué hace?", ["Cambia a BUSCARV", "Libera las celdas ocupadas donde debe aparecer el resultado", "Presiona Ctrl+Mayús+Enter", "Elimina los duplicados manualmente"], 1, "El resultado necesita celdas vacías para desbordarse."],
+    ["¿Qué significa X4# en una fórmula?", ["La celda X4 como texto", "Todo el rango desbordado desde X4", "Un error de referencia", "La fila 4 completa"], 1, "El operador # hace referencia a todo el resultado dinámico que empieza en X4."]
+  ];
+  let ans = {};
+  function render(){
+    ans = {};
+    box.innerHTML = Q.map((q, i) => `<div class="card q" data-q="${i}"><b>${i+1}. ${esc(q[0])}</b><div class="opts">` + q[1].map((o, j) => `<button class="opt" data-j="${j}">${String.fromCharCode(97+j)}) ${esc(o)}</button>`).join("") + `</div><div class="fb"></div></div>`).join("");
+    $$(".q", box).forEach(c => $$(".opt", c).forEach(b => b.onclick = () => {
+      const i = +c.dataset.q; if(i in ans) return; const j = +b.dataset.j; ans[i] = j === Q[i][2];
+      $$(".opt", c).forEach((x, k) => { if(k === Q[i][2]) x.classList.add("right"); else if(k === j) x.classList.add("wrong"); });
+      const fb = $(".fb", c); fb.style.display = "block"; fb.innerHTML = (ans[i] ? '<span class="yes">✔ Correcto.</span> ' : '<span class="no">✘ Incorrecto.</span> ') + esc(Q[i][3]);
+      score();
+    }));
+    score();
+  }
+  function score(){
+    const n = Object.keys(ans).length, ok = Object.values(ans).filter(Boolean).length;
+    $("#quizScore").textContent = ok + " / " + Q.length;
+    $("#quizMsg").textContent = n < Q.length ? `Respondidas ${n} de ${Q.length}.` : ok >= 8 ? "¡Excelente! Domina las funciones de búsqueda y resumen." : ok >= 6 ? "Buen resultado. Repase los subtemas donde falló." : "Le recomendamos repasar los laboratorios y volver a intentarlo.";
+  }
+  $("#quizReset").onclick = render; render();
+})();
+
+/* ------------------------------------------------ videos */
+(function(){
+  const g = $("#vidGrid"); if(!g) return;
+  const V = DATA.videos, topics = ["Todos"].concat([...new Set(V.map(v => v.t))]);
+  let cur = "Todos";
+  $("#vidFilters").innerHTML = topics.map(t => `<button class="chip${t === cur ? " on" : ""}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
+  function draw(){
+    g.innerHTML = V.filter(v => cur === "Todos" || v.t === cur).map(v => `<a class="card vid" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener"><div class="th"><img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="Miniatura: ${esc(v.title)}"><div class="play"><span>▶</span></div></div><div class="meta"><span class="pill">${esc(v.t)}</span><b>${esc(v.title)}</b><small>Canal: ${esc(v.ch)} · YouTube</small></div></a>`).join("");
+  }
+  $$("#vidFilters .chip").forEach(c => c.onclick = () => { cur = c.dataset.t; $$("#vidFilters .chip").forEach(x => x.classList.toggle("on", x === c)); draw(); });
+  draw();
+  $("#msDocs").innerHTML = "<tr><th>Recurso</th><th>Enlace</th></tr>" + DATA.docs.map(d => `<tr><td>${esc(d[0])}</td><td><a href="${d[1]}" target="_blank" rel="noopener">Abrir en support.microsoft.com ↗</a></td></tr>`).join("");
+})();
+
+/* ------------------------------------------------ glosario */
+(function(){
+  const L = $("#glList"); if(!L) return;
+  const G = DATA.glosario.slice().sort((a, b) => a[0].localeCompare(b[0], "es"));
+  function draw(q){
+    q = (q || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    const n = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    const r = G.filter(g => !q || n(g[0]).includes(q) || n(g[1]).includes(q));
+    L.innerHTML = r.length ? r.map(g => `<div class="gl-item"><b>${esc(g[0])}</b><br>${esc(g[1])}</div>`).join("") : "<p>No se encontraron términos.</p>";
+  }
+  $("#glSearch").addEventListener("input", e => draw(e.target.value)); draw();
+})();
+
+/* ------------------------------------------------ inicio */
+go((location.hash || "").slice(1) || "inicio");
+})();
+
+</script>
+</body>
+</html>
+
