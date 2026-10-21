@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="es">
+<title>OVA Power Query Participante</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: panel lateral institucional (azul SENA) + área de contenido tipo dashboard con tema claro/oscuro */
+:root{
+  --verde:#39A900; --verde2:#007832; --azul:#00304D;
+  --bg:#F3F7F1; --surface:#FFFFFF; --surface2:#EAF2E5; --fg:#16241B; --muted:#56675C; --line:#D6E2D0;
+  --accent-txt:#007832; --chip:#E3F3D8; --chip-fg:#245F00; --warn:#B25E00; --warn-bg:#FFF1DE; --bad:#B42318; --bad-bg:#FDECEA; --info-bg:#E6F0F6;
+  --code-bg:#0F2633; --code-fg:#E3EEF2; --shadow:0 1px 2px rgba(0,48,77,.06),0 6px 18px rgba(0,48,77,.06);
+  --f-disp:"Work Sans",Calibri,"Segoe UI",Arial,sans-serif; --f-body:"Work Sans",Calibri,"Segoe UI",Arial,sans-serif; --f-mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1A24; --surface:#10283A; --surface2:#163448; --fg:#E4EDF0; --muted:#9CB2BC; --line:#23445A;
+  --accent-txt:#7BD94A; --chip:#1F3F1B; --chip-fg:#A6EB7E; --warn:#FFB35C; --warn-bg:#3A2A12; --bad:#FF8A80; --bad-bg:#3B1C1C; --info-bg:#173A50;
+  --code-bg:#06131B; --code-fg:#E3EEF2; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1A24; --surface:#10283A; --surface2:#163448; --fg:#E4EDF0; --muted:#9CB2BC; --line:#23445A;
+  --accent-txt:#7BD94A; --chip:#1F3F1B; --chip-fg:#A6EB7E; --warn:#FFB35C; --warn-bg:#3A2A12; --bad:#FF8A80; --bad-bg:#3B1C1C; --info-bg:#173A50;
+  --code-bg:#06131B; --code-fg:#E3EEF2; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.app{display:grid;grid-template-columns:272px minmax(0,1fr);min-height:100%}
+.side{background:var(--azul);color:#DCE8EE;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:20px 14px 18px max(14px,env(safe-area-inset-left,0px))}
+.brand{display:flex;gap:12px;align-items:center;padding:4px 8px 18px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand img{width:46px;height:auto}
+.brand b{display:block;font-size:15px;line-height:1.25;color:#fff;font-weight:700}
+.brand small{display:block;font-size:12px;color:#9FC1D3;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+.role{margin:14px 8px 6px;display:inline-flex;align-self:flex-start;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;background:var(--verde);color:#fff;padding:3px 10px;border-radius:99px}
+.nav{list-style:none;margin:10px 0;padding:0;display:flex;flex-direction:column;gap:2px}
+.nav a{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;color:#D2E2EA;text-decoration:none;padding:9px 10px;border-radius:8px;font-size:14.5px;line-height:1.3}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav a.on{background:rgba(57,169,0,.22);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--verde)}
+.nav .num{font-size:11px;color:#8FB3C6;font-variant-numeric:tabular-nums}
+.nav .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid #6E95AA}
+.nav a.seen .dot{background:var(--verde);border-color:var(--verde)}
+.side-foot{margin-top:auto;font-size:12px;color:#8FB3C6;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,.12)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding-block:12px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top h1{font-size:15px;margin:0;font-weight:600;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top h1 b{color:var(--fg)}
+.prog{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{width:120px;height:8px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--verde);width:0;transition:width .4s}
+.btn{font:inherit;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--verde)}
+.btn.pri{background:var(--verde2);border-color:var(--verde2);color:#fff}
+.btn.pri:hover{background:#005F27}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.nav a:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--verde);outline-offset:2px}
+.menu-btn{display:none}
+.content{padding-block:28px 64px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));max-width:1180px}
+.view{display:flex;flex-direction:column;gap:22px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-txt)}
+h2{font-family:var(--f-disp);font-size:clamp(28px,4vw,40px);line-height:1.1;font-weight:800;margin:4px 0 0;text-wrap:balance;letter-spacing:-.01em}
+h3{font-size:21px;line-height:1.25;margin:0 0 8px;font-weight:700;text-wrap:balance}
+h4{font-size:16px;margin:0 0 6px;font-weight:700}
+p{margin:0 0 10px;max-width:72ch}
+.lead{font-size:18px;color:var(--muted);max-width:68ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);min-width:0}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.tile .k{font-size:30px;font-weight:800;color:var(--accent-txt);line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .l{font-size:13px;color:var(--muted)}
+.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:center;background:linear-gradient(120deg,var(--verde2),#0A5B2C 55%,var(--azul));color:#fff;border-radius:18px;padding:30px;overflow:hidden}
+.hero h2{color:#fff}
+.hero p{color:#E5F3EA}
+.hero .eyebrow{color:#C8F5A8}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hero .meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:4px 12px;border-radius:99px;font-size:13px}
+.chip{display:inline-block;font-size:12px;font-weight:600;background:var(--chip);color:var(--chip-fg);padding:2px 10px;border-radius:99px}
+.note{border-radius:10px;padding:14px 16px;background:var(--info-bg);font-size:15px}
+.note.warn{background:var(--warn-bg)} .note.warn b:first-child{color:var(--warn)}
+.note.bad{background:var(--bad-bg)}
+ul.clean{margin:0;padding-left:20px} ul.clean li{margin:4px 0}
+ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+ol.steps>li::before{content:counter(s);width:32px;height:32px;border-radius:50%;background:var(--verde2);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+ol.steps>li>div{min-width:0}
+.kbd,kbd{font-family:var(--f-mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;white-space:nowrap}
+.path{font-weight:600;color:var(--accent-txt)}
+.code{border-radius:10px;overflow:hidden;background:var(--code-bg);color:var(--code-fg);min-width:0}
+.code-h{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#9CC3D5;background:rgba(255,255,255,.05)}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:var(--f-mono);font-size:13px;line-height:1.55}
+.copy{font:inherit;font-size:12px;background:transparent;color:#C8F5A8;border:1px solid rgba(200,245,168,.4);border-radius:6px;padding:2px 10px;cursor:pointer;text-transform:none;letter-spacing:0}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table.t{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+table.t th{background:var(--surface2);text-align:left;font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t tr:last-child td{border-bottom:0}
+table.t td.dirty{background:var(--warn-bg);color:var(--warn);font-weight:600}
+table.t td.nul{color:var(--muted);font-style:italic}
+table.t td.new,table.t th.new{background:var(--chip);color:var(--chip-fg)}
+.ty{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-right:6px;border:1px solid var(--line);border-radius:4px;padding:0 3px}
+/* Infografía ETL */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+.flow .st{border-radius:14px;padding:18px;background:var(--surface);border:1px solid var(--line);position:relative;min-width:0}
+.flow .st .n{font-size:44px;font-weight:900;line-height:1;color:var(--verde);opacity:.9}
+.flow .st h4{margin-top:6px}
+.flow .ar{display:grid;place-items:center;color:var(--verde)}
+.flow .st.mid{background:var(--verde2);color:#fff;border-color:var(--verde2)}
+.flow .st.mid .n{color:#C8F5A8}
+.flow .st.mid p{color:#E5F3EA}
+/* simulador */
+.sim{display:grid;grid-template-columns:260px minmax(0,1fr);gap:16px}
+.stepsList{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.stepsList button{width:100%;text-align:left;font:inherit;font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;display:flex;gap:8px;align-items:center}
+.stepsList button.done{color:var(--fg)}
+.stepsList button.cur{background:var(--chip);color:var(--chip-fg);font-weight:700;border-color:var(--verde)}
+.stepsList button .gear{width:16px;color:var(--verde)}
+.sim .ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.explain{margin-top:12px}
+/* joins */
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.seg button.on{background:var(--verde2);color:#fff;border-color:var(--verde2)}
+.venn{display:block;margin:0 auto;max-width:220px}
+/* quiz */
+.q{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface)}
+.q .opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.q label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;border:1px solid var(--line);cursor:pointer}
+.q label:hover{border-color:var(--verde)}
+.q label.ok{background:var(--chip);border-color:var(--verde)}
+.q label.ko{background:var(--bad-bg);border-color:var(--bad)}
+.q .fb{margin-top:8px;font-size:14px}
+/* checklist */
+.chk{display:flex;flex-direction:column;gap:8px}
+.chk label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--verde2);margin-top:3px}
+.chk label:has(input:checked){background:var(--chip)}
+.chk label>div{min-width:0}
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.vid{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;color:inherit;text-decoration:none}
+.vid:hover{border-color:var(--verde)}
+.thumb{position:relative;aspect-ratio:16/9;max-width:100%;background:linear-gradient(135deg,var(--verde2),var(--azul));display:grid;place-items:center;overflow:hidden}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb .ph{position:absolute;left:12px;bottom:10px;color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.thumb .play{position:absolute;width:52px;height:36px;border-radius:9px;background:rgba(0,0,0,.65);display:grid;place-items:center}
+.thumb .play::after{content:"";border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:3px}
+.vid .vb{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.vid .vb b{font-size:14.5px;line-height:1.3}
+.vid .vb span{font-size:12.5px;color:var(--muted)}
+/* glosario */
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.gl div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.gl b{color:var(--accent-txt)}
+input[type=search],input[type=number],select{font:inherit;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);width:100%}
+.ref{padding-left:2.2em;text-indent:-2.2em;margin:0 0 10px;max-width:none}
+.ref a{color:var(--accent-txt);word-break:break-word}
+a{color:var(--accent-txt)}
+/* calculadora */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.calc label{display:block;font-size:14px;font-weight:600;margin-bottom:12px}
+.calc input[type=range]{width:100%;accent-color:var(--verde2)}
+.calc output{font-variant-numeric:tabular-nums;color:var(--accent-txt)}
+.verdict{border-radius:12px;padding:18px;border:2px solid var(--line)}
+.verdict.yes{border-color:var(--verde);background:var(--chip)}
+.verdict.mid{border-color:var(--warn);background:var(--warn-bg)}
+.verdict.no{border-color:var(--bad);background:var(--bad-bg)}
+.big{font-size:34px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.timeline{display:flex;flex-direction:column;gap:0;border-left:3px solid var(--verde);margin-left:8px}
+.timeline>div{position:relative;padding:0 0 16px 20px}
+.timeline>div::before{content:"";position:absolute;left:-9px;top:4px;width:15px;height:15px;border-radius:50%;background:var(--surface);border:3px solid var(--verde)}
+.timeline .tm{font-size:12px;font-weight:700;color:var(--accent-txt);font-variant-numeric:tabular-nums}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:8px;flex-wrap:wrap}
+.scrim{display:none}
+@media (max-width:980px){
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:minmax(0,1fr)}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .sim{grid-template-columns:minmax(0,1fr)}
+  .calc{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:0;bottom:0;width:280px;z-index:30;transform:translateX(-105%);transition:transform .25s;height:auto;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none}
+  .scrim.open{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:25}
+  .menu-btn{display:inline-flex}
+  .bar{width:70px}
+  .g2{grid-template-columns:minmax(0,1fr)}
+  .flow{grid-template-columns:minmax(0,1fr)}
+  .flow .ar{transform:rotate(90deg)}
+  .top{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .content{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top .lbl{display:none}
+}
+@media (max-width:480px){.g4{grid-template-columns:minmax(0,1fr)} .hero{padding:22px} .prog span{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<body data-key="ova-pq-part">
+<div class="app">
+<aside class="side" aria-label="Navegación del OVA">
+  <div class="brand"><img src="data:image/png;base64,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" alt="Logo SENA"><div><b>Power Query y automatización en Excel</b><small>Excel intermedio · Tema 10</small></div></div>
+  <span class="role">Participante</span>
+  <ul class="nav"><li><a href="#inicio" data-t="Inicio"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></span><span>Inicio</span><span class="dot"></span></a></li><li><a href="#pq" data-t="Qué es Power Query"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg></span><span>Qué es Power Query <span class=num>10.1</span></span><span class="dot"></span></a></li><li><a href="#fuentes" data-t="Fuentes de datos"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span><span>Fuentes de datos <span class=num>10.2</span></span><span class="dot"></span></a></li><li><a href="#transformaciones" data-t="Transformaciones"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20L15 9M14 4v3M19 9h-3M17.5 5.5l-2 2M10 4l.5 1.5M20 14l-1.5-.5"/></svg></span><span>Transformaciones <span class=num>10.3</span></span><span class="dot"></span></a></li><li><a href="#anexar" data-t="Anexar y combinar"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v6a6 6 0 0 0 6 6h0a6 6 0 0 1 6 6M18 3v6M6 21v-4"/></svg></span><span>Anexar y combinar <span class=num>10.4</span></span><span class="dot"></span></a></li><li><a href="#macros" data-t="Macros grabadas"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></span><span>Macros grabadas <span class=num>10.5</span></span><span class="dot"></span></a></li><li><a href="#taller" data-t="Taller de aplicación"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><span>Taller de aplicación</span><span class="dot"></span></a></li><li><a href="#evaluacion" data-t="Autoevaluación"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg></span><span>Autoevaluación</span><span class="dot"></span></a></li><li><a href="#reflexion" data-t="Retroalimentación"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg></span><span>Retroalimentación</span><span class="dot"></span></a></li><li><a href="#recursos" data-t="Recursos y glosario"><span><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM20 4h-6M20 4v14h-6"/></svg></span><span>Recursos y glosario</span><span class="dot"></span></a></li></ul>
+  <div class="side-foot">Servicio Nacional de Aprendizaje SENA<br>Formación para funcionarios administrativos<br>Clasificación de la información: Pública</div>
+</aside>
+<div class="scrim"></div>
+<main>
+  <div class="top">
+    <button class="btn menu-btn" type="button" aria-label="Abrir menú"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h1>OVA Participante · <b id="crumb"></b></h1>
+    <div class="prog" title="Avance: secciones visitadas y pasos del taller"><span>Avance</span><div class="bar"><i id="pbar"></i></div><b id="ptxt">0%</b></div>
+    <button class="btn" id="themeBtn" type="button"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span class="lbl">Modo oscuro</span></button>
+  </div>
+  <div class="content">
+  <section class="view" id="v-inicio" ><div><div class="eyebrow">Tema 10 · Excel intermedio</div><h2>Power Query y automatización en Excel</h2></div><div class="hero"><div>
+<div class="eyebrow">Objeto Virtual de Aprendizaje · Participante</div>
+<h2>Que los reportes se consoliden solos</h2>
+<p>Cada mes llegan archivos de varias dependencias con el mismo formato, y alguien los copia y pega uno por uno. En este tema aprenderá a construir ese consolidado <b>una sola vez</b> con Power Query y a dejarlo listo para actualizarse con un clic, con el formato final aplicado por una macro.</p>
+<div class="meta"><span>Duración: 4 horas</span><span>Modalidad: presencial o virtual sincrónica</span><span>Nivel: Excel intermedio</span><span>Excel 2016 o Microsoft 365</span></div>
+</div>
+<div><img src="data:image/png;base64,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" alt="" style="width:110px;filter:brightness(0) invert(1);opacity:.95;display:block;margin-left:auto"></div></div><div class="panel"><div class="eyebrow">Contexto</div><h3>¿Qué son los Fundamentos de Excel intermedio?</h3>
+<p>Son el conjunto de habilidades que permiten pasar de usar Excel como una hoja para escribir datos a usarlo como una <b>herramienta de análisis y gestión</b>. Un usuario intermedio organiza la información en tablas estructuradas, usa funciones lógicas y de búsqueda, resume con tablas dinámicas, controla la calidad de los datos y, en este último tema, <b>automatiza</b> las tareas que se repiten cada mes.</p>
+<div class="grid g4" style="margin-top:12px">
+<div class="tile"><span class="chip">Organizar</span><h4 style="margin-top:8px">Tablas de Excel</h4><p class="l" style="font-size:14px;color:var(--muted)">Rangos con nombre, filtros y formato que crecen solos.</p></div>
+<div class="tile"><span class="chip">Calcular</span><h4 style="margin-top:8px">Funciones</h4><p style="font-size:14px;color:var(--muted)">SI, Y, O, BUSCARV / BUSCARX, SUMAR.SI.CONJUNTO.</p></div>
+<div class="tile"><span class="chip">Resumir</span><h4 style="margin-top:8px">Tablas dinámicas</h4><p style="font-size:14px;color:var(--muted)">Totales por dependencia, mes o rubro en segundos.</p></div>
+<div class="tile"><span class="chip">Automatizar</span><h4 style="margin-top:8px">Power Query y macros</h4><p style="font-size:14px;color:var(--muted)">Consolidar, limpiar y dar formato sin repetir trabajo.</p></div>
+</div></div><div class="panel"><div class="eyebrow">Para qué le sirve</div><h3>Usos reales para un funcionario administrativo del SENA</h3>
+<div class="grid g3" style="margin-top:8px">
+<div><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg> Consolidar reportes de dependencias</h4><p>Unir los informes mensuales de Talento Humano, Financiera, Contratación o Bienestar sin copiar y pegar.</p></div>
+<div><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg> Limpiar exportes de aplicativos</h4><p>Ordenar archivos descargados de aplicativos institucionales (por ejemplo SOFIA Plus, SIIF Nación o SECOP II) que vienen con títulos, totales y celdas vacías.</p></div>
+<div><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v6a6 6 0 0 0 6 6h0a6 6 0 0 1 6 6M18 3v6M6 21v-4"/></svg> Cruzar información</h4><p>Traer el valor unitario de un catálogo, el nombre de un funcionario por su cédula o el rubro de un código, sin BUSCARV frágiles.</p></div>
+<div><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg> Informes periódicos</h4><p>El informe de cada mes, trimestre o vigencia se actualiza con <kbd>Datos › Actualizar todo</kbd>.</p></div>
+<div><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg> Menos errores</h4><p>Cada paso queda registrado y se repite igual: no se olvida una fila ni se pega dos veces un archivo.</p></div>
+<div><h4><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg> Formato con un botón</h4><p>Una macro aplica el formato institucional y deja el informe listo para enviar.</p></div>
+</div></div><div class="grid g2">
+<div class="panel"><div class="eyebrow">Objetivo</div><h3>Automatizar la consolidación y limpieza de reportes recurrentes</h3>
+<ul class="clean"><li>Explicar qué es Power Query y cuándo usarlo en lugar de fórmulas.</li><li>Conectar Excel a archivos, CSV y carpetas completas.</li><li>Aplicar transformaciones de limpieza y anular dinamización.</li><li>Anexar reportes mensuales y combinar tablas.</li><li>Grabar, ejecutar y asignar a un botón una macro, con criterios de seguridad.</li></ul></div>
+<div class="panel"><div class="eyebrow">Producto esperado</div><h3>Consolidado automático y actualizable</h3>
+<p>Un libro que lee la carpeta de reportes de cuatro dependencias, los limpia, los une, los cruza con el catálogo de elementos y presenta un informe por dependencia y mes. Al agregar los reportes de octubre basta con actualizar.</p>
+<div class="grid g3" style="margin-top:10px"><div class="tile"><div class="k">16</div><div class="l">archivos de práctica</div></div><div class="tile"><div class="k">4</div><div class="l">dependencias</div></div><div class="tile"><div class="k">1 clic</div><div class="l">para actualizar</div></div></div></div></div><div class="panel"><div class="eyebrow">Ruta de aprendizaje</div><h3>Así avanza el tema</h3>
+<div class="grid g3" style="margin-top:6px"><a class="tile" href="#pq" style="text-decoration:none;color:inherit"><span class="chip">10.1</span><h4 style="margin-top:8px">Qué es Power Query</h4><p style="font-size:14px;color:var(--muted);margin:0">Obtener y transformar datos sin fórmulas.</p></a><a class="tile" href="#fuentes" style="text-decoration:none;color:inherit"><span class="chip">10.2</span><h4 style="margin-top:8px">Fuentes de datos</h4><p style="font-size:14px;color:var(--muted);margin:0">Excel, CSV, carpetas y exportes de aplicativos.</p></a><a class="tile" href="#transformaciones" style="text-decoration:none;color:inherit"><span class="chip">10.3</span><h4 style="margin-top:8px">Transformaciones</h4><p style="font-size:14px;color:var(--muted);margin:0">Simulador paso a paso de limpieza.</p></a><a class="tile" href="#anexar" style="text-decoration:none;color:inherit"><span class="chip">10.4</span><h4 style="margin-top:8px">Anexar y combinar</h4><p style="font-size:14px;color:var(--muted);margin:0">Unir meses y cruzar tablas.</p></a><a class="tile" href="#macros" style="text-decoration:none;color:inherit"><span class="chip">10.5</span><h4 style="margin-top:8px">Macros grabadas</h4><p style="font-size:14px;color:var(--muted);margin:0">Grabar, ejecutar, botón y seguridad.</p></a><a class="tile" href="#taller" style="text-decoration:none;color:inherit"><span class="chip">Taller</span><h4 style="margin-top:8px">Consolidado automático</h4><p style="font-size:14px;color:var(--muted);margin:0">Aplicación con los archivos de práctica.</p></a></div></div><div class="pager"><span></span><a class="btn pri" href="#pq">Qué es Power Query →</a></div></section>
+<section class="view" id="v-pq" hidden><div><div class="eyebrow">Subtema 10.1</div><h2>Qué es Power Query</h2></div><p class="lead">Power Query es el motor de Excel para <b>obtener</b> datos de distintas fuentes, <b>transformarlos</b> (limpiar, dividir, unir) y <b>cargarlos</b> en una hoja, sin escribir fórmulas. Cada acción que haga con el mouse queda guardada como un paso, y todos los pasos se repiten automáticamente cada vez que actualice.</p>
+<div class="flow">
+<div class="st"><div class="n">1</div><h4>Obtener (Extract)</h4><p>Conectarse a un archivo, una carpeta, un CSV o una tabla. Los datos originales no se modifican.</p><span class="chip">Datos › Obtener datos</span></div>
+<div class="ar"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 9l5 3-5 3z"/></svg></div>
+<div class="st mid"><div class="n">2</div><h4>Transformar (Transform)</h4><p>Quitar filas, dividir columnas, reemplazar valores, cambiar tipos, anular dinamización, combinar tablas.</p><span class="chip">Editor de Power Query</span></div>
+<div class="ar"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 9l5 3-5 3z"/></svg></div>
+<div class="st"><div class="n">3</div><h4>Cargar (Load)</h4><p>Enviar el resultado a una tabla, a una tabla dinámica o solo como conexión. Se actualiza con un clic.</p><span class="chip">Cerrar y cargar</span></div>
+</div>
+<div class="grid g2">
+<div class="panel"><h3>Fórmulas y copiar-pegar vs. Power Query</h3>
+<div class="tbl-wrap"><table class="t"><thead><tr><th>Situación</th><th>Manual / fórmulas</th><th>Power Query</th></tr></thead><tbody>
+<tr><td>Unir 12 archivos</td><td>Abrir y pegar 12 veces</td><td>Una consulta a la carpeta</td></tr>
+<tr><td>Quitar títulos y totales</td><td>Borrar a mano cada mes</td><td>Paso guardado</td></tr>
+<tr><td>Separar «Código - Elemento»</td><td>IZQUIERDA / ENCONTRAR</td><td>Dividir columna</td></tr>
+<tr><td>Traer valor del catálogo</td><td>BUSCARV en miles de filas</td><td>Combinar consultas</td></tr>
+<tr><td>Mes siguiente</td><td>Repetir todo</td><td>Actualizar todo</td></tr>
+</tbody></table></div></div>
+<div class="panel"><h3>Dónde está en Excel</h3>
+<ol class="steps">
+<li><div>Pestaña <span class="path">Datos</span>, grupo <span class="path">Obtener y transformar datos</span>.</div></li>
+<li><div><span class="path">Obtener datos</span> despliega las fuentes: Desde un archivo, Desde una base de datos, Desde otras fuentes.</div></li>
+<li><div>Al elegir una fuente se abre el <b>Editor de Power Query</b>: a la derecha verá el panel <b>Pasos aplicados</b>; arriba, la <b>barra de fórmulas</b> con el código M de cada paso (actívela en <span class="path">Vista › Barra de fórmulas</span>).</div></li>
+<li><div>Para volver a una consulta: <span class="path">Datos › Consultas y conexiones</span> y doble clic sobre ella.</div></li>
+</ol>
+<div class="note" style="margin-top:12px"><b>Idea clave:</b> Power Query <i>no cambia</i> los archivos de origen. Lee, transforma y carga una copia. Por eso es seguro trabajar sobre los reportes oficiales.</div></div>
+</div>
+<div class="panel"><h3>El lenguaje M, sin miedo</h3><p>Cada paso que hace con el mouse se escribe en un lenguaje llamado <b>M</b>. No necesita aprenderlo para usar Power Query, pero reconocerlo ayuda a entender qué hace cada paso. Así se ve un paso de «Quitar filas superiores»:</p><div class="code"><div class="code-h"><span>M</span><button class="copy" type="button">Copiar</button></div><pre><code>= Table.Skip(Origen, 4)</code></pre></div><p style="margin-top:10px">Se lee: «a partir del paso Origen, salta las 4 primeras filas». Cada paso usa el resultado del anterior, como una receta.</p></div><div class="pager"><a class="btn" href="#inicio">← Inicio</a><a class="btn pri" href="#fuentes">Fuentes de datos →</a></div></section>
+<section class="view" id="v-fuentes" hidden><div><div class="eyebrow">Subtema 10.2</div><h2>Fuentes de datos</h2></div><p class="lead">Power Query se conecta a muchas fuentes. Para el trabajo administrativo, cuatro cubren casi todo: libros de Excel, archivos CSV, carpetas con reportes y archivos exportados de los aplicativos institucionales.</p><div class="grid g2"><div class="panel"><h3>Libro de Excel</h3><p class="path" style="font-size:14px">Datos › Obtener datos › Desde un archivo › Desde un libro de Excel</p><p>Puede elegir una hoja o una tabla con nombre. Prefiera tablas (Ctrl+T): sus encabezados son estables.</p><p style="font-size:14px;color:var(--muted);margin:0">Archivo de práctica: <b>Catalogo_Elementos.xlsx (tabla tblCatalogo)</b></p></div><div class="panel"><h3>Texto o CSV</h3><p class="path" style="font-size:14px">Datos › Obtener datos › Desde un archivo › Desde texto/CSV</p><p>Revise en la vista previa el <b>Origen del archivo</b> (codificación, p. ej. 1252: Europeo occidental) y el <b>Delimitador</b> (punto y coma o coma). Si salen símbolos raros en las tildes, cambie la codificación.</p><p style="font-size:14px;color:var(--muted);margin:0">Archivo de práctica: <b>Exportado_Aplicativo_Inventario.csv</b></p></div><div class="panel"><h3>Carpeta completa</h3><p class="path" style="font-size:14px">Datos › Obtener datos › Desde un archivo › Desde una carpeta</p><p>Lee todos los archivos de una carpeta y los combina con el botón <b>Combinar y transformar datos</b>. Todo archivo nuevo que se guarde allí entra en la próxima actualización.</p><p style="font-size:14px;color:var(--muted);margin:0">Archivo de práctica: <b>Carpeta Reportes_Dependencias</b></p></div><div class="panel"><h3>Reportes de aplicativos</h3><p class="path" style="font-size:14px">Exportar a Excel o CSV desde el aplicativo › conectar como archivo o carpeta</p><p>Los exportes suelen traer filas de título, fecha de generación, filas en blanco y una fila TOTAL. Power Query las quita con pasos que se repiten cada mes.</p><p style="font-size:14px;color:var(--muted);margin:0">Archivo de práctica: <b>Cualquiera de los 12 reportes de dependencias</b></p></div></div><div class="panel"><div class="eyebrow">Paso a paso</div><h3>Ejemplo 1: importar un CSV exportado de un aplicativo</h3>
+<ol class="steps">
+<li><div>Abra un libro nuevo. <span class="path">Datos › Obtener datos › Desde un archivo › Desde texto/CSV</span> y elija <b>Exportado_Aplicativo_Inventario.csv</b>.</div></li>
+<li><div>En la vista previa verifique <b>Origen del archivo: 1252 Europeo occidental (Windows)</b> y <b>Delimitador: Punto y coma</b>. Las tildes de «Descripción» deben verse bien.</div></li>
+<li><div>Pulse <b>Transformar datos</b> (no Cargar) para abrir el Editor.</div></li>
+<li><div>Columna <b>Estado</b>: <span class="path">Transformar › Formato › Poner En Mayúsculas Cada Palabra</span>. «BUENO» y «Bueno» quedan iguales.</div></li>
+<li><div>Columna <b>Valor</b>: <span class="path">Transformar › Reemplazar valores</span>, buscar <kbd>.</kbd> reemplazar por nada. Luego cambie el tipo a <b>Número entero</b> con el icono ABC/123 del encabezado.</div></li>
+<li><div>Columna <b>Fecha ingreso</b>: clic en el icono de tipo › <span class="path">Usar configuración regional › Fecha › Español (Colombia)</span>. Así 03/04/2021 se lee como 3 de abril.</div></li>
+<li><div><span class="path">Inicio › Cerrar y cargar</span>. Obtendrá una tabla limpia de 40 bienes.</div></li>
+</ol></div>
+<div class="panel"><div class="eyebrow">Paso a paso</div><h3>Ejemplo 2: conectar una carpeta completa</h3>
+<ol class="steps">
+<li><div>Copie la carpeta <b>Reportes_Dependencias</b> en una ruta corta, por ejemplo <kbd>C:\Taller_PQ\</kbd>.</div></li>
+<li><div><span class="path">Datos › Obtener datos › Desde un archivo › Desde una carpeta</span> › Examinar › seleccione la carpeta › Abrir.</div></li>
+<li><div>Verá una lista con 12 archivos (Name, Extension, Date modified…). Pulse <b>Combinar › Combinar y transformar datos</b>.</div></li>
+<li><div>En «Combinar archivos», con <b>Archivo de ejemplo: Primer archivo</b>, seleccione la hoja <b>Reporte</b> y Aceptar.</div></li>
+<li><div>Power Query crea la carpeta <b>Archivos auxiliares</b> con «Transformar archivo de ejemplo». Lo que limpie allí se aplica a <b>todos</b> los archivos. Esto se trabaja en el taller.</div></li>
+</ol>
+<div class="note" style="margin-top:12px"><b>Trabajo colaborativo:</b> si la carpeta está en una biblioteca de SharePoint u OneDrive institucional compartida con las dependencias, cada una guarda allí su reporte y usted solo actualiza. Use <span class="path">Obtener datos › Desde un archivo › Desde una carpeta de SharePoint</span> con la dirección del sitio.</div></div>
+<div class="note warn"><b>Reglas para que una carpeta funcione:</b> todos los archivos con la <b>misma estructura</b> (mismos encabezados y nombre de hoja), sin otros archivos en la carpeta, y nombres de archivo con un patrón fijo (por ejemplo <kbd>2026-07_Talento Humano.xlsx</kbd>) porque de ahí se extraen el mes y la dependencia.</div><div class="pager"><a class="btn" href="#pq">← Qué es Power Query</a><a class="btn pri" href="#transformaciones">Transformaciones →</a></div></section>
+<section class="view" id="v-transformaciones" hidden><div><div class="eyebrow">Subtema 10.3</div><h2>Transformaciones</h2></div><p class="lead">Transformar es limpiar y dar forma a los datos para que sirvan. Cada transformación queda guardada y se repite igual en cada actualización.</p><div class="grid g4"><div class="tile"><h4>Eliminar filas</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Quitar títulos del aplicativo, filas en blanco, totales o duplicados.</p><span class="chip">Inicio › Quitar filas</span></div><div class="tile"><h4>Eliminar columnas</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Dejar solo lo necesario. Quitar columnas como Observaciones.</p><span class="chip">Inicio › Quitar columnas</span></div><div class="tile"><h4>Dividir columnas</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Separar «PAP-001 - Resma» en Código y Elemento.</p><span class="chip">Transformar › Dividir columna</span></div><div class="tile"><h4>Cambiar tipos</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Texto, número entero, decimal, fecha, moneda.</p><span class="chip">Icono ABC/123 del encabezado</span></div><div class="tile"><h4>Reemplazar valores</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Cambiar «UND» por «Unidad», «-» por 0, quitar puntos.</p><span class="chip">Transformar › Reemplazar valores</span></div><div class="tile"><h4>Anular dinamización</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Convertir columnas Semana 1…4 en filas: tabla larga, lista para resumir.</p><span class="chip">Transformar › Anular dinamización</span></div><div class="tile"><h4>Usar primera fila</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Convertir la fila de títulos en encabezados.</p><span class="chip">Inicio › Usar la primera fila…</span></div><div class="tile"><h4>Formato de texto</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">Recortar espacios, mayúsculas, Poner En Mayúsculas Cada Palabra.</p><span class="chip">Transformar › Formato</span></div></div><div class="panel"><div class="eyebrow">Simulador interactivo</div><h3>Limpie un reporte exportado, paso a paso</h3>
+<p>Este es un reporte real del taller (Talento Humano, julio). Aplique los pasos en orden y observe cómo cambia la tabla, qué aparece en «Pasos aplicados» y el código M que Power Query escribe por usted. Las celdas <span class="chip" style="background:var(--warn-bg);color:var(--warn)">naranja</span> son datos sucios; las <span class="chip">verdes</span>, columnas nuevas.</p>
+<div class="sim" style="margin-top:10px">
+<div><h4>Pasos aplicados</h4><ul class="stepsList" id="simSteps"></ul>
+<div class="ctrl"><button class="btn" type="button" id="simPrev">Deshacer</button><button class="btn pri" type="button" id="simNext">Aplicar siguiente paso</button></div></div>
+<div style="min-width:0"><div class="tbl-wrap" id="simTable"></div>
+<div class="explain"><div class="note" id="simExp"></div><div style="margin-top:10px" id="simCode"></div></div></div>
+</div></div><div class="panel"><h3>¿Por qué anular dinamización?</h3>
+<div class="grid g2"><div><p>Los reportes suelen llegar <b>anchos</b>: una columna por semana o por mes. Se ven bien impresos, pero no sirven para resumir: no puede filtrar «Semana» ni hacer una tabla dinámica por semana.</p><p>Anular dinamización convierte esas columnas en dos: <b>Atributo</b> (el nombre de la columna: Semana 1…) y <b>Valor</b> (la cantidad). La tabla queda <b>larga</b>, con un dato por fila.</p>
+<p style="font-size:14px;color:var(--muted)">Consejo: seleccione las columnas que <b>no</b> cambian (Código, Elemento, Unidad) y use <b>Anular dinamización de otras columnas</b>. Si un mes llega una «Semana 5», se incluye sola.</p></div>
+<div><svg viewBox="0 0 360 200" width="100%" style="max-width:460px;display:block;margin:0 auto" role="img" aria-label="Tabla ancha con columnas S1 a S4 convertida en tabla larga con columnas Semana y Cantidad">
+<g font-family="Work Sans, sans-serif" font-size="11">
+<rect x="0" y="20" width="150" height="22" fill="var(--verde2)"/><text x="6" y="35" fill="#fff" font-weight="700">Código  S1  S2  S3  S4</text>
+<rect x="0" y="42" width="150" height="22" fill="var(--surface2)"/><text x="6" y="57" fill="var(--fg)">PAP-001  4   0   6   2</text>
+<rect x="0" y="64" width="150" height="22" fill="var(--surface)" stroke="var(--line)"/><text x="6" y="79" fill="var(--fg)">ASE-002  9   3   5   7</text>
+<text x="0" y="110" fill="var(--muted)">Ancha: 2 filas × 5 columnas</text>
+<path d="M160 60 H200" stroke="var(--verde)" stroke-width="3" marker-end="url(#ah)"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--verde)"/></marker></defs>
+<rect x="210" y="0" width="150" height="20" fill="var(--verde2)"/><text x="216" y="14" fill="#fff" font-weight="700">Código  Semana  Cant.</text>
+<rect x="210" y="20" width="150" height="18" fill="var(--surface2)"/><text x="216" y="33" fill="var(--fg)">PAP-001  Semana 1   4</text><rect x="210" y="38" width="150" height="18" fill="var(--surface)"/><text x="216" y="51" fill="var(--fg)">PAP-001  Semana 2   0</text><rect x="210" y="56" width="150" height="18" fill="var(--surface2)"/><text x="216" y="69" fill="var(--fg)">PAP-001  Semana 3   6</text><rect x="210" y="74" width="150" height="18" fill="var(--surface)"/><text x="216" y="87" fill="var(--fg)">PAP-001  Semana 4   2</text><rect x="210" y="92" width="150" height="18" fill="var(--surface2)"/><text x="216" y="105" fill="var(--fg)">ASE-002  Semana 1   9</text><rect x="210" y="110" width="150" height="18" fill="var(--surface)"/><text x="216" y="123" fill="var(--fg)">ASE-002  Semana 2   3</text><rect x="210" y="128" width="150" height="18" fill="var(--surface2)"/><text x="216" y="141" fill="var(--fg)">ASE-002  Semana 3   5</text><rect x="210" y="146" width="150" height="18" fill="var(--surface)"/><text x="216" y="159" fill="var(--fg)">ASE-002  Semana 4   7</text>
+<text x="210" y="190" fill="var(--muted)">Larga: 8 filas × 3 columnas</text></g></svg></div></div></div><div class="panel"><div class="eyebrow">Práctica guiada</div><h3>Ejemplo 3: Ejemplo_Transformaciones.xlsx</h3>
+<p>La tabla <b>tblAtenciones</b> tiene «Dependencia - Responsable» en una sola columna, meses en columnas y valores «N/A».</p>
+<ol class="steps">
+<li><div>Clic dentro de la tabla › <span class="path">Datos › Desde la tabla o rango</span>.</div></li>
+<li><div>Columna «Dependencia - Responsable» › <span class="path">Transformar › Dividir columna › Por delimitador</span> › Personalizado: <kbd> - </kbd> (espacio, guion, espacio) › <b>En el delimitador situado más a la izquierda</b>. Renombre: Dependencia y Responsable.</div></li>
+<li><div>Seleccione Ene a Jun (clic en Ene, Mayús + clic en Jun) › <span class="path">Transformar › Reemplazar valores</span>: «N/A» por <kbd>null</kbd>.</div></li>
+<li><div>Seleccione Dependencia y Responsable › clic derecho › <b>Anular dinamización de otras columnas</b>. Renombre Atributo → Mes y Valor → Atenciones.</div></li>
+<li><div>Cambie el tipo de Atenciones a <b>Número entero</b> y <span class="path">Cerrar y cargar</span>.</div></li>
+</ol>
+<div class="note" style="margin-top:12px"><b>Para pensar:</b> al anular dinamización, las celdas vacías (null) desaparecen. ¿Es correcto para el informe, o debería reemplazarlas por 0 antes? Depende: 0 significa «no hubo atenciones»; null significa «no se reportó».</div></div><div class="pager"><a class="btn" href="#fuentes">← Fuentes de datos</a><a class="btn pri" href="#anexar">Anexar y combinar →</a></div></section>
+<section class="view" id="v-anexar" hidden><div><div class="eyebrow">Subtema 10.4</div><h2>Anexar y combinar consultas</h2></div><p class="lead">Hay dos formas de unir tablas y conviene no confundirlas. <b>Anexar</b> pone una tabla debajo de la otra (más filas). <b>Combinar</b> cruza dos tablas por una columna común y trae columnas nuevas (como BUSCARV).</p>
+<div class="grid g2">
+<div class="panel"><span class="chip">Más filas</span><h3 style="margin-top:8px">Anexar consultas</h3>
+<svg viewBox="0 0 300 150" width="100%" style="max-width:420px;display:block;margin:6px auto" role="img" aria-label="Julio y agosto apilados en una sola tabla"><g font-family="Work Sans, sans-serif" font-size="12" font-weight="600">
+<rect x="10" y="10" width="110" height="40" rx="6" fill="var(--verde2)"/><text x="65" y="35" fill="#fff" text-anchor="middle">Julio · 10 filas</text>
+<rect x="10" y="60" width="110" height="40" rx="6" fill="var(--azul)"/><text x="65" y="85" fill="#fff" text-anchor="middle">Agosto · 10 filas</text>
+<path d="M130 55 H165" stroke="var(--verde)" stroke-width="3" marker-end="url(#ah2)"/>
+<defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--verde)"/></marker></defs>
+<rect x="175" y="10" width="115" height="45" rx="6" fill="var(--verde2)"/><rect x="175" y="55" width="115" height="45" rx="6" fill="var(--azul)"/>
+<text x="150" y="132" fill="var(--fg)" text-anchor="middle">Resultado: 20 filas, mismas columnas</text></g></svg>
+<p><span class="path">Inicio › Anexar consultas › Anexar consultas como nuevas</span>. Úselo cuando las tablas tienen <b>las mismas columnas</b>. La conexión a carpeta del taller es un anexar automático de todos los archivos.</p></div>
+<div class="panel"><span class="chip">Más columnas</span><h3 style="margin-top:8px">Combinar consultas</h3>
+<svg viewBox="0 0 300 150" width="100%" style="max-width:420px;display:block;margin:6px auto" role="img" aria-label="Trámites y funcionarios cruzados por cédula"><g font-family="Work Sans, sans-serif" font-size="12" font-weight="600">
+<rect x="10" y="20" width="90" height="80" rx="6" fill="var(--verde2)"/><text x="55" y="55" fill="#fff" text-anchor="middle">Trámites</text><text x="55" y="72" fill="#fff" text-anchor="middle" font-weight="400">Cédula</text>
+<rect x="110" y="20" width="70" height="80" rx="6" fill="var(--azul)"/><text x="145" y="55" fill="#fff" text-anchor="middle">Funcion.</text><text x="145" y="72" fill="#fff" text-anchor="middle" font-weight="400">Cédula</text>
+<path d="M188 60 H215" stroke="var(--verde)" stroke-width="3" marker-end="url(#ah2)"/>
+<rect x="222" y="20" width="45" height="80" rx="6" fill="var(--verde2)"/><rect x="267" y="20" width="28" height="80" rx="6" fill="var(--azul)"/>
+<text x="150" y="130" fill="var(--fg)" text-anchor="middle">Mismas filas + Nombre y Dependencia</text></g></svg>
+<p><span class="path">Inicio › Combinar consultas</span>. Elija la columna común en cada tabla (Cédula, Código) y el <b>tipo de combinación</b>. Luego expanda las columnas que necesita con el icono ↔ del encabezado.</p></div>
+</div>
+<div class="panel"><div class="eyebrow">Explorador interactivo</div><h3>Tipos de combinación</h3>
+<p>Consumos del mes (izquierda) y catálogo de elementos (derecha). Note que <b>PAP-099</b> no existe en el catálogo y <b>CAF-002</b> no tuvo consumo. Elija un tipo de combinación y compare el resultado.</p>
+<div class="seg" id="joinSeg" style="margin:10px 0"></div>
+<div class="grid g3" style="align-items:start">
+<div style="min-width:0"><h4>Consumos (izquierda)</h4><div class="tbl-wrap" id="jL"></div></div>
+<div style="min-width:0"><h4>Catálogo (derecha)</h4><div class="tbl-wrap" id="jR"></div></div>
+<div style="min-width:0"><h4>Resultado</h4><div id="jV"></div><div class="tbl-wrap" id="jOut"></div><p id="jTxt" style="font-size:14px;margin-top:8px"></p></div>
+</div></div>
+<div class="panel"><div class="eyebrow">Práctica guiada</div><h3>Ejemplo 4: Ejemplo_Anexar_Combinar.xlsx</h3>
+<ol class="steps">
+<li><div>Cargue cada tabla como consulta: clic en la tabla de la hoja Julio › <span class="path">Datos › Desde la tabla o rango</span> › <span class="path">Cerrar y cargar en › Solo crear conexión</span>. Repita con Agosto y Funcionarios.</div></li>
+<li><div><span class="path">Datos › Obtener datos › Combinar consultas › Anexar</span> › Dos tablas: tblJulio y tblAgosto › Aceptar. Resultado: 20 trámites.</div></li>
+<li><div>En la consulta anexada: <span class="path">Inicio › Combinar consultas</span> › tabla inferior tblFuncionarios › clic en «Cédula funcionario» en ambas › Externa izquierda › Aceptar.</div></li>
+<li><div>Expanda la nueva columna: marque Nombre y Dependencia, desmarque «Usar el nombre de la columna original como prefijo».</div></li>
+<li><div>Verifique que «Cédula funcionario» sea <b>Texto</b> en ambas tablas. Si una es número y otra texto, la combinación no encuentra coincidencias.</div></li>
+<li><div><span class="path">Cerrar y cargar</span>. Ahora puede hacer una tabla dinámica de tiempo de respuesta por dependencia.</div></li>
+</ol></div><div class="pager"><a class="btn" href="#transformaciones">← Transformaciones</a><a class="btn pri" href="#macros">Macros grabadas →</a></div></section>
+<section class="view" id="v-macros" hidden><div><div class="eyebrow">Subtema 10.5</div><h2>Macros grabadas</h2></div><p class="lead">Una macro es una serie de acciones guardadas que Excel puede repetir. La <b>grabadora de macros</b> registra lo que usted hace (clics, formatos, selecciones) y lo convierte en código VBA, sin programar.</p>
+<div class="grid g4">
+<div class="tile"><span class="chip">1 · Preparar</span><h4 style="margin-top:8px">Activar Programador</h4><p style="font-size:14px;color:var(--muted);margin:0">Archivo › Opciones › Personalizar cinta de opciones › marcar <b>Programador</b>.</p></div>
+<div class="tile"><span class="chip">2 · Grabar</span><h4 style="margin-top:8px">Grabar macro</h4><p style="font-size:14px;color:var(--muted);margin:0">Programador › Grabar macro (o Vista › Macros). Nombre sin espacios.</p></div>
+<div class="tile"><span class="chip">3 · Ejecutar</span><h4 style="margin-top:8px">Ejecutar</h4><p style="font-size:14px;color:var(--muted);margin:0"><kbd>Alt</kbd>+<kbd>F8</kbd> › elegir la macro › Ejecutar, o con su atajo.</p></div>
+<div class="tile"><span class="chip">4 · Botón</span><h4 style="margin-top:8px">Asignar a botón</h4><p style="font-size:14px;color:var(--muted);margin:0">Insertar › Formas › dibujar › clic derecho › <b>Asignar macro</b>.</p></div>
+</div>
+<div class="panel"><div class="eyebrow">Paso a paso</div><h3>Grabe la macro «FormatoFinal» del informe</h3>
+<ol class="steps">
+<li><div>Abra el libro del taller con la tabla <b>tblConsolidado</b> cargada en la hoja Consolidado. Haga clic en la celda <b>A1</b>.</div></li>
+<li><div><span class="path">Programador › Grabar macro</span>. Nombre: <kbd>FormatoFinal</kbd>. Método abreviado: <kbd>Ctrl</kbd>+<kbd>Mayús</kbd>+<kbd>F</kbd>. Guardar macro en: <b>Este libro</b>. Descripción: «Formato institucional del consolidado». Aceptar.</div></li>
+<li><div>Seleccione la fila de encabezados de la tabla › relleno <b>verde SENA</b> (Más colores › Personalizado › RGB 57, 169, 0), fuente blanca y negrita.</div></li>
+<li><div>Seleccione las columnas Valor unitario y Valor total › <span class="path">Inicio › Número › Moneda</span> sin decimales.</div></li>
+<li><div>Columna Mes › Formato de celdas › Personalizada <kbd>mmm-aaaa</kbd>.</div></li>
+<li><div>Seleccione las columnas A:J › <span class="path">Inicio › Formato › Autoajustar ancho de columna</span>. Clic en A2 › <span class="path">Vista › Inmovilizar › Inmovilizar fila superior</span>.</div></li>
+<li><div><span class="path">Programador › Detener grabación</span>. Pruebe: quite el formato y ejecute con <kbd>Alt</kbd>+<kbd>F8</kbd>.</div></li>
+<li><div>Hoja Informe › <span class="path">Insertar › Formas › Rectángulo redondeado</span> › escriba «Actualizar y formatear» › clic derecho › <b>Asignar macro</b> › FormatoFinal.</div></li>
+<li><div><span class="path">Archivo › Guardar como</span> › Tipo: <b>Libro de Excel habilitado para macros (*.xlsm)</b>. Si guarda como .xlsx, la macro se pierde.</div></li>
+</ol></div>
+<div class="grid g2">
+<div class="panel"><h3>Lo que la grabadora escribe</h3><p>Abra <kbd>Alt</kbd>+<kbd>F11</kbd> y vea el módulo. Note el rango fijo <kbd>I2:J413</kbd>: cuando octubre agregue filas, la macro no les dará formato. Es la principal limitación de las macros grabadas.</p><div class="code"><div class="code-h"><span>VBA</span><button class="copy" type="button">Copiar</button></div><pre><code>Sub FormatoFinal()
+    Range(&quot;A1:J1&quot;).Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .Color = 43321
+    End With
+    Selection.Font.Bold = True
+    Range(&quot;I2:J413&quot;).Select
+    Selection.NumberFormat = &quot;$ #,##0&quot;
+    Columns(&quot;A:J&quot;).EntireColumn.AutoFit
+End Sub</code></pre></div><p style="margin-top:10px;font-size:14px;color:var(--muted)">Solución sin programar: aplique los formatos de número a las <b>columnas completas</b> (clic en la letra de la columna) mientras graba, o dé el formato una vez a la tabla: Power Query lo conserva al actualizar.</p></div>
+<div class="panel"><h3><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg> Seguridad de macros</h3>
+<ul class="clean">
+<li>Una macro puede borrar, enviar o modificar archivos. Por eso Excel las <b>deshabilita</b> por defecto y muestra la barra amarilla «Habilitar contenido».</li>
+<li>Configuración: <span class="path">Archivo › Opciones › Centro de confianza › Configuración del Centro de confianza › Configuración de macros</span>. Recomendado: <b>Deshabilitar todas las macros con notificación</b>.</li>
+<li>Los archivos descargados de Internet o del correo traen la «marca de la Web» y Microsoft 365 bloquea sus macros (barra roja). Solo si confía en el origen: clic derecho al archivo › Propiedades › <b>Desbloquear</b>.</li>
+<li><b>Ubicaciones de confianza</b>: una carpeta donde las macros se ejecutan sin preguntar. Úsela solo para sus propios archivos y siguiendo la política del área de TI.</li>
+<li>Nunca habilite macros de un archivo que no esperaba recibir, aunque parezca institucional.</li>
+</ul>
+<div class="note warn" style="margin-top:10px"><b>En el SENA:</b> consulte con la mesa de servicios de TI antes de cambiar la configuración del Centro de confianza en un equipo institucional.</div></div>
+</div><div class="pager"><a class="btn" href="#anexar">← Anexar y combinar</a><a class="btn pri" href="#taller">Taller de aplicación →</a></div></section>
+<section class="view" id="v-taller" hidden><div><div class="eyebrow">Taller de aplicación</div><h2>Consolidado automático de reportes</h2></div><p class="lead">Va a construir el consolidado que se actualiza solo. Siga los pasos en orden: su avance se guarda en este navegador.</p><div class="panel"><div class="eyebrow">Archivos del taller</div><h3>Lo que necesita</h3>
+<div class="tbl-wrap"><table class="t"><thead><tr><th>Archivo o carpeta</th><th>Para qué</th></tr></thead><tbody>
+<tr><td><b>Reportes_Dependencias/</b> (12 .xlsx)</td><td>Julio a septiembre de 2026 de Talento Humano, Gestión Financiera, Contratación y Bienestar al Aprendiz</td></tr>
+<tr><td><b>Reportes_Octubre_para_agregar/</b> (4 .xlsx)</td><td>Se copian al final para probar la actualización con un clic</td></tr>
+<tr><td><b>Catalogo_Elementos.xlsx</b></td><td>Tabla tblCatalogo con categoría y valor unitario de 12 elementos</td></tr>
+<tr><td><b>Plantilla_Consolidado_Participante.xlsx</b></td><td>Hojas Instrucciones, Parametros, Consolidado (vacía) e Informe (con fórmulas listas)</td></tr>
+<tr><td><b>Ejemplos_Paso_a_Paso/</b></td><td>CSV de inventario, Ejemplo_Transformaciones y Ejemplo_Anexar_Combinar</td></tr>
+</tbody></table></div>
+<p style="margin-top:10px;font-size:14px;color:var(--muted)">Cada reporte trae lo que traen los exportes reales: 3 filas de título del aplicativo, una fila en blanco, una fila en blanco en medio de los datos, una fila TOTAL, guiones en lugar de ceros y unidades escritas de varias formas (UND, und, Und., Unidad).</p></div><div class="grid g3"><div class="tile"><div class="k">412</div><div class="l">filas esperadas con julio a septiembre</div></div><div class="tile"><div class="k">552</div><div class="l">filas esperadas después de agregar octubre</div></div><div class="tile"><div class="k">5</div><div class="l">unidades distintas tras limpiar (Caja, Galón, Paquete, Resma, Unidad)</div></div></div><div class="panel"><div class="eyebrow">Paso a paso · marque cada paso al terminarlo</div><h3>Consolidar los reportes mensuales de las dependencias</h3><div class="chk"><label><input type="checkbox" id="t1"><div><b>1. Preparar archivos</b><br><span style="font-size:15px">Cree <kbd>C:\Taller_PQ\</kbd> y copie allí la carpeta <b>Reportes_Dependencias</b> (12 archivos), <b>Catalogo_Elementos.xlsx</b> y <b>Plantilla_Consolidado_Participante.xlsx</b>. Deje fuera, por ahora, la carpeta Reportes_Octubre_para_agregar. Abra la plantilla.</span></div></label><label><input type="checkbox" id="t2"><div><b>2. Conectar la carpeta</b><br><span style="font-size:15px"><span class='path'>Datos › Obtener datos › Desde un archivo › Desde una carpeta</span> › Reportes_Dependencias › <b>Combinar › Combinar y transformar datos</b> › hoja <b>Reporte</b> › Aceptar.</span></div></label><label><input type="checkbox" id="t3"><div><b>3. Limpiar el archivo de ejemplo</b><br><span style="font-size:15px">En el panel izquierdo abra <b>Transformar archivo de ejemplo</b>: <span class='path'>Inicio › Quitar filas › Quitar filas superiores</span> = 4 · <span class='path'>Usar la primera fila como encabezado</span> · <span class='path'>Quitar filas › Quitar filas en blanco</span> · filtro de «Código - Elemento» › Filtros de texto › <b>No comienza por</b> TOTAL · seleccione Observaciones › Quitar columnas.</span></div></label><label><input type="checkbox" id="t4"><div><b>4. Volver a la consulta principal</b><br><span style="font-size:15px">Abra <b>Reportes_Dependencias</b>. Si aparece un error en el último paso «Tipo cambiado», elimínelo con la X: hacía referencia a columnas que ya no existen. Debe ver Source.Name y las columnas limpias.</span></div></label><label><input type="checkbox" id="t5"><div><b>5. Mes y dependencia desde el nombre</b><br><span style="font-size:15px">Columna Source.Name › <span class='path'>Reemplazar valores</span> «.xlsx» por nada › <span class='path'>Dividir columna › Por delimitador</span> «_» › renombre <b>Periodo</b> y <b>Dependencia</b>. En Dependencia reemplace «Gestion Financiera» por «Gestión Financiera» y «Contratacion» por «Contratación».</span></div></label><label><input type="checkbox" id="t6"><div><b>6. Código y elemento</b><br><span style="font-size:15px">Columna «Código - Elemento» › Dividir columna › Por delimitador › Personalizado <kbd> - </kbd> › <b>En el delimitador situado más a la izquierda</b>. Renombre <b>Código</b> y <b>Elemento</b>.</span></div></label><label><input type="checkbox" id="t7"><div><b>7. Normalizar la unidad</b><br><span style="font-size:15px">Columna Unidad › <span class='path'>Transformar › Formato › Recortar</span> y luego <b>Poner En Mayúsculas Cada Palabra</b> › Reemplazar valores «.» por nada › Reemplazar «Und» por «Unidad» marcando <b>Coincidir con el contenido de toda la celda</b> (Opciones avanzadas). Deben quedar solo 5 unidades.</span></div></label><label><input type="checkbox" id="t8"><div><b>8. Semanas sin guiones</b><br><span style="font-size:15px">Seleccione Semana 1 a Semana 4 › Reemplazar valores «-» por 0 › otra vez Reemplazar valores <kbd>null</kbd> por 0.</span></div></label><label><input type="checkbox" id="t9"><div><b>9. Anular dinamización</b><br><span style="font-size:15px">Seleccione Periodo, Dependencia, Código, Elemento y Unidad › clic derecho › <b>Anular dinamización de otras columnas</b>. Renombre Atributo → <b>Semana</b>, Valor → <b>Cantidad</b> y cambie Cantidad a Número entero.</span></div></label><label><input type="checkbox" id="t10"><div><b>10. Mes como fecha</b><br><span style="font-size:15px"><span class='path'>Agregar columna › Columna personalizada</span>: nombre <b>Mes</b>, fórmula <kbd>Date.FromText([Periodo] &amp; "-01")</kbd>. Cambie su tipo a Fecha y quite la columna Periodo.</span></div></label><label><input type="checkbox" id="t11"><div><b>11. Traer el catálogo</b><br><span style="font-size:15px"><span class='path'>Datos › Obtener datos › Desde un archivo › Desde un libro de Excel</span> › Catalogo_Elementos.xlsx › tabla <b>tblCatalogo</b> › Transformar datos › <span class='path'>Cerrar y cargar en › Solo crear conexión</span>. Renombre la consulta como <b>Catalogo</b>.</span></div></label><label><input type="checkbox" id="t12"><div><b>12. Combinar con el catálogo</b><br><span style="font-size:15px">En Reportes_Dependencias: <span class='path'>Inicio › Combinar consultas</span> › Catalogo › clic en Código en ambas › Externa izquierda. Expanda solo <b>Categoría</b> y <b>Valor unitario</b> sin prefijo.</span></div></label><label><input type="checkbox" id="t13"><div><b>13. Calcular Valor total</b><br><span style="font-size:15px"><span class='path'>Agregar columna › Columna personalizada</span>: <b>Valor total</b> = <kbd>[Cantidad] * [Valor unitario]</kbd>. Tipo: Número decimal. Ordene las columnas: Mes, Dependencia, Código, Elemento, Unidad, Semana, Cantidad, Categoría, Valor unitario, Valor total.</span></div></label><label><input type="checkbox" id="t14"><div><b>14. Cargar en la plantilla</b><br><span style="font-size:15px"><span class='path'>Inicio › Cerrar y cargar › Cerrar y cargar en</span> › Tabla › Hoja de cálculo existente <kbd>=Consolidado!$A$1</kbd>. En <span class='path'>Diseño de tabla</span> nombre la tabla <b>tblConsolidado</b>. Verifique: <b>412 filas</b>. La hoja Informe se llena sola.</span></div></label><label><input type="checkbox" id="t15"><div><b>15. Resumen con tabla dinámica</b><br><span style="font-size:15px"><span class='path'>Insertar › Tabla dinámica</span> › tblConsolidado › hoja Informe celda H7. Filas: Dependencia · Columnas: Mes · Valores: Suma de Valor total.</span></div></label><label><input type="checkbox" id="t16"><div><b>16. Macro y botón</b><br><span style="font-size:15px">Grabe la macro <b>FormatoFinal</b> (sección 10.5), asígnela a un botón en Informe y guarde como <b>Consolidado_SuNombre.xlsm</b>.</span></div></label><label><input type="checkbox" id="t17"><div><b>17. Prueba de un clic</b><br><span style="font-size:15px">Copie los 4 archivos de <b>Reportes_Octubre_para_agregar</b> dentro de Reportes_Dependencias. En Excel: <span class='path'>Datos › Actualizar todo</span> y luego su botón. Verifique: <b>552 filas</b> y la columna oct-2026 del informe con valores.</span></div></label></div></div><div class="note"><b>Entregable:</b> el archivo <b>Consolidado_SuNombre.xlsm</b> con la consulta a la carpeta, la tabla tblConsolidado, el informe con la tabla dinámica y el botón con la macro. En la socialización deberá mostrar la actualización con octubre.</div><div class="pager"><a class="btn" href="#macros">← Macros grabadas</a><a class="btn pri" href="#evaluacion">Autoevaluación →</a></div></section>
+<section class="view" id="v-evaluacion" hidden><div><div class="eyebrow">Autoevaluación</div><h2>¿Qué tanto aprendió?</h2></div><p class="lead">Diez preguntas para comprobar lo aprendido. Al enviar verá la respuesta correcta y la explicación.</p><form id="quiz" class="grid" style="gap:12px"><fieldset class="q" data-a="1" data-e="Power Query solo lee el origen. Las transformaciones viven en la consulta." style="margin:0"><legend style="font-weight:700;padding:0 4px">1. ¿Qué hace Power Query con los archivos de origen al transformar los datos?</legend><div class="opts"><label><input type="radio" name="q0" value="0" id="q0o0"> <span>Los modifica y guarda los cambios</span></label><label><input type="radio" name="q0" value="1" id="q0o1"> <span>Los lee y transforma una copia; el origen no cambia</span></label><label><input type="radio" name="q0" value="2" id="q0o2"> <span>Los borra después de cargarlos</span></label><label><input type="radio" name="q0" value="3" id="q0o3"> <span>Los convierte en .xlsm</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="0" data-e="La conexión a carpeta anexa todos los archivos y toma los nuevos al actualizar." style="margin:0"><legend style="font-weight:700;padding:0 4px">2. Necesita unir 12 reportes mensuales con la misma estructura guardados en una carpeta. ¿Qué opción usa?</legend><div class="opts"><label><input type="radio" name="q1" value="0" id="q1o0"> <span>Desde una carpeta + Combinar y transformar</span></label><label><input type="radio" name="q1" value="1" id="q1o1"> <span>Desde texto/CSV, uno por uno</span></label><label><input type="radio" name="q1" value="2" id="q1o2"> <span>Copiar y pegar en una hoja</span></label><label><input type="radio" name="q1" value="3" id="q1o3"> <span>Combinar consultas con Externa izquierda</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="1" data-e="Anular dinamización convierte esas columnas en filas Semana / Cantidad." style="margin:0"><legend style="font-weight:700;padding:0 4px">3. Un reporte trae columnas Semana 1, Semana 2, Semana 3, Semana 4. Para analizar por semana debe:</legend><div class="opts"><label><input type="radio" name="q2" value="0" id="q2o0"> <span>Dividir columna</span></label><label><input type="radio" name="q2" value="1" id="q2o1"> <span>Anular dinamización</span></label><label><input type="radio" name="q2" value="2" id="q2o2"> <span>Cambiar el tipo a fecha</span></label><label><input type="radio" name="q2" value="3" id="q2o3"> <span>Quitar columnas</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="2" data-e="Anexar = más filas. Combinar = más columnas, como un BUSCARV." style="margin:0"><legend style="font-weight:700;padding:0 4px">4. ¿Cuál es la diferencia entre anexar y combinar consultas?</legend><div class="opts"><label><input type="radio" name="q3" value="0" id="q3o0"> <span>No hay diferencia</span></label><label><input type="radio" name="q3" value="1" id="q3o1"> <span>Anexar agrega columnas; combinar agrega filas</span></label><label><input type="radio" name="q3" value="2" id="q3o2"> <span>Anexar agrega filas (una tabla debajo de otra); combinar cruza tablas por una columna común</span></label><label><input type="radio" name="q3" value="3" id="q3o3"> <span>Combinar solo funciona con CSV</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="2" data-e="Anti izquierda devuelve las filas de la izquierda sin coincidencia en la derecha." style="margin:0"><legend style="font-weight:700;padding:0 4px">5. Quiere encontrar los elementos consumidos que NO están en el catálogo. ¿Qué tipo de combinación usa?</legend><div class="opts"><label><input type="radio" name="q4" value="0" id="q4o0"> <span>Interna</span></label><label><input type="radio" name="q4" value="1" id="q4o1"> <span>Externa completa</span></label><label><input type="radio" name="q4" value="2" id="q4o2"> <span>Anti izquierda</span></label><label><input type="radio" name="q4" value="3" id="q4o3"> <span>Externa derecha</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="0" data-e="Reemplace «-» por 0 antes de cambiar el tipo de datos." style="margin:0"><legend style="font-weight:700;padding:0 4px">6. Al cambiar el tipo de la columna Semana 1 a número aparecen celdas «Error». ¿La causa más probable?</legend><div class="opts"><label><input type="radio" name="q5" value="0" id="q5o0"> <span>La columna tiene guiones «-» que no son números</span></label><label><input type="radio" name="q5" value="1" id="q5o1"> <span>El archivo está en otra carpeta</span></label><label><input type="radio" name="q5" value="2" id="q5o2"> <span>Falta una macro</span></label><label><input type="radio" name="q5" value="3" id="q5o3"> <span>La tabla no tiene nombre</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="1" data-e="Dividir columna por el delimitador situado más a la izquierda." style="margin:0"><legend style="font-weight:700;padding:0 4px">7. La columna «PAP-001 - Resma papel carta» se separa en código y elemento con:</legend><div class="opts"><label><input type="radio" name="q6" value="0" id="q6o0"> <span>Anular dinamización</span></label><label><input type="radio" name="q6" value="1" id="q6o1"> <span>Dividir columna por delimitador « - »</span></label><label><input type="radio" name="q6" value="2" id="q6o2"> <span>Reemplazar valores</span></label><label><input type="radio" name="q6" value="3" id="q6o3"> <span>Agrupar por</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="1" data-e="Las macros solo se guardan en formatos habilitados para macros (.xlsm)." style="margin:0"><legend style="font-weight:700;padding:0 4px">8. Guardó su libro con macro como .xlsx. ¿Qué pasa?</legend><div class="opts"><label><input type="radio" name="q7" value="0" id="q7o0"> <span>Nada, la macro se conserva</span></label><label><input type="radio" name="q7" value="1" id="q7o1"> <span>La macro se pierde; debe guardar como .xlsm</span></label><label><input type="radio" name="q7" value="2" id="q7o2"> <span>Se convierte en consulta</span></label><label><input type="radio" name="q7" value="3" id="q7o3"> <span>Excel la firma digitalmente</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="2" data-e="Las macros pueden ejecutar acciones dañinas. Verifique antes con el remitente o con TI." style="margin:0"><legend style="font-weight:700;padding:0 4px">9. Recibe por correo un archivo con macros que no esperaba. Lo correcto es:</legend><div class="opts"><label><input type="radio" name="q8" value="0" id="q8o0"> <span>Habilitar contenido para ver qué hace</span></label><label><input type="radio" name="q8" value="1" id="q8o1"> <span>Moverlo a una ubicación de confianza</span></label><label><input type="radio" name="q8" value="2" id="q8o2"> <span>No habilitar las macros y confirmar el origen por otro medio</span></label><label><input type="radio" name="q8" value="3" id="q8o3"> <span>Desbloquearlo en Propiedades</span></label></div><div class="fb" hidden></div></fieldset><fieldset class="q" data-a="1" data-e="La grabadora guarda rangos fijos. Use columnas completas o una macro ajustada a la tabla." style="margin:0"><legend style="font-weight:700;padding:0 4px">10. Una macro grabada da formato a «I2:J413». Al agregar octubre la tabla tiene 552 filas. ¿Qué ocurre?</legend><div class="opts"><label><input type="radio" name="q9" value="0" id="q9o0"> <span>Se ajusta sola</span></label><label><input type="radio" name="q9" value="1" id="q9o1"> <span>Las filas nuevas quedan sin formato</span></label><label><input type="radio" name="q9" value="2" id="q9o2"> <span>Borra octubre</span></label><label><input type="radio" name="q9" value="3" id="q9o3"> <span>La consulta falla</span></label></div><div class="fb" hidden></div></fieldset><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn pri" type="submit">Calificar</button><button class="btn" type="reset">Reiniciar</button></div><div class="panel" id="qres" hidden></div></form><div class="pager"><a class="btn" href="#taller">← Taller de aplicación</a><a class="btn pri" href="#reflexion">Retroalimentación →</a></div></section>
+<section class="view" id="v-reflexion" hidden><div><div class="eyebrow">Retroalimentación</div><h2>¿Cuándo conviene automatizar y qué riesgos implica?</h2></div><p class="lead">Automatizar ahorra tiempo, pero no siempre conviene y siempre implica riesgos. Use la calculadora con un reporte real de su dependencia y luego responda las preguntas de discusión.</p>
+<div class="panel"><div class="eyebrow">Calculadora</div><h3>¿Conviene automatizar este reporte?</h3>
+<div class="calc">
+<div>
+<label for="cFreq">Veces que hace el reporte al año: <output id="oFreq"></output></label><input type="range" id="cFreq" min="1" max="52" value="12">
+<label for="cMin">Minutos que toma hacerlo a mano: <output id="oMin"></output></label><input type="range" id="cMin" min="5" max="480" step="5" value="120">
+<label for="cBuild">Horas para construir la automatización: <output id="oBuild"></output></label><input type="range" id="cBuild" min="1" max="40" value="4">
+<label for="cStab">¿El formato del reporte de origen es estable? <select id="cStab"><option value="1">Sí, siempre llega igual</option><option value="0.6">A veces cambia</option><option value="0.25">Cambia casi siempre</option></select></label>
+<label for="cSens">¿Contiene datos personales o reservados? <select id="cSens"><option value="0">No</option><option value="1">Sí</option></select></label>
+</div>
+<div class="verdict" id="cOut"></div>
+</div></div>
+<div class="grid g2">
+<div class="panel"><h3>Cuándo conviene automatizar</h3><ul class="clean">
+<li>La tarea se repite con frecuencia (semanal, mensual) y siempre con los mismos pasos.</li>
+<li>Los archivos de origen tienen una estructura estable.</li>
+<li>Hay muchos archivos o muchas filas, y el riesgo de error humano es alto.</li>
+<li>Otra persona debe poder repetir el proceso sin depender de usted.</li></ul></div>
+<div class="panel"><h3>Riesgos y cómo controlarlos</h3><ul class="clean">
+<li><b>Cambio de estructura:</b> si una dependencia cambia un encabezado, la consulta falla o, peor, carga datos incompletos sin avisar. Control: totales de verificación.</li>
+<li><b>Confianza ciega:</b> «lo hizo Excel» no garantiza que esté bien. Revise conteos y sumas cada vez.</li>
+<li><b>Dependencia de una persona:</b> documente los pasos y deje el archivo en una ubicación compartida.</li>
+<li><b>Macros maliciosas:</b> habilite solo macros propias o de origen verificado.</li>
+<li><b>Datos personales:</b> la Ley 1581 de 2012 exige proteger los datos personales; no cargue cédulas o salarios en carpetas abiertas.</li>
+<li><b>Rutas locales:</b> una consulta a <kbd>C:\</kbd> no funciona en el equipo de otra persona. Use rutas compartidas o la hoja Parametros.</li></ul></div>
+</div>
+<div class="panel"><div class="eyebrow">Discusión</div><h3>Preguntas para la socialización</h3>
+<ol class="steps">
+<li><div>¿Qué reporte de su dependencia automatizaría primero y por qué?</div></li>
+<li><div>¿Qué pasaría si en noviembre una dependencia envía el reporte con la hoja llamada «Hoja1»? ¿Cómo lo detectaría?</div></li>
+<li><div>¿Quién más debería saber cómo funciona su consolidado, y dónde dejaría la documentación?</div></li>
+<li><div>¿Qué tarea de su trabajo <b>no</b> conviene automatizar? Explique.</div></li>
+</ol></div><div class="pager"><a class="btn" href="#evaluacion">← Autoevaluación</a><a class="btn pri" href="#recursos">Recursos y glosario →</a></div></section>
+<section class="view" id="v-recursos" hidden><div><div class="eyebrow">Recursos</div><h2>Cibergrafía, bibliografía y glosario</h2></div><div class="panel"><div class="eyebrow">Cibergrafía · videos</div><h3>Videos recomendados por subtema</h3><p style="font-size:14px;color:var(--muted)">Se abren en YouTube en una pestaña nueva. Enlaces verificados en octubre de 2026.</p><div class="vids"><a class="vid" href="https://www.youtube.com/watch?v=Wy46tFMmsxg" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.1</div><img src="https://i.ytimg.com/vi/Wy46tFMmsxg/hqdefault.jpg" alt="Miniatura del video ¿Qué es Power Query? ¿Excel? ¿Power BI?" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.1</span><b>¿Qué es Power Query? ¿Excel? ¿Power BI?</b><span>Power Elite Studio · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=f3nEZo4b-Yg" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.1</div><img src="https://i.ytimg.com/vi/f3nEZo4b-Yg/hqdefault.jpg" alt="Miniatura del video Power Query desde cero: tutorial completo para principiantes" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.1</span><b>Power Query desde cero: tutorial completo para principiantes</b><span>JP Technology · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=T1wkFExDo8Q" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.2</div><img src="https://i.ytimg.com/vi/T1wkFExDo8Q/hqdefault.jpg" alt="Miniatura del video Cómo combinar archivos desde una carpeta con Power Query" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.2</span><b>Cómo combinar archivos desde una carpeta con Power Query</b><span>Hablando de Excel · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=L0sL6bXM3DQ" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.2</div><img src="https://i.ytimg.com/vi/L0sL6bXM3DQ/hqdefault.jpg" alt="Miniatura del video Consolidar múltiples archivos de Excel con Power Query" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.2</span><b>Consolidar múltiples archivos de Excel con Power Query</b><span>Renzo Caceres Rossi · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=KDGYVXVRAIY" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.3</div><img src="https://i.ytimg.com/vi/KDGYVXVRAIY/hqdefault.jpg" alt="Miniatura del video Power Query: anular dinamización de columnas a filas y viceversa" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.3</span><b>Power Query: anular dinamización de columnas a filas y viceversa</b><span>El Tío Tech · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=B-slsEfoWws" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.4</div><img src="https://i.ytimg.com/vi/B-slsEfoWws/hqdefault.jpg" alt="Miniatura del video Combinar y anexar consultas en Power Query" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.4</span><b>Combinar y anexar consultas en Power Query</b><span>La Mochila del saber · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=FyjD8xcA-Fk" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.5</div><img src="https://i.ytimg.com/vi/FyjD8xcA-Fk/hqdefault.jpg" alt="Miniatura del video Macros fáciles en Excel para principiantes: cómo grabar macros" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.5</span><b>Macros fáciles en Excel para principiantes: cómo grabar macros</b><span>Generación Aprende · YouTube</span></div></a><a class="vid" href="https://www.youtube.com/watch?v=17hQ3lZguhQ" target="_blank" rel="noopener"><div class="thumb"><div class="ph">Video · 10.5</div><img src="https://i.ytimg.com/vi/17hQ3lZguhQ/hqdefault.jpg" alt="Miniatura del video Grabar macros en Excel y asignarlas a un botón" loading="lazy"><span class="play"></span></div><div class="vb"><span class="chip" style="align-self:flex-start">10.5</span><b>Grabar macros en Excel y asignarlas a un botón</b><span>Carlos A. García S. · YouTube</span></div></a></div></div><div class="panel"><div class="eyebrow">Cibergrafía · documentación oficial</div><h3>Soporte de Microsoft en español</h3><p class="ref">Microsoft. (s. f.). <i>Acerca de Power Query en Excel</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-es/Excel/about-power-query-in-excel" target="_blank" rel="noopener">https://support.microsoft.com/es-es/Excel/about-power-query-in-excel</a></p><p class="ref">Microsoft. (s. f.). <i>Importar datos de una carpeta con varios archivos (Power Query)</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-es/Excel/import-data-from-a-folder-with-multiple-files-power-query" target="_blank" rel="noopener">https://support.microsoft.com/es-es/Excel/import-data-from-a-folder-with-multiple-files-power-query</a></p><p class="ref">Microsoft. (s. f.). <i>Anular dinamización de columnas (Power Query)</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-es/Excel/unpivot-columns-power-query" target="_blank" rel="noopener">https://support.microsoft.com/es-es/Excel/unpivot-columns-power-query</a></p><p class="ref">Microsoft. (s. f.). <i>Consultas de datos anexados (Power Query)</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-es/Excel/append-queries-power-query" target="_blank" rel="noopener">https://support.microsoft.com/es-es/Excel/append-queries-power-query</a></p><p class="ref">Microsoft. (s. f.). <i>Combinar las consultas (Power Query)</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-es/Excel/merge-queries-power-query" target="_blank" rel="noopener">https://support.microsoft.com/es-es/Excel/merge-queries-power-query</a></p><p class="ref">Microsoft. (s. f.). <i>Crear, cargar o editar una consulta en Excel (Power Query)</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-es/Excel/create-load-or-edit-a-query-in-excel-power-query" target="_blank" rel="noopener">https://support.microsoft.com/es-es/Excel/create-load-or-edit-a-query-in-excel-power-query</a></p><p class="ref">Microsoft. (s. f.). <i>Habilitar o deshabilitar macros en archivos de Microsoft 365</i>. Recuperado el 20 de octubre de 2026, de <a href="https://support.microsoft.com/es-ES/Office/vba/enable-or-disable-macros-in-microsoft-365-files" target="_blank" rel="noopener">https://support.microsoft.com/es-ES/Office/vba/enable-or-disable-macros-in-microsoft-365-files</a></p><p class="ref">Microsoft. (s. f.). <i>Documentación de Power Query (Microsoft Learn)</i>. Recuperado el 20 de octubre de 2026, de <a href="https://learn.microsoft.com/power-query" target="_blank" rel="noopener">https://learn.microsoft.com/power-query</a></p></div><div class="panel"><div class="eyebrow">Bibliografía</div><h3>Referencias (APA 7)</h3><p class="ref">Alexander, M., & Kusleika, D. (2018). <i>Excel 2019 Power Programming with VBA</i>. Wiley.</p><p class="ref">Congreso de la República de Colombia. (2012). <i>Ley Estatutaria 1581 de 2012, por la cual se dictan disposiciones generales para la protección de datos personales</i>. Diario Oficial 48.587.</p><p class="ref">Puls, K., & Escobar, M. (2021). <i>Master Your Data with Power Query in Excel and Power BI</i> (2.ª ed.). Holy Macro! Books.</p><p class="ref">Raviv, G. (2019). <i>Collect, Combine, and Transform Data Using Power Query in Excel and Power BI</i>. Microsoft Press.</p><p class="ref">Servicio Nacional de Aprendizaje SENA. (s. f.). <i>Manual de identidad visual</i>. SENA.</p><p class="ref">Webb, C. (2014). <i>Power Query for Power BI and Excel</i>. Apress.</p></div><div class="panel"><div class="eyebrow">Glosario</div><h3>Términos clave</h3><label for="glSearch" style="font-size:14px;font-weight:600">Buscar término</label><input type="search" id="glSearch" placeholder="Ej.: anexar, macro, null" style="margin:6px 0 14px"><div class="gl"><div><b>Actualizar todo</b><br><span style="font-size:14.5px">Comando (Datos › Actualizar todo, Ctrl+Alt+F5) que vuelve a ejecutar todas las consultas y tablas dinámicas del libro.</span></div><div><b>Anexar consultas</b><br><span style="font-size:14.5px">Unir tablas con las mismas columnas una debajo de otra. Aumenta el número de filas.</span></div><div><b>Anular dinamización</b><br><span style="font-size:14.5px">Convertir columnas en filas (unpivot). Pasa de una tabla ancha a una larga.</span></div><div><b>Anti izquierda</b><br><span style="font-size:14.5px">Tipo de combinación que devuelve las filas de la tabla izquierda sin coincidencia en la derecha.</span></div><div><b>Archivo de ejemplo</b><br><span style="font-size:14.5px">Archivo que Power Query usa como modelo al combinar una carpeta. Sus pasos se aplican a todos.</span></div><div><b>Botón de macro</b><br><span style="font-size:14.5px">Forma o control al que se asigna una macro para ejecutarla con un clic.</span></div><div><b>Centro de confianza</b><br><span style="font-size:14.5px">Configuración de seguridad de Office que define cómo se tratan macros, complementos y ubicaciones.</span></div><div><b>Combinar consultas</b><br><span style="font-size:14.5px">Cruzar dos tablas por una o más columnas comunes para traer columnas de una a otra (merge).</span></div><div><b>Consulta</b><br><span style="font-size:14.5px">Conjunto de pasos guardados que obtiene y transforma datos de un origen.</span></div><div><b>CSV</b><br><span style="font-size:14.5px">Archivo de texto con valores separados por coma o punto y coma. Formato habitual de exportación de aplicativos.</span></div><div><b>Delimitador</b><br><span style="font-size:14.5px">Carácter que separa partes de un texto, como «_», « - » o «;».</span></div><div><b>Editor de Power Query</b><br><span style="font-size:14.5px">Ventana donde se aplican y revisan las transformaciones de una consulta.</span></div><div><b>ETL</b><br><span style="font-size:14.5px">Extraer, transformar y cargar: el ciclo de trabajo de Power Query.</span></div><div><b>Externa izquierda</b><br><span style="font-size:14.5px">Combinación que conserva todas las filas de la izquierda y trae las coincidencias de la derecha.</span></div><div><b>Grabadora de macros</b><br><span style="font-size:14.5px">Herramienta que registra acciones del usuario y las convierte en código VBA.</span></div><div><b>Lenguaje M</b><br><span style="font-size:14.5px">Lenguaje en el que Power Query guarda cada paso de una consulta.</span></div><div><b>Macro</b><br><span style="font-size:14.5px">Secuencia de instrucciones que automatiza tareas en Excel.</span></div><div><b>Marca de la Web</b><br><span style="font-size:14.5px">Etiqueta que Windows pone a archivos descargados; hace que Office bloquee sus macros.</span></div><div><b>null</b><br><span style="font-size:14.5px">Valor vacío en Power Query. No es lo mismo que 0 ni que un texto vacío.</span></div><div><b>Pasos aplicados</b><br><span style="font-size:14.5px">Panel del Editor que lista, en orden, las transformaciones de la consulta.</span></div><div><b>Solo crear conexión</b><br><span style="font-size:14.5px">Opción de carga que guarda la consulta sin escribir datos en una hoja; útil para tablas auxiliares.</span></div><div><b>Tabla de Excel</b><br><span style="font-size:14.5px">Rango con formato de tabla (Ctrl+T) que tiene nombre y crece automáticamente.</span></div><div><b>Tipo de datos</b><br><span style="font-size:14.5px">Clase de valor de una columna: texto, número entero, decimal, fecha, moneda.</span></div><div><b>Ubicación de confianza</b><br><span style="font-size:14.5px">Carpeta en la que Excel ejecuta macros sin preguntar.</span></div><div><b>VBA</b><br><span style="font-size:14.5px">Visual Basic para Aplicaciones: el lenguaje de las macros de Office.</span></div><div><b>.xlsm</b><br><span style="font-size:14.5px">Formato de libro de Excel habilitado para macros.</span></div></div></div><div class="pager"><a class="btn" href="#reflexion">← Retroalimentación</a></div></section>
+  </div>
+</main>
+</div>
+
+<script>
+window.initSim = function(){
+  var host = document.getElementById('simTable'); if(!host) return;
+  var raw = [
+    ['SERVICIO NACIONAL DE APRENDIZAJE - SENA',null,null,null,null,null],
+    ['Reporte de consumo de elementos - Talento Humano',null,null,null,null,null],
+    ['Periodo: Julio 2026 | Generado por el aplicativo',null,null,null,null,null],
+    [null,null,null,null,null,null],
+    ['Código - Elemento','Unidad','Semana 1','Semana 2','Semana 3','Observaciones'],
+    ['ASE-002 - Toallas de papel paquete x150','PAQUETE','9','-','5','Pedido urgente'],
+    ['CAF-001 - Café molido 500 g','Und.','12','16',null,null],
+    [null,null,null,null,null,null],
+    ['PAP-001 - Resma papel carta 75 g','Resma','-','11','8','Revisar con almacén'],
+    ['PAP-004 - Bolígrafo tinta negra','UND','15','4','15',null],
+    ['TOTAL',null,'36','31','28',null]
+  ];
+  function clone(t){return {h:t.h.slice(), ty:t.ty.slice(), r:t.r.map(function(x){return x.slice()}), mark:{}, newc:t.newc?t.newc.slice():[]}}
+  var S = [];
+  var t0 = {h:['Column1','Column2','Column3','Column4','Column5','Column6'], ty:['any','any','any','any','any','any'], r:raw, mark:{}, newc:[]};
+  S.push({name:'Origen', t:t0, m:'= Excel.Workbook(Archivo, null, true){[Item="Reporte",Kind="Sheet"]}[Data]', e:'Así llega el reporte exportado: títulos del aplicativo arriba, filas vacías, una fila TOTAL, guiones en lugar de ceros y unidades escritas de varias formas.'});
+  var t = clone(t0); t.r = t.r.slice(4);
+  S.push({name:'Filas superiores quitadas', t:t, m:'= Table.Skip(Origen, 4)', e:'Inicio › Quitar filas › Quitar filas superiores › 4. Se eliminan las 3 filas de título y la fila en blanco.'});
+  t = clone(t); t.h = t.r[0].slice(); t.r = t.r.slice(1); t.ty=['any','any','any','any','any','any'];
+  S.push({name:'Encabezados promovidos', t:t, m:'= Table.PromoteHeaders(#"Filas superiores quitadas", [PromoteAllScalars=true])', e:'Inicio › Usar la primera fila como encabezado. Ahora las columnas tienen nombres reales.'});
+  t = clone(t); t.r = t.r.filter(function(x){return x[0]!==null && x[0].toUpperCase().indexOf('TOTAL')!==0});
+  S.push({name:'Filas filtradas', t:t, m:'= Table.SelectRows(#"Encabezados promovidos", each [#"Código - Elemento"] <> null\n    and not Text.StartsWith([#"Código - Elemento"], "TOTAL"))', e:'Quitar filas en blanco y filtro de texto «No comienza por TOTAL». Nunca sume la fila de totales del aplicativo: se duplicaría el valor.'});
+  t = clone(t); t.h.pop(); t.ty.pop(); t.r = t.r.map(function(x){return x.slice(0,5)});
+  S.push({name:'Columnas quitadas', t:t, m:'= Table.RemoveColumns(#"Filas filtradas", {"Observaciones"})', e:'Seleccione Observaciones › Inicio › Quitar columnas. Solo deje lo que el informe necesita.'});
+  t = clone(t); t.h.splice(0,1,'Código','Elemento'); t.ty.splice(0,1,'text','text'); t.r = t.r.map(function(x){var p=x[0].indexOf(' - '); return [x[0].slice(0,p), x[0].slice(p+3)].concat(x.slice(1))}); t.newc=[0,1];
+  S.push({name:'Dividir columna por delimitador', t:t, m:'= Table.SplitColumn(#"Columnas quitadas", "Código - Elemento",\n    Splitter.SplitTextByEachDelimiter({" - "}), {"Código", "Elemento"})', e:'Transformar › Dividir columna › Por delimitador « - », en el situado más a la izquierda. Una columna se convierte en dos.'});
+  t = clone(t); t.newc=[2,3,4,5]; t.r = t.r.map(function(x){var u=x[2].replace('.','').trim(); u=u.charAt(0).toUpperCase()+u.slice(1).toLowerCase(); if(u==='Und') u='Unidad'; var y=[x[0],x[1],u]; for(var i=3;i<x.length;i++){y.push(x[i]==='-'||x[i]===null?'0':x[i])} return y});
+  S.push({name:'Valor reemplazado', t:t, m:'= Table.ReplaceValue(..., "Und", "Unidad", Replacer.ReplaceValue, {"Unidad"})\n= Table.ReplaceValue(..., "-", 0, Replacer.ReplaceValue, {"Semana 1","Semana 2","Semana 3"})\n= Table.ReplaceValue(..., null, 0, Replacer.ReplaceValue, {"Semana 1","Semana 2","Semana 3"})', e:'Transformar › Formato › Poner En Mayúsculas Cada Palabra y Reemplazar valores. «UND», «Und.» y «PAQUETE» quedan como «Unidad» y «Paquete»; los «-» y vacíos pasan a 0.'});
+  t = clone(t); t.newc=[]; t.ty = ['text','text','text','int','int','int'];
+  S.push({name:'Tipo cambiado', t:t, m:'= Table.TransformColumnTypes(#"Valor reemplazado",\n    {{"Semana 1", Int64.Type}, {"Semana 2", Int64.Type}, {"Semana 3", Int64.Type}})', e:'Clic en el icono ABC/123 de cada encabezado › Número entero. Ahora las cantidades se pueden sumar. Si hubiera quedado un «-», aparecería Error.'});
+  t = clone(t); var rows=[]; t.r.forEach(function(x){for(var i=3;i<x.length;i++){rows.push([x[0],x[1],x[2],t.h[i],x[i]])}}); t.h=['Código','Elemento','Unidad','Semana','Cantidad']; t.ty=['text','text','text','text','int']; t.r=rows; t.newc=[3,4];
+  S.push({name:'Columnas de anulación de dinamización', t:t, m:'= Table.UnpivotOtherColumns(#"Tipo cambiado",\n    {"Código", "Elemento", "Unidad"}, "Semana", "Cantidad")', e:'Seleccione Código, Elemento y Unidad › clic derecho › Anular dinamización de otras columnas. 4 filas × 3 semanas = 12 filas: una por elemento y semana, lista para tablas dinámicas.'});
+  var cur = 0;
+  var list = document.getElementById('simSteps');
+  S.forEach(function(s,i){var li=document.createElement('li'); var b=document.createElement('button'); b.type='button'; b.innerHTML='<svg class="gear" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg><span>'+s.name+'</span>'; b.addEventListener('click',function(){cur=i; render()}); li.appendChild(b); list.appendChild(li)});
+  function esc(v){return String(v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function render(){
+    var s = S[cur], tb = s.t, tyl = {any:'ABC123', text:'ABC', int:'123'};
+    var h = '<table class="t"><thead><tr>'+tb.h.map(function(c,i){return '<th class="'+(tb.newc.indexOf(i)>=0?'new':'')+'"><span class="ty">'+tyl[tb.ty[i]]+'</span>'+esc(c)+'</th>'}).join('')+'</tr></thead><tbody>';
+    tb.r.forEach(function(r){h+='<tr>'+r.map(function(v,i){
+      var cls=''; if(v===null){return '<td class="nul">null</td>'}
+      if(v==='-'||v==='UND'||v==='Und.'||v==='PAQUETE'||v==='TOTAL') cls='dirty';
+      if(tb.newc.indexOf(i)>=0) cls='new';
+      if(tb.ty[i]==='int') return '<td class="'+cls+'" style="text-align:right">'+esc(v)+'</td>';
+      return '<td class="'+cls+'">'+esc(v)+'</td>'}).join('')+'</tr>'});
+    h += '</tbody></table>';
+    host.innerHTML = h;
+    document.getElementById('simExp').innerHTML = '<b>Paso '+(cur+1)+' de '+S.length+': '+s.name+'.</b> '+s.e+' <span style="color:var(--muted)">('+tb.r.length+' filas × '+tb.h.length+' columnas)</span>';
+    document.getElementById('simCode').innerHTML = '<div class="code"><div class="code-h"><span>Código M generado</span></div><pre><code>'+esc(s.m)+'</code></pre></div>';
+    Array.prototype.forEach.call(list.querySelectorAll('button'),function(b,i){b.classList.toggle('cur',i===cur); b.classList.toggle('done',i<=cur)});
+    document.getElementById('simPrev').disabled = cur===0;
+    document.getElementById('simNext').disabled = cur===S.length-1;
+  }
+  document.getElementById('simPrev').addEventListener('click',function(){if(cur>0){cur--;render()}});
+  document.getElementById('simNext').addEventListener('click',function(){if(cur<S.length-1){cur++;render()}});
+  render();
+};
+
+window.initJoin = function(){
+  var seg = document.getElementById('joinSeg'); if(!seg) return;
+  var L = [['PAP-001',24],['ASE-001',6],['CAF-001',9],['PAP-099',3]];
+  var R = [['PAP-001','Papelería',18500],['ASE-001','Aseo',24500],['CAF-001','Cafetería',19800],['CAF-002','Cafetería',4900]];
+  var types = [
+    ['left','Externa izquierda','Todas las filas de Consumos y las coincidencias del catálogo. PAP-099 queda con null: no está en el catálogo. Es la opción del taller.'],
+    ['inner','Interna','Solo las filas que existen en ambas tablas. PAP-099 y CAF-002 desaparecen.'],
+    ['full','Externa completa','Todas las filas de ambas tablas, coincidan o no.'],
+    ['right','Externa derecha','Todas las filas del catálogo y las coincidencias de Consumos. CAF-002 aparece sin cantidad.'],
+    ['antil','Anti izquierda','Solo las filas de Consumos que NO están en el catálogo. Sirve para encontrar códigos mal escritos o elementos nuevos.'],
+    ['antir','Anti derecha','Solo los elementos del catálogo que NO tuvieron consumo.']
+  ];
+  function tbl(h,rows){return '<table class="t"><thead><tr>'+h.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(v){return v===null?'<td class="nul">null</td>':'<td>'+(typeof v==='number'?v.toLocaleString('es-CO'):v)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>'}
+  document.getElementById('jL').innerHTML = tbl(['Código','Cantidad'],L);
+  document.getElementById('jR').innerHTML = tbl(['Código','Categoría','Valor'],R);
+  function rm(c){for(var i=0;i<R.length;i++) if(R[i][0]===c) return R[i]; return null}
+  function lm(c){for(var i=0;i<L.length;i++) if(L[i][0]===c) return L[i]; return null}
+  function venn(k){
+    var a = (k==='left'||k==='full'||k==='antil'), b=(k==='right'||k==='full'||k==='antir'), m=(k!=='antil'&&k!=='antir');
+    var g='var(--verde)', n='var(--surface2)';
+    return '<svg class="venn" viewBox="0 0 200 110" role="img" aria-label="Diagrama de la combinación"><defs><clipPath id="cA"><circle cx="75" cy="55" r="45"/></clipPath></defs>'+
+      '<circle cx="75" cy="55" r="45" fill="'+(a?g:n)+'" stroke="var(--line)"/><circle cx="125" cy="55" r="45" fill="'+(b?g:n)+'" stroke="var(--line)"/>'+
+      '<circle cx="125" cy="55" r="45" clip-path="url(#cA)" fill="'+(m?'var(--verde2)':n)+'"/>'+
+      '<text x="45" y="59" font-size="11" fill="var(--fg)" font-family="Work Sans,sans-serif">Izq.</text><text x="140" y="59" font-size="11" fill="var(--fg)" font-family="Work Sans,sans-serif">Der.</text></svg>';
+  }
+  function run(k){
+    var rows=[], h=['Código','Cantidad','Categoría','Valor'];
+    if(k==='left'||k==='inner'||k==='full'){L.forEach(function(l){var r=rm(l[0]); if(r||k!=='inner') rows.push([l[0],l[1],r?r[1]:null,r?r[2]:null])})}
+    if(k==='full'){R.forEach(function(r){if(!lm(r[0])) rows.push([r[0],null,r[1],r[2]])})}
+    if(k==='right'){R.forEach(function(r){var l=lm(r[0]); rows.push([r[0],l?l[1]:null,r[1],r[2]])})}
+    if(k==='antil'){h=['Código','Cantidad']; L.forEach(function(l){if(!rm(l[0])) rows.push(l)})}
+    if(k==='antir'){h=['Código','Categoría','Valor']; R.forEach(function(r){if(!lm(r[0])) rows.push(r)})}
+    document.getElementById('jOut').innerHTML = tbl(h,rows);
+    document.getElementById('jV').innerHTML = venn(k);
+    types.forEach(function(t){if(t[0]===k) document.getElementById('jTxt').innerHTML='<b>'+t[1]+':</b> '+t[2]});
+    Array.prototype.forEach.call(seg.children,function(b){b.classList.toggle('on',b.getAttribute('data-k')===k); b.setAttribute('aria-pressed',b.getAttribute('data-k')===k)});
+  }
+  types.forEach(function(t){var b=document.createElement('button'); b.type='button'; b.textContent=t[1]; b.setAttribute('data-k',t[0]); b.addEventListener('click',function(){run(t[0])}); seg.appendChild(b)});
+  run('left');
+};
+
+window.initCalc = function(){
+  var f=document.getElementById('cFreq'); if(!f) return;
+  var m=document.getElementById('cMin'), b=document.getElementById('cBuild'), s=document.getElementById('cStab'), p=document.getElementById('cSens'), o=document.getElementById('cOut');
+  function upd(){
+    var freq=+f.value, min=+m.value, build=+b.value, stab=+s.value, sens=+p.value;
+    document.getElementById('oFreq').textContent=freq; document.getElementById('oMin').textContent=min+' min'; document.getElementById('oBuild').textContent=build+' h';
+    var manualH = freq*min/60;
+    var autoH = freq*5/60 + (1-stab)*freq*min/60*0.8;
+    var maint = build*(1-stab)*2;
+    var saved = manualH - autoH - maint;
+    var payback = saved>0 ? Math.max(1,Math.ceil(build/(saved/12))) : null;
+    var cls, title, txt;
+    if(saved > build*1.5 && stab>=0.6){cls='yes'; title='Conviene automatizar'; txt='Recupera las horas de construcción en '+payback+(payback===1?' mes':' meses')+' aproximadamente.'}
+    else if(saved > build*0.5){cls='mid'; title='Conviene, con cautela'; txt='El ahorro existe, pero depende de que el formato de origen no cambie. Agregue controles de conteo y suma.'}
+    else {cls='no'; title='Mejor no automatizar todavía'; txt='La tarea es poco frecuente o cambia demasiado. Documente los pasos manuales y revise de nuevo más adelante.'}
+    var risk = sens ? '<p style="margin-top:10px"><b>Datos personales:</b> guarde la carpeta de origen y el consolidado en ubicaciones con acceso restringido y no comparta el archivo por fuera de la entidad (Ley 1581 de 2012).</p>' : '';
+    o.className='verdict '+cls;
+    o.innerHTML='<div class="eyebrow">Resultado</div><h3>'+title+'</h3><div class="grid g2" style="margin:10px 0"><div><div class="big">'+Math.round(manualH)+' h</div><div style="font-size:13px;color:var(--muted)">al año haciéndolo a mano</div></div><div><div class="big">'+Math.max(0,Math.round(saved))+' h</div><div style="font-size:13px;color:var(--muted)">ahorradas al año (estimado)</div></div></div><p>'+txt+'</p>'+risk+'<p style="font-size:12.5px;color:var(--muted);margin:0">Estimación didáctica: supone 5 minutos por actualización automática y más mantenimiento cuando el formato cambia.</p>';
+  }
+  [f,m,b,s,p].forEach(function(e){e.addEventListener('input',upd); e.addEventListener('change',upd)});
+  upd();
+};
+</script>
+
+
+<script>
+(function(){
+  var KEY = document.body.getAttribute('data-key');
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+  function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+  var st = load(); st.seen = st.seen||{}; st.chk = st.chk||{};
+  var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  var ids = views.map(function(v){return v.id.slice(2)});
+  var root = document.documentElement;
+  // tema
+  var tbtn = document.getElementById('themeBtn');
+  function isDark(){var t=root.getAttribute('data-theme'); if(t) return t==='dark'; return window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches}
+  function paintTheme(){tbtn.querySelector('.lbl').textContent = isDark()?'Modo claro':'Modo oscuro'; tbtn.setAttribute('aria-pressed',isDark())}
+  if(st.theme) root.setAttribute('data-theme',st.theme);
+  tbtn.addEventListener('click',function(){var n=isDark()?'light':'dark'; root.setAttribute('data-theme',n); st.theme=n; save(st); paintTheme()});
+  paintTheme();
+  // progreso
+  var nChk = document.querySelectorAll('.chk input').length;
+  function progress(){
+    var seen = ids.filter(function(i){return st.seen[i]}).length;
+    var done = Object.keys(st.chk).filter(function(k){return st.chk[k]}).length;
+    var total = ids.length + nChk, val = seen + done;
+    var pct = Math.round(100*val/total);
+    document.getElementById('pbar').style.width = pct+'%';
+    document.getElementById('ptxt').textContent = pct+'%';
+    links.forEach(function(a){ if(st.seen[a.getAttribute('href').slice(1)]) a.classList.add('seen') });
+  }
+  function show(id){
+    if(ids.indexOf(id)<0) id = ids[0];
+    views.forEach(function(v){v.hidden = v.id!=='v-'+id});
+    links.forEach(function(a){var on=a.getAttribute('href')==='#'+id; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current')});
+    var a = document.querySelector('.nav a[href="#'+id+'"]');
+    document.getElementById('crumb').textContent = a? a.getAttribute('data-t') : '';
+    st.seen[id]=true; save(st); progress();
+    document.querySelector('.side').classList.remove('open'); document.querySelector('.scrim').classList.remove('open');
+  }
+  window.addEventListener('hashchange',function(){show(location.hash.slice(1)); window.scrollTo(0,0)});
+  show(location.hash.slice(1));
+  document.querySelector('.menu-btn').addEventListener('click',function(){document.querySelector('.side').classList.add('open');document.querySelector('.scrim').classList.add('open')});
+  document.querySelector('.scrim').addEventListener('click',function(){document.querySelector('.side').classList.remove('open');this.classList.remove('open')});
+  // checklist
+  document.querySelectorAll('.chk input').forEach(function(c){
+    c.checked = !!st.chk[c.id];
+    c.addEventListener('change',function(){st.chk[c.id]=c.checked; save(st); progress()});
+  });
+  // copiar
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t = b.closest('.code').querySelector('code');
+      function sel(){var r=document.createRange(); r.selectNodeContents(t); var s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='Seleccionado: Ctrl+C'}
+      try{ navigator.clipboard.writeText(t.textContent).then(function(){b.textContent='Copiado'; setTimeout(function(){b.textContent='Copiar'},1600)},sel) }catch(e){sel()}
+    });
+  });
+  // miniaturas
+  document.querySelectorAll('.thumb img').forEach(function(im){
+    im.addEventListener('error',function(){im.remove()});
+    if(im.complete && im.naturalWidth===0) im.remove();
+  });
+  // glosario
+  var gs = document.getElementById('glSearch');
+  if(gs) gs.addEventListener('input',function(){var q=gs.value.toLowerCase(); document.querySelectorAll('.gl>div').forEach(function(d){d.hidden = d.textContent.toLowerCase().indexOf(q)<0})});
+  // quiz
+  var qform = document.getElementById('quiz');
+  if(qform){
+    qform.addEventListener('submit',function(e){
+      e.preventDefault(); var ok=0, qs=qform.querySelectorAll('.q');
+      qs.forEach(function(q){
+        var right = q.getAttribute('data-a'); var picked = q.querySelector('input:checked');
+        q.querySelectorAll('label').forEach(function(l){l.classList.remove('ok','ko')});
+        var fb = q.querySelector('.fb'); fb.hidden=false;
+        if(picked && picked.value===right){ok++; picked.parentNode.classList.add('ok'); fb.innerHTML='<b>Correcto.</b> '+q.getAttribute('data-e')}
+        else { if(picked) picked.parentNode.classList.add('ko'); q.querySelector('input[value="'+right+'"]').parentNode.classList.add('ok'); fb.innerHTML='<b>Revise:</b> '+q.getAttribute('data-e')}
+      });
+      var r = document.getElementById('qres'); r.hidden=false;
+      r.innerHTML = '<div class="big">'+ok+' / '+qs.length+'</div><p>'+(ok>=8?'Muy bien. Está listo para el taller.':ok>=6?'Buen avance. Repase los subtemas marcados en rojo.':'Repase los subtemas 10.1 a 10.5 y vuelva a intentarlo.')+'</p>';
+      st.quiz = ok; save(st);
+    });
+    qform.addEventListener('reset',function(){qform.querySelectorAll('.fb').forEach(function(f){f.hidden=true}); qform.querySelectorAll('label').forEach(function(l){l.classList.remove('ok','ko')}); document.getElementById('qres').hidden=true});
+  }
+  if(window.initSim) window.initSim();
+  if(window.initJoin) window.initJoin();
+  if(window.initCalc) window.initCalc();
+})();
+</script>
+
+</body>
+</html>
