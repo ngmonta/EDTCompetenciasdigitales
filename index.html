@@ -185,9 +185,9 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
     <p>Objetos Virtuales de Aprendizaje para funcionarios administrativos. Elija el día, seleccione un OVA y vaya directamente al tema que necesita.</p>
     <div class="stats">
       <div class="stat"><b>5</b><span>Días</span></div>
-      <div class="stat"><b>6</b><span>OVA publicados</span></div>
-      <div class="stat"><b>32</b><span>Temas</span></div>
-      <div class="stat"><b>6</b><span>Talleres de aplicación</span></div>
+      <div class="stat"><b>8</b><span>OVA publicados</span></div>
+      <div class="stat"><b>43</b><span>Temas</span></div>
+      <div class="stat"><b>8</b><span>Talleres de aplicación</span></div>
     </div>
   </div>
 </section>
@@ -205,7 +205,7 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
   <nav class="days" role="tablist" aria-label="Días de la EDT">
     <button class="day-tab" role="tab" data-day="1" type="button"><b>Día 1</b><span>3 OVA</span><em class="hits"></em></button>
     <button class="day-tab" role="tab" data-day="2" type="button"><b>Día 2</b><span>3 OVA</span><em class="hits"></em></button>
-    <button class="day-tab" role="tab" data-day="3" type="button"><b>Día 3</b><span>Próximamente</span><em class="hits"></em></button>
+    <button class="day-tab" role="tab" data-day="3" type="button"><b>Día 3</b><span>2 OVA</span><em class="hits"></em></button>
     <button class="day-tab" role="tab" data-day="4" type="button"><b>Día 4</b><span>Próximamente</span><em class="hits"></em></button>
     <button class="day-tab" role="tab" data-day="5" type="button"><b>Día 5</b><span>Próximamente</span><em class="hits"></em></button>
   </nav>
@@ -395,59 +395,63 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
 
   <section class="day" id="dia3" data-day="3" hidden>
     <div class="day-h">
-      <div><span class="day-k">Día 3</span><h2>Próximamente</h2><p>Los OVA de este día se agregarán aquí con el mismo formato.</p></div>
+      <div><span class="day-k">Día 3</span><h2>Análisis de datos y automatización en Excel</h2><p>Seleccione un OVA para ver sus temas.</p></div>
+    </div>
+    <div class="jumps">
+      <a class="jump c1" href="#ova-tablas"><span class="jn">1</span>Tablas y gráficos dinámicos</a>
+      <a class="jump c2" href="#ova-powerquery"><span class="jn">2</span>Power Query y automatización</a>
     </div>
     <div class="grid">
-    <article class="card c1 soon" aria-hidden="true">
+    <article class="card c1" id="ova-tablas">
       <div class="card-h">
         <div class="num">1</div>
-        <span class="tag">OVA · Por definir</span>
-        <h2>Contenido en preparación</h2>
-        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
-        <div class="meta"><span class="chip">Próximamente</span></div>
+        <span class="tag">OVA · Tablas dinámicas</span>
+        <h2>Tablas y gráficos dinámicos para la gestión administrativa</h2>
+        <p class="desc">Resuma miles de registros de ejecución presupuestal, contratación o metas y conviértalos en un tablero interactivo.</p>
+        <div class="meta"><span class="chip">Tablas dinámicas · Segmentaciones · Gráficos</span></div>
       </div>
       <ul class="topics">
         <li class="grp">Temas</li>
-        <li><span class="topic ghost"><span class="n">1.1</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">1.2</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">1.3</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">1.4</span><span class="bar"></span></span></li>
+        <li><a class="topic main" href="OVA_Participante_Tablas_Dinamicas.html#s91"><span class="n">1.1</span><span class="t">Creación de tablas dinámicas</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Tablas_Dinamicas.html#s92"><span class="n">1.2</span><span class="t">Agrupación por fechas y por rangos</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Tablas_Dinamicas.html#s93"><span class="n">1.3</span><span class="t">Cálculos: % del total y campos calculados</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Tablas_Dinamicas.html#s94"><span class="n">1.4</span><span class="t">Interactividad: segmentaciones y escalas de tiempo</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Tablas_Dinamicas.html#s95"><span class="n">1.5</span><span class="t">Gráficos dinámicos y mini tablero</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_Tablas_Dinamicas.html#colab"><span class="n">1.6</span><span class="t">Compartir el tablero y trabajar en equipo</span><span class="arr">→</span></a></li>
+        <li class="grp">Aplicación</li>
+        <li><a class="topic" href="OVA_Participante_Tablas_Dinamicas.html#taller"><span class="n">T</span><span class="t">Taller: tablero de ejecución presupuestal y metas</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Participante_Tablas_Dinamicas.html#evaluacion"><span class="n">E</span><span class="t">Evaluación</span><span class="arr">→</span></a></li>
       </ul>
-      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
+      <div class="card-f">
+        <a class="btn" href="OVA_Participante_Tablas_Dinamicas.html">Abrir OVA Tablas dinámicas
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
     </article>
-    <article class="card c2 soon" aria-hidden="true">
+
+    <article class="card c2" id="ova-powerquery">
       <div class="card-h">
         <div class="num">2</div>
-        <span class="tag">OVA · Por definir</span>
-        <h2>Contenido en preparación</h2>
-        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
-        <div class="meta"><span class="chip">Próximamente</span></div>
+        <span class="tag">OVA · Power Query</span>
+        <h2>Power Query y automatización en Excel</h2>
+        <p class="desc">Obtenga, transforme y consolide datos de varias fuentes para que los reportes se actualicen solos, y automatice tareas con macros.</p>
+        <div class="meta"><span class="chip">Power Query · Macros</span></div>
       </div>
       <ul class="topics">
         <li class="grp">Temas</li>
-        <li><span class="topic ghost"><span class="n">2.1</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">2.2</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">2.3</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">2.4</span><span class="bar"></span></span></li>
+        <li><a class="topic main" href="OVA_Participante_PowerQuery.html#pq"><span class="n">2.1</span><span class="t">Qué es Power Query</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_PowerQuery.html#fuentes"><span class="n">2.2</span><span class="t">Fuentes de datos</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_PowerQuery.html#transformaciones"><span class="n">2.3</span><span class="t">Transformaciones</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_PowerQuery.html#anexar"><span class="n">2.4</span><span class="t">Anexar y combinar consultas</span><span class="arr">→</span></a></li>
+        <li><a class="topic main" href="OVA_Participante_PowerQuery.html#macros"><span class="n">2.5</span><span class="t">Macros grabadas</span><span class="arr">→</span></a></li>
+        <li class="grp">Aplicación</li>
+        <li><a class="topic" href="OVA_Participante_PowerQuery.html#taller"><span class="n">T</span><span class="t">Taller: consolidado automático de reportes</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Participante_PowerQuery.html#reflexion"><span class="n">R</span><span class="t">Retroalimentación: ¿cuándo conviene automatizar?</span><span class="arr">→</span></a></li>
+        <li><a class="topic" href="OVA_Participante_PowerQuery.html#evaluacion"><span class="n">E</span><span class="t">Autoevaluación</span><span class="arr">→</span></a></li>
       </ul>
-      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
-    </article>
-    <article class="card c3 soon" aria-hidden="true">
-      <div class="card-h">
-        <div class="num">3</div>
-        <span class="tag">OVA · Por definir</span>
-        <h2>Contenido en preparación</h2>
-        <p class="desc">Los temas de este OVA se publicarán próximamente.</p>
-        <div class="meta"><span class="chip">Próximamente</span></div>
+      <div class="card-f">
+        <a class="btn" href="OVA_Participante_PowerQuery.html">Abrir OVA Power Query
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <ul class="topics">
-        <li class="grp">Temas</li>
-        <li><span class="topic ghost"><span class="n">3.1</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">3.2</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">3.3</span><span class="bar"></span></span></li>
-        <li><span class="topic ghost"><span class="n">3.4</span><span class="bar"></span></span></li>
-      </ul>
-      <div class="card-f"><span class="btn disabled">Disponible pronto</span></div>
     </article>
     </div>
   </section>
@@ -663,7 +667,7 @@ footer .wrap{padding:22px 16px;display:flex;flex-wrap:wrap;justify-content:space
       s.hidden=term?hits===0:s.dataset.day!==active;
       if(!s.hidden) anyDay=true;
     });
-    count.textContent=term?shown+" de "+total+" accesos directos":total+" accesos directos en 6 OVA";
+    count.textContent=term?shown+" de "+total+" accesos directos":total+" accesos directos en 8 OVA";
     empty.style.display=anyDay?"none":"block";
   }
   q.addEventListener("input",run);
