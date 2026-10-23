@@ -1600,7 +1600,7 @@ const VIDS=[
  {id:"Jkrs4lZX2TA",t:"Inteligencia artificial y el derecho a la protección de datos personales",c:"Club IA Legal",g:"etica"}
 ];
 const GN={conceptos:"Conceptos",copilot:"Copilot",prompts:"Prompts",etica:"Ética y datos"};
-const vcard=v=>`<a class="vid" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener"><div class="th"><img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="Miniatura: ${esc(v.t)}"></div><div class="bd"><span class="chip">${GN[v.g]}</span><b>${esc(v.t)}</b><small>${esc(v.c)} · YouTube · Español</small></div></a>`;
+const vcard=v=>`<a class="vid" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener"><div class="th"><img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="Miniatura: ${esc(v.t)}" onerror="this.style.display=&quot;none&quot;"></div><div class="bd"><span class="chip">${GN[v.g]}</span><b>${esc(v.t)}</b><small>${esc(v.c)} · YouTube · Español</small></div></a>`;
 $$("[data-videos]").forEach(el=>{el.innerHTML=VIDS.filter(v=>v.g===el.dataset.videos).slice(0,3).map(vcard).join("")});
 function renderVids(g){$("#vidAll").innerHTML=VIDS.filter(v=>!g||v.g===g).map(vcard).join("");$$("#vidFilter button").forEach(b=>b.classList.toggle("sec",b.dataset.g===(g||"")))}
 $("#vidFilter").innerHTML=`<button class="btn ghost" data-g="">Todos (${VIDS.length})</button>`+Object.keys(GN).map(k=>`<button class="btn ghost" data-g="${k}">${GN[k]}</button>`).join("");

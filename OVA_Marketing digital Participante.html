@@ -179,6 +179,7 @@ input[type=search],input[type=number]{font:inherit;padding:10px 12px;border:1.5p
 .thumb .play::after{content:"";border-left:15px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
 .thumb .tt{position:relative;font-weight:800;font-size:1.05rem;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.25);max-width:85%}
 .thumb .ring{position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;border:18px solid rgba(255,255,255,.18)}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .thumb .src{position:absolute;top:10px;left:12px;font-size:.72rem;font-weight:600;background:rgba(0,0,0,.35);padding:2px 8px;border-radius:999px}
 .vid .meta{padding:12px 14px}
 .vid .meta b{display:block;font-size:.95rem;line-height:1.3}
@@ -1232,7 +1233,7 @@ $("#qCheck").onclick=()=>{let s=0;QUIZ.forEach((q,i)=>{const el=$("#q"+i),sel=do
 $("#qReset").onclick=()=>{$("#quiz").reset();$$(".q").forEach(q=>q.classList.remove("ok","bad"));$("#qScore").textContent=""};
 
 /* Videos */
-$("#vidGrid").innerHTML=VIDS.map(v=>`<a class="vid" href="https://www.youtube.com/watch?v=${v[0]}" target="_blank" rel="noopener noreferrer"><div class="thumb" style="background:linear-gradient(135deg,${v[3]},${v[4]})"><span class="ring"></span><span class="src">YouTube · ${v[2]}</span><span class="play" aria-hidden="true"></span><span class="tt">${v[1]}</span></div><div class="meta"><b>${v[1]}</b><span>Abrir en YouTube</span></div></a>`).join("");
+$("#vidGrid").innerHTML=VIDS.map(v=>`<a class="vid" href="https://www.youtube.com/watch?v=${v[0]}" target="_blank" rel="noopener noreferrer"><div class="thumb" style="background:linear-gradient(135deg,${v[3]},${v[4]})"><span class="ring"></span><span class="tt">${v[1]}</span><img src="https://i.ytimg.com/vi/${v[0]}/hqdefault.jpg" alt="Miniatura: ${esc(v[1])}" loading="lazy" onerror="this.remove()"><span class="src">YouTube · ${v[2]}</span><span class="play" aria-hidden="true"></span></div><div class="meta"><b>${v[1]}</b><span>Abrir en YouTube</span></div></a>`).join("");
 
 /* Recursos */
 $("#ciberList").innerHTML=CIBER.map(g=>`<div class="panel" style="margin-bottom:12px"><h4>${g[0]}</h4><ul style="margin:0;padding-left:1.2em">${g[1].map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener noreferrer">${l[0]}</a><br><span style="font-size:.8rem;color:var(--muted);word-break:break-all">${l[1]}</span></li>`).join("")}</ul></div>`).join("")+`<p style="font-size:.82rem;color:var(--muted)">Fecha de consulta: 1 de octubre de 2026.</p>`;
