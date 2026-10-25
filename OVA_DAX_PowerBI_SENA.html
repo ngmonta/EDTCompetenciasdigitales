@@ -1,0 +1,1304 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OVA DAX Power BI SENA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Carlito:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: panel lateral de módulos + área de trabajo tipo dashboard; un módulo visible a la vez. Identidad SENA: verde #39A900, secundarios #007832 y #00304D, Work Sans + Calibri. */
+:root{
+  --bg:#F2F6EF; --surface:#FFFFFF; --surface-2:#E8F1E3; --line:#D3E1CC;
+  --fg:#0E2533; --muted:#4F6472;
+  --green:#39A900; --green-ink:#2C8200; --green-2:#007832; --navy:#00304D; --navy-soft:#E3ECF2;
+  --on-green:#FFFFFF;
+  --code-bg:#0D2230; --code-fg:#E4EEF3; --c-fn:#7CDB3A; --c-str:#F2C46B; --c-ref:#7FC8F0; --c-num:#F59E8B; --c-com:#8AA3B0; --c-kw:#C9A8FF;
+  --ok:#2C8200; --warn:#B7791F; --bad:#C2410C;
+  --ok-bg:#E4F4D8; --warn-bg:#FBEFD5; --bad-bg:#FCE5DA;
+  --shadow:0 1px 2px rgba(0,48,77,.06),0 4px 14px rgba(0,48,77,.06);
+  --f-display:"Work Sans",Calibri,Carlito,"Segoe UI",system-ui,sans-serif;
+  --f-body:Calibri,Carlito,"Work Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",Consolas,"Cascadia Mono",monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1712; --surface:#11211A; --surface-2:#172C23; --line:#24402F;
+  --fg:#E5EFE7; --muted:#9BB2A4;
+  --green:#4BC21A; --green-ink:#74D944; --green-2:#2FA86A; --navy:#8EC5EA; --navy-soft:#16293A;
+  --on-green:#06210E;
+  --code-bg:#08131C; --code-fg:#E4EEF3;
+  --ok:#74D944; --warn:#F0B54A; --bad:#FF8A5C;
+  --ok-bg:#183A1D; --warn-bg:#3A2E14; --bad-bg:#3E1E14;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0A1712; --surface:#11211A; --surface-2:#172C23; --line:#24402F;
+  --fg:#E5EFE7; --muted:#9BB2A4;
+  --green:#4BC21A; --green-ink:#74D944; --green-2:#2FA86A; --navy:#8EC5EA; --navy-soft:#16293A;
+  --on-green:#06210E;
+  --code-bg:#08131C; --code-fg:#E4EEF3;
+  --ok:#74D944; --warn:#F0B54A; --bad:#FF8A5C;
+  --ok-bg:#183A1D; --warn-bg:#3A2E14; --bad-bg:#3E1E14;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.55}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.35rem,2.4vw,1.75rem);font-weight:700}
+h3{font-size:1.12rem;font-weight:600}
+h4{font-size:1rem;font-weight:600}
+p{margin:0}
+a{color:var(--green-ink)}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:4px}
+.eyebrow{font-family:var(--f-display);font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green-ink)}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* App shell */
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--navy);color:#E9F2F7;display:flex;flex-direction:column;gap:18px;padding-block:20px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px}
+:root[data-theme="dark"] .side{background:#07131C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .side{background:#07131C}}
+.brand{display:flex;gap:12px;align-items:center}
+.brand img{width:54px;height:54px;border-radius:8px;flex:none}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:1.05rem;display:block;color:#fff}
+.brand span{font-size:.82rem;color:#A9C2D2;font-family:var(--f-display)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:8px;font-family:var(--f-display);font-size:.93rem;font-weight:500;color:#CFE0EA}
+.nav button svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav button[aria-current="page"]{background:#39A900;color:#fff;font-weight:600}
+.nav button .dot{margin-left:auto;width:8px;height:8px;border-radius:50%;background:transparent;border:1.5px solid #5F8299}
+.nav button.seen .dot{background:#7FD94A;border-color:#7FD94A}
+.nav button[aria-current="page"] .dot{border-color:#fff}
+.progress-box{margin-top:auto;background:rgba(255,255,255,.06);border-radius:10px;padding:14px;font-family:var(--f-display);font-size:.84rem;color:#CFE0EA}
+.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:#39A900;border-radius:99px;transition:width .4s}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding-block:12px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.crumb{font-family:var(--f-display);font-size:.92rem;color:var(--muted);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb b{color:var(--fg)}
+.tb-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--f-display);font-weight:600;font-size:.9rem;padding:9px 15px;border-radius:8px;background:var(--green);color:var(--on-green);transition:filter .15s,transform .1s}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.sm{padding:6px 11px;font-size:.82rem}
+.btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.theme-btn{width:40px;height:40px;padding:0}
+
+.content{padding-block:28px 60px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));max-width:1240px;width:100%}
+section.mod{display:flex;flex-direction:column;gap:22px}
+.mod-head{display:flex;flex-direction:column;gap:8px;max-width:72ch}
+.lead{font-size:1.1rem;color:var(--muted)}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.span2{grid-column:span 2}
+@media (max-width:1050px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.span2{grid-column:auto}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);min-width:0;display:flex;flex-direction:column;gap:12px}
+.card.flat{box-shadow:none;background:var(--surface-2);border-color:transparent}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+.kpi{gap:6px}
+.kpi .k-lab{font-family:var(--f-display);font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kpi .k-val{font-family:var(--f-display);font-size:2rem;font-weight:700;color:var(--fg);font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .k-val.g{color:var(--green-ink)}
+.kpi .k-sub{font-size:.9rem;color:var(--muted)}
+
+.hero{background:var(--navy);color:#F1F7FA;border-radius:14px;padding:30px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:center;position:relative;overflow:hidden}
+:root[data-theme="dark"] .hero{background:#0B2A3D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero{background:#0B2A3D}}
+.hero h1{color:#fff}
+.hero .eyebrow{color:#8EE05C}
+.hero p{color:#C7DAE5;font-size:1.08rem;max-width:56ch}
+.hero .formula{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:16px 18px;font-family:var(--f-mono);font-size:.92rem;line-height:1.7;color:#E4EEF3;overflow-x:auto}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.hero .btn.ghost{color:#fff;border-color:rgba(255,255,255,.3)}
+.hero .btn.ghost:hover{background:rgba(255,255,255,.08)}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr);padding:22px}}
+
+/* code */
+pre.code{margin:0;background:var(--code-bg);color:var(--code-fg);border-radius:9px;padding:14px 16px;font-family:var(--f-mono);font-size:.86rem;line-height:1.65;overflow-x:auto;white-space:pre;tab-size:4}
+.tk-fn{color:var(--c-fn);font-weight:600}.tk-str{color:var(--c-str)}.tk-ref{color:var(--c-ref)}.tk-tab{color:#B7E3F7}.tk-num{color:var(--c-num)}.tk-com{color:var(--c-com);font-style:italic}.tk-kw{color:var(--c-kw);font-weight:600}
+.code-wrap{position:relative}
+.code-wrap .copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);color:#E4EEF3;border:1px solid rgba(255,255,255,.18)}
+.code-wrap .copy:hover{background:rgba(255,255,255,.18)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-display);font-weight:600;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);position:sticky;top:0}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td code{white-space:nowrap}
+tr.on td{background:color-mix(in srgb,var(--green) 13%,transparent)}
+tr.off td{opacity:.42}
+tr.cur td{background:color-mix(in srgb,var(--navy) 16%,transparent)}
+
+/* chips, pills */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{all:unset;cursor:pointer;font-family:var(--f-display);font-size:.84rem;font-weight:500;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.chip:hover{border-color:var(--green)}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-display);font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:99px}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.tag{font-family:var(--f-display);font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:5px;background:var(--navy-soft);color:var(--navy);white-space:nowrap}
+
+/* forms */
+.ctrls{display:flex;flex-wrap:wrap;gap:14px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:150px;flex:1}
+.field label{font-family:var(--f-display);font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+select,input[type=text],input[type=number],input[type=search]{font:inherit;font-size:.95rem;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);width:100%}
+input[type=range]{width:100%;accent-color:var(--green)}
+select:focus,input:focus{outline:2px solid var(--green);outline-offset:0}
+
+.note{border-left:4px solid var(--green);background:var(--surface-2);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.96rem}
+.note.navy{border-color:var(--navy)}
+.note b{font-family:var(--f-display)}
+
+/* SVG infographics */
+svg.info{width:100%;height:auto;display:block}
+.info .t{font-family:var(--f-display);fill:var(--fg)}
+.info .tm{font-family:var(--f-body);fill:var(--muted)}
+.info .tw{font-family:var(--f-display);fill:#fff}
+.info .mono{font-family:var(--f-mono)}
+.info .box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.info .box2{fill:var(--surface-2);stroke:none}
+.info .gfill{fill:var(--green)}
+.info .g2fill{fill:var(--green-2)}
+.info .nfill{fill:var(--navy)}
+.info .gstroke{stroke:var(--green);fill:none}
+.info .lstroke{stroke:var(--line);fill:none}
+.info .mstroke{stroke:var(--muted);fill:none}
+.info .arrow{stroke:var(--muted);stroke-width:2;fill:none}
+.svg-scroll{overflow-x:auto}
+.svg-scroll svg{min-width:640px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;counter-reset:st}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.step .n{font-family:var(--f-display);font-weight:800;font-size:1.4rem;color:var(--green-ink);font-variant-numeric:tabular-nums}
+.step h4{font-size:.95rem}
+.step p{font-size:.9rem;color:var(--muted)}
+@media (max-width:1050px){.steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.steps{grid-template-columns:minmax(0,1fr)}}
+
+/* curve */
+.lvl{cursor:pointer}
+.lvl circle.ring{fill:var(--surface);stroke:var(--green);stroke-width:3;transition:r .2s}
+.lvl.active circle.ring{fill:var(--green)}
+.lvl.active text.ln{fill:var(--on-green)}
+.lvl text.ln{font-family:var(--f-display);font-weight:700;font-size:14px;fill:var(--green-ink);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.lvl:hover circle.ring,.lvl:focus circle.ring{stroke-width:5}
+.lvl:focus{outline:none}
+
+/* anatomy */
+.anat{font-family:var(--f-mono);font-size:clamp(.95rem,2.2vw,1.35rem);background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:22px 18px;overflow-x:auto;white-space:nowrap;line-height:2}
+.anat span{border-radius:5px;padding:2px 3px;transition:background .15s,outline .15s;cursor:help}
+.anat span.hl{background:rgba(124,219,58,.25);outline:2px solid #7CDB3A}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.part{all:unset;cursor:pointer;box-sizing:border-box;border:1px solid var(--line);border-radius:9px;padding:11px 12px;background:var(--surface);display:flex;flex-direction:column;gap:3px}
+.part b{font-family:var(--f-display);font-size:.9rem}
+.part span{font-size:.88rem;color:var(--muted)}
+.part:hover,.part.hl{border-color:var(--green);background:var(--surface-2)}
+
+/* bars (html) */
+.hbars{display:flex;flex-direction:column;gap:9px}
+.hb{display:grid;grid-template-columns:96px minmax(0,1fr) 110px;gap:10px;align-items:center;font-size:.92rem}
+.hb .lab{font-family:var(--f-display);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb .track{height:20px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.hb .fill{height:100%;background:var(--green);border-radius:0 5px 5px 0;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.hb .v{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-display);font-size:.88rem}
+@media (max-width:480px){.hb{grid-template-columns:78px minmax(0,1fr) 88px}}
+
+.result{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.result .big{font-family:var(--f-display);font-size:2.1rem;font-weight:700;color:var(--green-ink);font-variant-numeric:tabular-nums}
+
+/* quiz */
+.q{display:flex;flex-direction:column;gap:10px}
+.opts{display:grid;gap:8px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:10px 13px;background:var(--surface);font-size:.97rem}
+.opt:hover{border-color:var(--green)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt[disabled]{cursor:default}
+.fb{font-size:.94rem;padding:10px 12px;border-radius:8px;background:var(--surface-2)}
+
+/* resources */
+.res{display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:inherit}
+.res .ic{width:42px;height:42px;border-radius:9px;flex:none;display:grid;place-items:center;background:var(--surface-2);color:var(--green-ink)}
+.res .ic svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.res .ic.yt{background:#FCE5E3;color:#C4302B}
+:root[data-theme="dark"] .res .ic.yt{background:#3A1A18;color:#FF7A70}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .res .ic.yt{background:#3A1A18;color:#FF7A70}}
+.res b{font-family:var(--f-display);font-weight:600;font-size:.97rem;display:block}
+.res:hover b{color:var(--green-ink);text-decoration:underline}
+.res small{color:var(--muted);font-size:.86rem}
+.biblio{display:flex;flex-direction:column;gap:12px;padding-left:0;list-style:none;margin:0}
+.biblio li{padding-left:2em;text-indent:-2em;font-size:.97rem}
+
+.foot{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);font-family:var(--f-display)}
+
+/* mobile shell */
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;height:auto;padding-block:14px;padding-right:max(16px,env(safe-area-inset-right,0px));padding-left:max(16px,env(safe-area-inset-left,0px));gap:12px}
+  .nav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}
+  .nav button{white-space:nowrap;flex:none;padding:8px 11px}
+  .nav button .dot{display:none}
+  .progress-box{display:none}
+  .topbar{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .content{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <aside class="side" aria-label="Módulos del OVA">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="Logosímbolo SENA">
+      <div><b>DAX en Power BI</b><span>OVA · Funcionarios administrativos</span></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="progress-box">
+      <div>Avance del recorrido: <b id="progTxt">0 de 11</b></div>
+      <div class="bar"><i id="progBar" style="width:0%"></i></div>
+      <div style="margin-top:10px">Autoevaluación: <b id="scoreSide">sin presentar</b></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">OVA DAX · <b id="crumb">Inicio</b></div>
+      <div class="tb-actions">
+        <button class="btn ghost sm" id="prevBtn" type="button" aria-label="Módulo anterior">← Anterior</button>
+        <button class="btn sm" id="nextBtn" type="button" aria-label="Módulo siguiente">Siguiente →</button>
+        <button class="btn ghost theme-btn" id="themeBtn" type="button" aria-label="Cambiar a modo oscuro" title="Modo claro / oscuro"></button>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+
+<!-- ============ INICIO ============ -->
+<section class="mod" id="inicio" data-title="Inicio">
+  <div class="hero">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <span class="eyebrow">Objeto Virtual de Aprendizaje</span>
+      <h1>DAX: fórmulas que convierten datos administrativos en indicadores</h1>
+      <p>Aprenda a escribir medidas en Power BI para responder preguntas reales de la gestión: cuánto se ha pagado, qué porcentaje del presupuesto se ejecutó, cómo va este año frente al anterior.</p>
+      <div class="hero-actions">
+        <button class="btn" type="button" data-go="que-es">Empezar el recorrido</button>
+        <button class="btn ghost" type="button" data-go="laboratorio">Ir a los simuladores</button>
+      </div>
+    </div>
+    <div class="formula" aria-label="Ejemplo de medida DAX" id="heroCode"></div>
+  </div>
+
+  <div class="grid g4">
+    <div class="card kpi"><span class="k-lab">Funciones DAX</span><span class="k-val g">250+</span><span class="k-sub">en la referencia oficial de Microsoft</span></div>
+    <div class="card kpi"><span class="k-lab">Tipos de cálculo</span><span class="k-val">3</span><span class="k-sub">medidas, columnas y tablas calculadas</span></div>
+    <div class="card kpi"><span class="k-lab">Contextos</span><span class="k-val">2</span><span class="k-sub">de fila y de filtro: la clave de todo</span></div>
+    <div class="card kpi"><span class="k-lab">Simuladores</span><span class="k-val g">6</span><span class="k-sub">para practicar sin instalar nada</span></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card span2">
+      <div class="card-h"><h3>Así se ve una medida en acción</h3><span class="tag">Datos de ejemplo · 2025</span></div>
+      <p class="muted small">La medida <code>% Ejecución</code> se calcula de nuevo para cada regional. Es la misma fórmula; cambia el filtro.</p>
+      <div class="hbars" id="homeBars"></div>
+    </div>
+    <div class="card">
+      <h3>Ruta del OVA</h3>
+      <div class="tbl-wrap" style="border:none">
+        <table id="routeTbl"><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUÉ ES ============ -->
+<section class="mod" id="que-es" data-title="¿Qué es DAX?" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 1 · Conceptos</span>
+    <h2>¿Qué es DAX y para qué se usa en Power BI?</h2>
+    <p class="lead"><b>DAX (Data Analysis Expressions)</b> es el lenguaje de fórmulas de Microsoft para Power BI, Power Pivot en Excel y Analysis Services. Con él se crean cálculos sobre un modelo de datos: totales, porcentajes, comparaciones entre periodos y reglas de negocio.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>Infografía · Dónde vive DAX dentro de Power BI</h3><span class="tag">SVG</span></div>
+    <div class="svg-scroll">
+    <svg class="info" viewBox="0 0 960 300" role="img" aria-label="Flujo: fuentes de datos, Power Query, modelo de datos, DAX y visualizaciones">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+      <!-- fuentes -->
+      <g><rect class="box" x="10" y="40" width="160" height="220" rx="12"/>
+        <text class="t" x="90" y="70" text-anchor="middle" font-weight="700" font-size="15">1. Fuentes</text>
+        <rect class="box2" x="28" y="88" width="124" height="34" rx="7"/><text class="tm" x="90" y="110" text-anchor="middle" font-size="13">Excel / CSV</text>
+        <rect class="box2" x="28" y="130" width="124" height="34" rx="7"/><text class="tm" x="90" y="152" text-anchor="middle" font-size="13">SharePoint</text>
+        <rect class="box2" x="28" y="172" width="124" height="34" rx="7"/><text class="tm" x="90" y="194" text-anchor="middle" font-size="13">Bases de datos</text>
+        <text class="tm" x="90" y="236" text-anchor="middle" font-size="12">reportes del área</text></g>
+      <path class="arrow" d="M174 150 H 202" marker-end="url(#ah)"/>
+      <!-- power query -->
+      <g><rect class="box" x="206" y="40" width="160" height="220" rx="12"/>
+        <text class="t" x="286" y="70" text-anchor="middle" font-weight="700" font-size="15">2. Power Query</text>
+        <text class="tm" x="286" y="96" text-anchor="middle" font-size="12">lenguaje M</text>
+        <g class="mstroke" stroke-width="2"><path d="M246 120 h80 l-26 34 v36 l-28 12 v-48 z"/></g>
+        <text class="tm" x="286" y="228" text-anchor="middle" font-size="13">Limpia y</text>
+        <text class="tm" x="286" y="246" text-anchor="middle" font-size="13">transforma</text></g>
+      <path class="arrow" d="M370 150 H 398" marker-end="url(#ah)"/>
+      <!-- modelo -->
+      <g><rect class="box" x="402" y="40" width="160" height="220" rx="12"/>
+        <text class="t" x="482" y="70" text-anchor="middle" font-weight="700" font-size="15">3. Modelo</text>
+        <rect class="nfill" x="422" y="92" width="56" height="44" rx="6"/><text class="tw" x="450" y="119" text-anchor="middle" font-size="11">Calendario</text>
+        <rect class="nfill" x="490" y="92" width="56" height="44" rx="6"/><text class="tw" x="518" y="119" text-anchor="middle" font-size="11">Regional</text>
+        <rect class="g2fill" x="448" y="170" width="70" height="44" rx="6"/><text class="tw" x="483" y="197" text-anchor="middle" font-size="11">Ejecución</text>
+        <path class="mstroke" stroke-width="1.6" d="M450 136 L470 170 M518 136 L500 170"/>
+        <text class="tm" x="482" y="240" text-anchor="middle" font-size="13">tablas relacionadas</text></g>
+      <path class="arrow" d="M566 150 H 594" marker-end="url(#ah)"/>
+      <!-- DAX -->
+      <g><rect x="598" y="26" width="168" height="248" rx="14" class="gfill"/>
+        <text class="tw" x="682" y="60" text-anchor="middle" font-weight="800" font-size="17">4. DAX</text>
+        <text class="tw" x="682" y="96" text-anchor="middle" font-size="13">Medidas</text>
+        <text class="tw" x="682" y="118" text-anchor="middle" font-size="13">Columnas calculadas</text>
+        <text class="tw" x="682" y="140" text-anchor="middle" font-size="13">Tablas calculadas</text>
+        <rect x="618" y="166" width="128" height="62" rx="8" fill="rgba(0,0,0,.18)"/>
+        <text class="tw mono" x="682" y="192" text-anchor="middle" font-size="12">fx = DIVIDE(</text>
+        <text class="tw mono" x="682" y="212" text-anchor="middle" font-size="12">[Pagado], [Total])</text>
+        <text class="tw" x="682" y="256" text-anchor="middle" font-size="12" font-weight="600">aquí está este OVA</text></g>
+      <path class="arrow" d="M770 150 H 798" marker-end="url(#ah)"/>
+      <!-- visual -->
+      <g><rect class="box" x="802" y="40" width="148" height="220" rx="12"/>
+        <text class="t" x="876" y="70" text-anchor="middle" font-weight="700" font-size="15">5. Informe</text>
+        <rect class="gfill" x="830" y="160" width="18" height="50"/><rect class="g2fill" x="856" y="130" width="18" height="80"/><rect class="gfill" x="882" y="110" width="18" height="100"/><rect class="nfill" x="908" y="145" width="18" height="65"/>
+        <path class="lstroke" stroke-width="1.5" d="M822 211 H 934"/>
+        <text class="tm" x="876" y="240" text-anchor="middle" font-size="13">tableros y KPI</text></g>
+    </svg>
+    </div>
+  </div>
+
+  <div class="grid g4">
+    <div class="card"><h4>Indicadores de gestión</h4><p class="muted small">Porcentaje de ejecución presupuestal, cumplimiento de metas, tiempos de respuesta.</p></div>
+    <div class="card"><h4>Comparar periodos</h4><p class="muted small">Acumulado del año, mismo mes del año anterior, variación porcentual.</p></div>
+    <div class="card"><h4>Porcentajes del total</h4><p class="muted small">Participación de cada regional o dependencia en el total nacional.</p></div>
+    <div class="card"><h4>Reglas y alertas</h4><p class="muted small">Semáforos (verde, amarillo, rojo) según umbrales definidos por el área.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>Infografía · Los tres tipos de cálculo DAX</h3><span class="tag">SVG</span></div>
+    <div class="svg-scroll">
+    <svg class="info" viewBox="0 0 960 250" role="img" aria-label="Comparación entre medida, columna calculada y tabla calculada">
+      <g><rect class="box" x="10" y="10" width="300" height="230" rx="12"/><rect class="gfill" x="10" y="10" width="300" height="50" rx="12"/><rect class="gfill" x="10" y="40" width="300" height="20"/>
+        <text class="tw" x="30" y="42" font-weight="700" font-size="17">Medida</text><text class="tw" x="290" y="42" font-size="12" text-anchor="end">la más usada</text>
+        <text class="t" x="30" y="90" font-size="13" font-weight="600">Se calcula:</text><text class="tm" x="30" y="110" font-size="13">al consultar, según filtros del visual</text>
+        <text class="t" x="30" y="138" font-size="13" font-weight="600">Ocupa memoria:</text><text class="tm" x="30" y="158" font-size="13">no; solo guarda la fórmula</text>
+        <text class="t" x="30" y="186" font-size="13" font-weight="600">Ejemplo:</text><text class="tm mono" x="30" y="208" font-size="12">Total Pagado = SUM(...)</text></g>
+      <g><rect class="box" x="330" y="10" width="300" height="230" rx="12"/><rect class="g2fill" x="330" y="10" width="300" height="50" rx="12"/><rect class="g2fill" x="330" y="40" width="300" height="20"/>
+        <text class="tw" x="350" y="42" font-weight="700" font-size="17">Columna calculada</text>
+        <text class="t" x="350" y="90" font-size="13" font-weight="600">Se calcula:</text><text class="tm" x="350" y="110" font-size="13">al actualizar datos, fila por fila</text>
+        <text class="t" x="350" y="138" font-size="13" font-weight="600">Ocupa memoria:</text><text class="tm" x="350" y="158" font-size="13">sí; un valor por cada fila</text>
+        <text class="t" x="350" y="186" font-size="13" font-weight="600">Ejemplo:</text><text class="tm mono" x="350" y="208" font-size="12">Saldo = [Comprometido]-[Pagado]</text></g>
+      <g><rect class="box" x="650" y="10" width="300" height="230" rx="12"/><rect class="nfill" x="650" y="10" width="300" height="50" rx="12"/><rect class="nfill" x="650" y="40" width="300" height="20"/>
+        <text class="tw" x="670" y="42" font-weight="700" font-size="17">Tabla calculada</text>
+        <text class="t" x="670" y="90" font-size="13" font-weight="600">Se calcula:</text><text class="tm" x="670" y="110" font-size="13">al actualizar datos, tabla completa</text>
+        <text class="t" x="670" y="138" font-size="13" font-weight="600">Ocupa memoria:</text><text class="tm" x="670" y="158" font-size="13">sí; es una tabla nueva</text>
+        <text class="t" x="670" y="186" font-size="13" font-weight="600">Ejemplo:</text><text class="tm mono" x="670" y="208" font-size="12">Calendario = CALENDARAUTO()</text></g>
+    </svg>
+    </div>
+    <p class="note"><b>Regla práctica:</b> si el resultado debe cambiar cuando el usuario filtra el informe (por regional, mes o rubro), use una <b>medida</b>. Si necesita el valor para filtrar, agrupar o poner en un eje, use una <b>columna calculada</b>.</p>
+  </div>
+
+  <div class="card">
+    <h3>Si ya usa Excel, esto le ayudará</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Aspecto</th><th>Fórmulas de Excel</th><th>DAX en Power BI</th></tr></thead>
+      <tbody>
+        <tr><td>Sobre qué opera</td><td>Celdas y rangos (A2:A500)</td><td>Columnas y tablas completas ('Ejecucion'[Pagado])</td></tr>
+        <tr><td>Dónde se escribe</td><td>En cada celda</td><td>Una sola vez, en la medida</td></tr>
+        <tr><td>Cómo filtra</td><td>SUMAR.SI.CONJUNTO con criterios fijos</td><td>El filtro llega desde el visual, la segmentación o CALCULATE</td></tr>
+        <tr><td>Relaciones</td><td>BUSCARV / BUSCARX</td><td>Relaciones del modelo y RELATED</td></tr>
+        <tr><td>Nombres de funciones</td><td>En español (SUMA, SI)</td><td>Siempre en inglés (SUM, IF)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ OBJETIVO ============ -->
+<section class="mod" id="objetivo" data-title="Objetivos" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 2 · Propósito</span>
+    <h2>Objetivos de aprendizaje</h2>
+  </div>
+  <div class="card" style="border-left:5px solid var(--green)">
+    <span class="eyebrow">Objetivo general</span>
+    <p style="font-size:1.15rem;font-family:var(--f-display);font-weight:500">Construir medidas DAX en Power BI que transformen los datos de la gestión administrativa del SENA en indicadores confiables para el seguimiento y la toma de decisiones.</p>
+  </div>
+  <div class="grid g2">
+    <div class="card"><span class="tag" style="align-self:flex-start">Específico 1 · Comprender</span><p>Explicar qué es DAX, dónde se ubica en Power BI y la diferencia entre medida, columna calculada y tabla calculada.</p></div>
+    <div class="card"><span class="tag" style="align-self:flex-start">Específico 2 · Escribir</span><p>Aplicar las reglas de sintaxis de DAX para referenciar tablas, columnas y medidas sin errores.</p></div>
+    <div class="card"><span class="tag" style="align-self:flex-start">Específico 3 · Interpretar</span><p>Reconocer el contexto de fila y el contexto de filtro para anticipar el resultado de una medida.</p></div>
+    <div class="card"><span class="tag" style="align-self:flex-start">Específico 4 · Aplicar</span><p>Crear medidas de agregación, filtro, porcentaje e inteligencia de tiempo para indicadores administrativos.</p></div>
+  </div>
+  <div class="grid g3">
+    <div class="card flat"><h4>Dirigido a</h4><p class="small">Funcionarios administrativos que preparan reportes de presupuesto, contratación, talento humano o bienestar.</p></div>
+    <div class="card flat"><h4>Requisitos previos</h4><p class="small">Manejo básico de Excel (fórmulas, tablas dinámicas) y Power BI Desktop instalado para practicar.</p></div>
+    <div class="card flat"><h4>Dedicación sugerida</h4><p class="small">8 horas: 4 de estudio guiado en este OVA y 4 de práctica con sus propios datos.</p></div>
+  </div>
+</section>
+
+<!-- ============ CURVA ============ -->
+<section class="mod" id="curva" data-title="Curva de aprendizaje" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 3 · Progresión</span>
+    <h2>Curva de aprendizaje para conformar medidas</h2>
+    <p class="lead">DAX es fácil de empezar y exige práctica para dominar. La curva se empina al llegar al contexto de filtro y CALCULATE. Haga clic en cada nivel.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card span2">
+      <div class="card-h"><h3>Infografía interactiva · Niveles de dominio</h3><span class="tag">SVG</span></div>
+      <svg class="info" viewBox="0 0 640 330" role="img" aria-label="Curva de aprendizaje de DAX con cinco niveles" id="curveSvg">
+        <path class="lstroke" stroke-width="1" d="M60 40 H620 M60 100 H620 M60 160 H620 M60 220 H620"/>
+        <path class="mstroke" stroke-width="1.5" d="M60 20 V280 H620"/>
+        <text class="tm" x="340" y="318" text-anchor="middle" font-size="13">Práctica acumulada (semanas)</text>
+        <text class="tm" x="22" y="150" text-anchor="middle" font-size="13" transform="rotate(-90 22 150)">Dominio</text>
+        <text class="tm" x="90" y="298" text-anchor="middle" font-size="12">1</text><text class="tm" x="200" y="298" text-anchor="middle" font-size="12">2–3</text><text class="tm" x="330" y="298" text-anchor="middle" font-size="12">4</text><text class="tm" x="450" y="298" text-anchor="middle" font-size="12">5–6</text><text class="tm" x="575" y="298" text-anchor="middle" font-size="12">7+</text>
+        <path d="M60 268 C 130 262, 170 250, 200 222 S 280 120, 330 112 S 420 82, 450 72 S 540 48, 600 42 L600 280 L60 280 Z" fill="var(--green)" opacity=".12"/>
+        <path class="gstroke" stroke-width="4" stroke-linecap="round" d="M60 268 C 130 262, 170 250, 200 222 S 280 120, 330 112 S 420 82, 450 72 S 540 48, 600 42"/>
+        <text class="tm" x="236" y="200" font-size="12" font-style="italic">tramo exigente: contextos</text>
+        <g id="lvls"></g>
+      </svg>
+    </div>
+    <div class="card" id="lvlDetail" aria-live="polite"></div>
+  </div>
+
+  <div class="card">
+    <h3>Pasos para conformar una medida</h3>
+    <p class="muted small">Este orden evita la mayoría de los errores. Aplíquelo cada vez que cree una medida nueva.</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h4>Formule la pregunta</h4><p>“¿Qué porcentaje del presupuesto comprometido se ha pagado?”</p></div>
+      <div class="step"><span class="n">2</span><h4>Ubique los datos</h4><p>Tabla <code>Ejecucion</code>, columnas <code>[Pagado]</code> y <code>[Comprometido]</code>.</p></div>
+      <div class="step"><span class="n">3</span><h4>Cree medidas base</h4><p><code>Total Pagado</code> y <code>Total Comprometido</code> con SUM.</p></div>
+      <div class="step"><span class="n">4</span><h4>Combine medidas</h4><p><code>DIVIDE([Total Pagado], [Total Comprometido])</code></p></div>
+      <div class="step"><span class="n">5</span><h4>Dé formato</h4><p>Porcentaje con un decimal; carpeta de visualización.</p></div>
+      <div class="step"><span class="n">6</span><h4>Valide</h4><p>Compare con un total conocido en una tabla o matriz.</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card"><h3>Buenas prácticas</h3>
+      <ul style="margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px">
+        <li>Cree una tabla vacía llamada <b>_Medidas</b> para agrupar todas las medidas.</li>
+        <li>Prefiera medidas explícitas a arrastrar columnas numéricas (medidas implícitas).</li>
+        <li>Nombres que entienda cualquier lector: <i>Total Pagado</i>, no <i>m1</i>.</li>
+        <li>Reutilice medidas base dentro de otras medidas.</li>
+        <li>Use <code>VAR</code> para pasos intermedios y comentarios con <code>//</code>.</li>
+      </ul></div>
+    <div class="card"><h3>Errores frecuentes al inicio</h3>
+      <ul style="margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px">
+        <li>Usar una columna calculada cuando se necesitaba una medida.</li>
+        <li>Dividir con <code>/</code> y obtener errores cuando el denominador es cero.</li>
+        <li>Escribir texto sin comillas dobles: <code>= Antioquia</code>.</li>
+        <li>Usar inteligencia de tiempo sin una tabla calendario.</li>
+        <li>Escribir funciones en español (SUMA, SI): DAX solo acepta inglés.</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- ============ SINTAXIS ============ -->
+<section class="mod" id="sintaxis" data-title="Sintaxis" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 4 · Forma</span>
+    <h2>Sintaxis: cómo se escribe una fórmula DAX</h2>
+    <p class="lead">La sintaxis son las reglas de escritura. Pase el cursor o toque cada parte para ver su función.</p>
+  </div>
+  <div class="card">
+    <div class="anat" id="anat">
+      <span data-p="name">Total Pagado Antioquia</span> <span data-p="eq">=</span>
+      <span data-p="fn">CALCULATE</span><span data-p="par">(</span>
+      <span data-p="fn">SUM</span><span data-p="par">(</span> <span data-p="tab">'Ejecucion'</span><span data-p="col">[Pagado]</span> <span data-p="par">)</span><span data-p="sep">,</span>
+      <span data-p="tab">Ejecucion</span><span data-p="col">[Regional]</span> <span data-p="op">=</span> <span data-p="str">"Antioquia"</span> <span data-p="par">)</span>
+    </div>
+    <div class="parts" id="parts"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card"><h3>Reglas esenciales</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Elemento</th><th>Cómo se escribe</th></tr></thead>
+        <tbody>
+          <tr><td>Tabla</td><td><code>Ejecucion</code> o <code>'Ejecución 2025'</code> (comillas simples si tiene espacios o tildes)</td></tr>
+          <tr><td>Columna</td><td><code>Ejecucion[Pagado]</code> siempre con su tabla</td></tr>
+          <tr><td>Medida</td><td><code>[Total Pagado]</code> solo entre corchetes</td></tr>
+          <tr><td>Texto</td><td><code>"Antioquia"</code> entre comillas dobles</td></tr>
+          <tr><td>Fecha</td><td><code>DATE(2025, 12, 31)</code></td></tr>
+          <tr><td>Comentario</td><td><code>// una línea</code> · <code>/* varias */</code></td></tr>
+          <tr><td>Variables</td><td><code>VAR x = ... RETURN x</code></td></tr>
+        </tbody></table></div>
+      <p class="note navy small"><b>Separador de argumentos:</b> Power BI usa la coma por defecto. Si su equipo está configurado para usar punto y coma, cámbielo en <i>Archivo › Opciones › Configuración regional</i> o escriba según lo que muestre el editor.</p>
+    </div>
+    <div class="card"><h3>Operadores</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Tipo</th><th>Operador</th><th>Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td>Aritmético</td><td><code>+ - * / ^</code></td><td><code>[Comprometido] - [Pagado]</code></td></tr>
+          <tr><td>Comparación</td><td><code>= == &lt;&gt; &gt; &lt; &gt;= &lt;=</code></td><td><code>[% Ejecución] &gt;= 0.9</code></td></tr>
+          <tr><td>Texto</td><td><code>&amp;</code></td><td><code>[Regional] &amp; " - " &amp; [Rubro]</code></td></tr>
+          <tr><td>Lógico</td><td><code>&amp;&amp;  ||  NOT</code></td><td><code>[A] &gt; 0 &amp;&amp; [B] &gt; 0</code></td></tr>
+          <tr><td>Pertenencia</td><td><code>IN { }</code></td><td><code>[Rubro] IN {"Viáticos","Servicios"}</code></td></tr>
+        </tbody></table></div>
+      <h4 style="margin-top:6px">Estructura con variables</h4>
+      <div class="code-wrap"><pre class="code" data-code="% Ejecución =
+VAR Pagado = SUM ( Ejecucion[Pagado] )
+VAR Comprometido = SUM ( Ejecucion[Comprometido] )
+RETURN
+    DIVIDE ( Pagado, Comprometido )  // devuelve BLANK si no hay compromiso"></pre></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEMÁNTICA ============ -->
+<section class="mod" id="semantica" data-title="Semántica" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 5 · Significado</span>
+    <h2>Semántica: qué significa y cómo se evalúa una fórmula</h2>
+    <p class="lead">Una fórmula puede estar bien escrita y dar un resultado inesperado. La semántica explica <b>en qué contexto</b> se evalúa: el mismo <code>SUM</code> devuelve valores distintos según los filtros activos.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>Infografía · Contexto de fila y contexto de filtro</h3><span class="tag">SVG</span></div>
+    <div class="svg-scroll">
+    <svg class="info" viewBox="0 0 960 280" role="img" aria-label="Contexto de fila recorre registros uno a uno; contexto de filtro reduce la tabla antes de calcular">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--green)"/></marker></defs>
+      <text class="t" x="20" y="28" font-weight="700" font-size="16">Contexto de fila</text>
+      <text class="tm" x="20" y="50" font-size="13">“la fila actual”: columnas calculadas e iteradores (SUMX)</text>
+      <g transform="translate(20,68)">
+        <rect class="box2" width="280" height="30" rx="4"/><text class="t" x="12" y="20" font-size="12" font-weight="600">Comprometido</text><text class="t" x="140" y="20" font-size="12" font-weight="600">Pagado</text><text class="t" x="214" y="20" font-size="12" font-weight="600">Saldo</text>
+        <rect class="box" y="34" width="280" height="30" rx="4"/><text class="tm mono" x="12" y="54" font-size="12">80</text><text class="tm mono" x="140" y="54" font-size="12">70</text><text class="tm mono" x="214" y="54" font-size="12">10</text>
+        <rect y="68" width="280" height="30" rx="4" fill="var(--green)" opacity=".2" stroke="var(--green)" stroke-width="2"/><text class="t mono" x="12" y="88" font-size="12">50</text><text class="t mono" x="140" y="88" font-size="12">35</text><text class="t mono" x="214" y="88" font-size="12" font-weight="700">15</text>
+        <rect class="box" y="102" width="280" height="30" rx="4"/><text class="tm mono" x="12" y="122" font-size="12">60</text><text class="tm mono" x="140" y="122" font-size="12">60</text><text class="tm mono" x="214" y="122" font-size="12">0</text>
+        <rect class="box" y="136" width="280" height="30" rx="4"/><text class="tm mono" x="12" y="156" font-size="12">90</text><text class="tm mono" x="140" y="156" font-size="12">40</text><text class="tm mono" x="214" y="156" font-size="12">50</text>
+        <path d="M300 84 h40" stroke="var(--green)" stroke-width="2.5" marker-end="url(#ah2)"/>
+        <text class="t" x="350" y="80" font-size="13" font-weight="600">Saldo = Comprometido − Pagado</text>
+        <text class="tm" x="350" y="100" font-size="12">se calcula para cada fila, una a la vez</text>
+      </g>
+      <path class="lstroke" stroke-width="1.5" stroke-dasharray="4 5" d="M610 20 V260"/>
+      <text class="t" x="640" y="28" font-weight="700" font-size="16">Contexto de filtro</text>
+      <text class="tm" x="640" y="50" font-size="13">segmentaciones, filas del visual y CALCULATE</text>
+      <g transform="translate(640,70)">
+        <rect class="nfill" width="140" height="34" rx="17"/><text class="tw" x="70" y="22" text-anchor="middle" font-size="12">Regional = Valle</text>
+        <path d="M70 40 v22" class="arrow" marker-end="url(#ah)"/>
+        <path d="M10 70 h120 l-40 46 v40 l-40 14 v-54 z" fill="var(--green)" opacity=".85"/>
+        <text class="tw" x="70" y="96" text-anchor="middle" font-size="11" font-weight="700">FILTRO</text>
+        <path d="M150 120 h40" class="arrow" marker-end="url(#ah)"/>
+        <rect class="box" x="196" y="96" width="104" height="52" rx="8"/>
+        <text class="tm" x="248" y="116" text-anchor="middle" font-size="11">SUM(Pagado)</text>
+        <text class="t" x="248" y="138" text-anchor="middle" font-size="14" font-weight="700">solo Valle</text>
+      </g>
+    </svg>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card span2">
+      <div class="card-h"><h3>Simulador 1 · Contexto de filtro</h3><span class="tag">Datos de ejemplo · 2025</span></div>
+      <p class="muted small">Active y desactive segmentaciones. Las filas resaltadas son las que “ve” la medida. Luego pruebe la casilla de <code>REMOVEFILTERS</code>.</p>
+      <div class="field" style="min-width:0"><label>Segmentación: Regional</label><div class="chips" id="fcReg"></div></div>
+      <div class="field" style="min-width:0"><label>Segmentación: Rubro</label><div class="chips" id="fcRub"></div></div>
+      <label style="display:flex;gap:9px;align-items:center;font-family:var(--f-display);font-size:.92rem;cursor:pointer"><input type="checkbox" id="fcRemove" style="width:18px;height:18px;accent-color:var(--green)"> Calcular con <code>REMOVEFILTERS ( Ejecucion[Regional] )</code></label>
+      <div class="tbl-wrap" style="max-height:330px"><table id="fcTbl"><thead><tr><th>Regional</th><th>Rubro</th><th class="num">Pagado</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card">
+      <h3>Resultado de la medida</h3>
+      <div class="code-wrap"><pre class="code" id="fcCode"></pre></div>
+      <div class="result"><span class="big" id="fcVal">–</span></div>
+      <p class="small"><b>Contexto activo:</b> <span id="fcCtx" class="muted"></span></p>
+      <p class="small"><b>Filas evaluadas:</b> <span id="fcRows"></span></p>
+      <p class="note small" id="fcNote"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>Simulador 2 · Contexto de fila (columna calculada)</h3></div>
+    <div class="code-wrap"><pre class="code" data-code="Saldo = Ejecucion[Comprometido] - Ejecucion[Pagado]"></pre></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button class="btn" type="button" id="rcStep">Evaluar siguiente fila</button>
+      <button class="btn ghost" type="button" id="rcReset">Reiniciar</button>
+      <span class="small" id="rcMsg" aria-live="polite"></span>
+    </div>
+    <div class="tbl-wrap"><table id="rcTbl"><thead><tr><th>Mes</th><th>Regional</th><th>Rubro</th><th class="num">Comprometido</th><th class="num">Pagado</th><th class="num">Saldo</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card flat"><h4>Transición de contexto</h4><p class="small">Cuando una medida se usa dentro de un iterador (por ejemplo SUMX), CALCULATE convierte la fila actual en un filtro. Por eso <code>[Total Pagado]</code> dentro de SUMX devuelve el valor de esa fila.</p></div>
+    <div class="card flat"><h4>BLANK no es cero</h4><p class="small">DAX devuelve <code>BLANK()</code> cuando no hay datos. Los visuales ocultan esas filas. DIVIDE devuelve BLANK al dividir por cero en lugar de un error.</p></div>
+    <div class="card flat"><h4>Tipos de datos</h4><p class="small">Número entero, decimal, decimal fijo (moneda), fecha/hora, texto, booleano. Sumar una columna de texto genera error: revise el tipo en Power Query.</p></div>
+  </div>
+</section>
+
+<!-- ============ COMANDOS ============ -->
+<section class="mod" id="comandos" data-title="Tabla de comandos" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 6 · Referencia</span>
+    <h2>Tabla de comandos DAX</h2>
+    <p class="lead">Las funciones que más usará en reportes administrativos, con su equivalente aproximado en Excel. Filtre por categoría o busque por nombre.</p>
+  </div>
+  <div class="card">
+    <div class="ctrls">
+      <div class="field" style="flex:2"><label for="cmdSearch">Buscar función</label><input type="search" id="cmdSearch" placeholder="Ej.: CALCULATE, porcentaje, SUMAR.SI"></div>
+      <div class="field" style="flex:3;min-width:0"><label>Categoría</label><div class="chips" id="cmdCats"></div></div>
+    </div>
+    <p class="small muted" id="cmdCount"></p>
+    <div class="tbl-wrap" style="max-height:620px"><table>
+      <thead><tr><th>Función</th><th>Categoría</th><th>Sintaxis</th><th>Qué hace</th><th>Ejemplo</th><th>En Excel</th></tr></thead>
+      <tbody id="cmdBody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ LABORATORIO ============ -->
+<section class="mod" id="laboratorio" data-title="Simuladores" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 7 · Práctica</span>
+    <h2>Laboratorio de simuladores</h2>
+    <p class="lead">Practique con una tabla de ejemplo de ejecución presupuestal: 5 regionales, 3 rubros, 24 meses (2024–2025). Las cifras son ficticias.</p>
+  </div>
+
+  <!-- builder -->
+  <div class="card">
+    <div class="card-h"><h3>Simulador 3 · Constructor de medidas</h3><span class="tag">Año en el informe: 2025</span></div>
+    <div class="ctrls">
+      <div class="field"><label for="bName">Nombre de la medida</label><input type="text" id="bName" value="Total Pagado"></div>
+      <div class="field"><label for="bFn">Función de agregación</label><select id="bFn">
+        <option value="SUM">SUM · suma</option><option value="AVERAGE">AVERAGE · promedio</option><option value="MIN">MIN · mínimo</option><option value="MAX">MAX · máximo</option><option value="COUNTROWS">COUNTROWS · contar filas</option><option value="DISTINCTCOUNT">DISTINCTCOUNT · contar distintos</option></select></div>
+      <div class="field"><label for="bCol">Columna</label><select id="bCol"></select></div>
+      <div class="field"><label for="bReg">CALCULATE · Regional</label><select id="bReg"></select></div>
+      <div class="field"><label for="bRub">CALCULATE · Rubro</label><select id="bRub"></select></div>
+    </div>
+    <div class="grid g2">
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <div class="code-wrap"><pre class="code" id="bCode"></pre><button class="btn sm copy" type="button" data-copy="bCode">Copiar</button></div>
+        <div class="result"><span class="muted small">Total en tarjeta:</span><span class="big" id="bVal"></span></div>
+        <p class="note small" id="bNote"></p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <h4>La misma medida en un visual por Regional</h4>
+        <div class="hbars" id="bBars"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sumx -->
+  <div class="card">
+    <div class="card-h"><h3>Simulador 4 · SUM frente a SUMX (iteradores)</h3><span class="tag">Orden de compra de ejemplo</span></div>
+    <p class="muted small">Para saber el valor total de una orden hay que multiplicar cantidad por valor unitario <b>en cada fila</b> y luego sumar. Cambie las cantidades y ejecute la iteración.</p>
+    <div class="grid g2">
+      <div class="tbl-wrap"><table id="sxTbl"><thead><tr><th>Elemento</th><th class="num">Cantidad</th><th class="num">Valor unitario</th><th class="num">Cant × Valor</th></tr></thead><tbody></tbody></table></div>
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <div class="code-wrap"><pre class="code" data-code="// Incorrecto: suma columnas y luego multiplica
+Valor Orden mal = SUM ( Orden[Cantidad] ) * SUM ( Orden[ValorUnitario] )
+
+// Correcto: multiplica fila por fila y luego suma
+Valor Orden = SUMX ( Orden, Orden[Cantidad] * Orden[ValorUnitario] )"></pre></div>
+        <div class="grid g2" style="gap:10px">
+          <div class="card flat kpi"><span class="k-lab">SUM × SUM</span><span class="k-val" style="font-size:1.35rem;color:var(--bad)" id="sxWrong"></span></div>
+          <div class="card flat kpi"><span class="k-lab">SUMX</span><span class="k-val g" style="font-size:1.35rem" id="sxRight">$ 0</span></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="button" id="sxPlay">Ejecutar SUMX fila por fila</button><button class="btn ghost" type="button" id="sxReset">Reiniciar</button></div>
+        <p class="small" id="sxMsg" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- time intelligence -->
+  <div class="card">
+    <div class="card-h"><h3>Simulador 5 · Inteligencia de tiempo</h3><span class="tag">Requiere tabla Calendario</span></div>
+    <div class="ctrls">
+      <div class="field"><label>Vista</label><div class="chips" id="tiMode"></div></div>
+      <div class="field"><label for="tiReg">Regional</label><select id="tiReg"></select></div>
+      <div class="field"><label for="tiMonth">Mes seleccionado: <span id="tiMonthLab"></span></label><input type="range" id="tiMonth" min="1" max="12" value="9"></div>
+    </div>
+    <div class="grid g4">
+      <div class="card flat kpi"><span class="k-lab">Pagado mes 2025</span><span class="k-val" style="font-size:1.4rem" id="tiK1"></span></div>
+      <div class="card flat kpi"><span class="k-lab">Mismo mes 2024</span><span class="k-val" style="font-size:1.4rem" id="tiK2"></span></div>
+      <div class="card flat kpi"><span class="k-lab">Variación %</span><span class="k-val" style="font-size:1.4rem" id="tiK3"></span></div>
+      <div class="card flat kpi"><span class="k-lab">Acumulado 2025</span><span class="k-val g" style="font-size:1.4rem" id="tiK4"></span></div>
+    </div>
+    <div class="grid g3">
+      <div class="span2" style="min-width:0"><svg class="info" id="tiChart" viewBox="0 0 680 290" role="img" aria-label="Gráfico de pagos mensuales 2025 frente a 2024"></svg>
+        <div class="chips small" style="gap:16px;font-family:var(--f-display)"><span><svg width="14" height="10"><rect width="14" height="10" rx="2" fill="var(--green)"/></svg> 2025</span><span><svg width="18" height="10"><path d="M0 5h18" stroke="var(--navy)" stroke-width="3" stroke-dasharray="5 3"/></svg> 2024 (SAMEPERIODLASTYEAR)</span></div></div>
+      <div class="code-wrap" style="min-width:0"><pre class="code" id="tiCode"></pre></div>
+    </div>
+  </div>
+
+  <!-- debugger -->
+  <div class="card">
+    <div class="card-h"><h3>Simulador 6 · Depurador de fórmulas</h3><span class="small muted" id="dbgPos"></span></div>
+    <p class="muted small">Cada fórmula tiene un problema. Elija la corrección adecuada.</p>
+    <div id="dbg" class="q"></div>
+  </div>
+</section>
+
+<!-- ============ EJEMPLOS ============ -->
+<section class="mod" id="ejemplos" data-title="Ejemplos" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 8 · Casos administrativos</span>
+    <h2>Ejemplos interactivos de medidas</h2>
+    <p class="lead">Medidas listas para copiar y adaptar a sus reportes. Los resultados se calculan en vivo sobre la tabla de ejemplo.</p>
+  </div>
+  <div class="card" style="flex-direction:row;flex-wrap:wrap;align-items:center;gap:14px">
+    <span class="eyebrow" style="color:var(--muted)">Contexto del informe</span>
+    <div class="chips" id="exYear"></div>
+    <div class="chips" id="exRub"></div>
+  </div>
+  <div class="grid g4" id="exKpis"></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-h"><h3>Semáforo de ejecución por regional</h3></div>
+      <div class="code-wrap"><pre class="code" data-code="Semáforo =
+VAR Ejec = [% Ejecución]
+RETURN
+    SWITCH (
+        TRUE (),
+        Ejec >= 0.90, &quot;Verde&quot;,
+        Ejec >= 0.75, &quot;Amarillo&quot;,
+        &quot;Rojo&quot;
+    )"></pre><button class="btn sm copy" type="button">Copiar</button></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Regional</th><th class="num">% Ejecución</th><th>Semáforo</th><th class="num">Ranking</th></tr></thead><tbody id="exSem"></tbody></table></div>
+      <p class="small muted">Ranking: <code>RANKX ( ALL ( Ejecucion[Regional] ), [Total Pagado] )</code></p>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>Participación % en el total nacional</h3></div>
+      <div class="code-wrap"><pre class="code" data-code="% Participación =
+DIVIDE (
+    [Total Pagado],
+    CALCULATE ( [Total Pagado], ALL ( Ejecucion[Regional] ) )
+)"></pre><button class="btn sm copy" type="button">Copiar</button></div>
+      <div class="hbars" id="exPart"></div>
+      <p class="note small">ALL quita el filtro de Regional solo en el denominador. Así cada fila se compara contra el total nacional.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>Biblioteca de medidas</h3><span class="small muted">Haga clic en una medida para ver su resultado</span></div>
+    <div class="grid g3" id="exLib"></div>
+    <div class="grid g2" style="align-items:start">
+      <div class="code-wrap"><pre class="code" id="exLibCode"></pre><button class="btn sm copy" type="button" data-copy="exLibCode">Copiar</button></div>
+      <div class="card flat"><span class="k-lab eyebrow" style="color:var(--muted)">Resultado en el contexto actual</span><span class="big" style="font-family:var(--f-display);font-size:1.9rem;font-weight:700;color:var(--green-ink);font-variant-numeric:tabular-nums" id="exLibVal"></span><p class="small" id="exLibTxt"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVALUACIÓN ============ -->
+<section class="mod" id="evaluacion" data-title="Autoevaluación" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 9 · Verificación</span>
+    <h2>Autoevaluación</h2>
+    <p class="lead">Ocho preguntas para comprobar lo aprendido. Cada respuesta muestra la explicación.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card span2" id="quiz"></div>
+    <div class="card">
+      <h3>Su resultado</h3>
+      <div class="result"><span class="big" id="qScore">0 / 8</span></div>
+      <div class="bar" style="background:var(--surface-2)"><i id="qBar" style="width:0%"></i></div>
+      <p class="small" id="qMsg">Responda las preguntas para ver su desempeño.</p>
+      <button class="btn ghost" type="button" id="qReset">Reiniciar autoevaluación</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECURSOS ============ -->
+<section class="mod" id="recursos" data-title="Recursos" hidden>
+  <div class="mod-head">
+    <span class="eyebrow">Módulo 10 · Para seguir aprendiendo</span>
+    <h2>Cibergrafía y bibliografía</h2>
+    <p class="lead">Videos en español y documentación oficial verificados en octubre de 2026. Se abren en una pestaña nueva.</p>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Videos en español</h3><div style="display:flex;flex-direction:column;gap:14px" id="vids"></div></div>
+    <div class="card"><h3>Documentación y sitios de referencia</h3><div style="display:flex;flex-direction:column;gap:14px" id="docs"></div></div>
+  </div>
+  <div class="card">
+    <h3>Bibliografía (APA 7.ª ed.)</h3>
+    <ul class="biblio">
+      <li>Collie, R., &amp; Singh, A. (2016). <i>Power Pivot and Power BI: The Excel user's guide to DAX, Power Query, Power BI &amp; Power Pivot in Excel 2010–2016</i>. Holy Macro! Books.</li>
+      <li>Ferrari, A., &amp; Russo, M. (2016). <i>Introducing Microsoft Power BI</i>. Microsoft Press.</li>
+      <li>Ferrari, A., &amp; Russo, M. (2019). <i>The definitive guide to DAX: Business intelligence for Microsoft Power BI, SQL Server Analysis Services, and Excel</i> (2.ª ed.). Microsoft Press.</li>
+      <li>Knight, D., Knight, B., Pearson, M., &amp; Quintana, M. (2018). <i>Microsoft Power BI quick start guide</i>. Packt Publishing.</li>
+      <li>Microsoft. (2026). <i>Referencia de expresiones de análisis de datos (DAX)</i>. Microsoft Learn. https://learn.microsoft.com/es-es/dax/</li>
+      <li>Russo, M., &amp; Ferrari, A. (2017). <i>Analyzing data with Power BI and Power Pivot for Excel</i>. Microsoft Press.</li>
+      <li>Servicio Nacional de Aprendizaje SENA. (s. f.). <i>Manual de identidad visual institucional</i>. SENA.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Glosario rápido</h3>
+    <div class="tbl-wrap"><table><tbody>
+      <tr><td><b>Medida</b></td><td>Cálculo que se evalúa al consultar, según los filtros del informe.</td></tr>
+      <tr><td><b>Contexto de filtro</b></td><td>Conjunto de filtros activos (segmentaciones, filas del visual, CALCULATE) al evaluar una medida.</td></tr>
+      <tr><td><b>Contexto de fila</b></td><td>La fila que se está evaluando en una columna calculada o un iterador.</td></tr>
+      <tr><td><b>Iterador</b></td><td>Función terminada en X (SUMX, AVERAGEX) que recorre una tabla fila por fila.</td></tr>
+      <tr><td><b>Tabla calendario</b></td><td>Tabla con una fila por fecha, necesaria para la inteligencia de tiempo.</td></tr>
+      <tr><td><b>Medida implícita</b></td><td>Agregación automática al arrastrar una columna numérica a un visual. Se recomienda reemplazarla por medidas explícitas.</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+      <footer class="foot">
+        <span>OVA de apoyo · DAX en Power BI para funcionarios administrativos SENA</span>
+        <span>Las cifras de los simuladores son ficticias y solo tienen fines pedagógicos.</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* ---------- icons ---------- */
+const IC={
+ home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+ target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+ curve:'<path d="M3 20c6 0 7-14 18-16"/><path d="M3 4v16h18"/>',
+ code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/>',
+ layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+ table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/>',
+ flask:'<path d="M9 3h6M10 3v6l-5 9a2 2 0 002 3h10a2 2 0 002-3l-5-9V3"/>',
+ spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>',
+ check:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 12l3 3 5-6"/>',
+ book:'<path d="M4 4h6a3 3 0 013 3v13a2 2 0 00-2-2H4z"/><path d="M20 4h-6a3 3 0 00-3 3"/><path d="M20 4v14h-7"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ moon:'<path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/>',
+ play:'<path d="M8 5v14l11-7z"/>',
+ link:'<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>'
+};
+const svgI=n=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+IC[n]+'</svg>';
+
+/* ---------- navigation ---------- */
+const MODS=[["inicio","Inicio","home"],["que-es","¿Qué es DAX?","info"],["objetivo","Objetivos","target"],["curva","Curva de aprendizaje","curve"],["sintaxis","Sintaxis","code"],["semantica","Semántica","layers"],["comandos","Tabla de comandos","table"],["laboratorio","Simuladores","flask"],["ejemplos","Ejemplos","spark"],["evaluacion","Autoevaluación","check"],["recursos","Recursos","book"]];
+let seen=new Set();try{seen=new Set(JSON.parse(store.get("ovaDaxSeen")||"[]"))}catch(e){}
+const nav=$("#nav");
+MODS.forEach(([id,t,ic])=>{const b=document.createElement("button");b.type="button";b.dataset.id=id;b.innerHTML=svgI(ic)+"<span>"+t+"</span><i class='dot'></i>";b.addEventListener("click",()=>go(id,true));nav.appendChild(b)});
+let current="inicio";
+function go(id,focus){
+  if(!MODS.find(m=>m[0]===id))id="inicio";
+  current=id;
+  $$("section.mod").forEach(s=>s.hidden=s.id!==id);
+  $$(".nav button").forEach(b=>{b.toggleAttribute("aria-current",false);if(b.dataset.id===id)b.setAttribute("aria-current","page")});
+  const mi=MODS.findIndex(m=>m[0]===id);
+  $("#crumb").textContent=MODS[mi][1];
+  $("#prevBtn").disabled=mi===0;$("#prevBtn").style.visibility=mi===0?"hidden":"visible";
+  $("#nextBtn").style.visibility=mi===MODS.length-1?"hidden":"visible";
+  seen.add(id);store.set("ovaDaxSeen",JSON.stringify([...seen]));updProg();
+  try{history.replaceState(null,"","#"+id)}catch(e){}
+  if(focus){window.scrollTo({top:0,behavior:"auto"});const ab=nav.querySelector('[data-id="'+id+'"]');if(ab&&ab.scrollIntoView&&window.innerWidth<900)ab.scrollIntoView({inline:"center",block:"nearest"})}
+}
+function updProg(){
+  $$(".nav button").forEach(b=>b.classList.toggle("seen",seen.has(b.dataset.id)));
+  $("#progTxt").textContent=seen.size+" de "+MODS.length;
+  $("#progBar").style.width=(seen.size/MODS.length*100)+"%";
+}
+$("#prevBtn").addEventListener("click",()=>{const i=MODS.findIndex(m=>m[0]===current);if(i>0)go(MODS[i-1][0],true)});
+$("#nextBtn").addEventListener("click",()=>{const i=MODS.findIndex(m=>m[0]===current);if(i<MODS.length-1)go(MODS[i+1][0],true)});
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go,true)});
+
+/* ---------- theme ---------- */
+const root=document.documentElement,mq=window.matchMedia("(prefers-color-scheme: dark)");
+function isDark(){const t=root.getAttribute("data-theme");return t?t==="dark":mq.matches}
+function paintThemeBtn(){const d=isDark();$("#themeBtn").innerHTML=svgI(d?"sun":"moon");$("#themeBtn").setAttribute("aria-label",d?"Cambiar a modo claro":"Cambiar a modo oscuro")}
+const savedT=store.get("ovaDaxTheme");if(savedT==="dark"||savedT==="light")root.setAttribute("data-theme",savedT);
+$("#themeBtn").addEventListener("click",()=>{const n=isDark()?"light":"dark";root.setAttribute("data-theme",n);store.set("ovaDaxTheme",n);paintThemeBtn();drawTI()});
+try{mq.addEventListener("change",()=>{paintThemeBtn()})}catch(e){}
+paintThemeBtn();
+
+/* ---------- highlighter ---------- */
+function hl(code){
+  const esc=code.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const re=/(\/\/.*$|--.*$)|("[^"\n]*")|('[^'\n]*'|\b[A-Za-z_][A-Za-z0-9_]*)(\[[^\]\n]+\])|(\[[^\]\n]+\])|\b([A-Z][A-Z0-9\.]*[A-Z0-9])(?=\s*\()|\b(VAR|RETURN|TRUE|FALSE|IN|NOT)\b|\b(\d+(?:[\.,]\d+)?)\b/gm;
+  return esc.replace(re,(m,c,s,t,tc,col,fn,kw,num)=>{
+    if(c)return'<span class="tk-com">'+c+'</span>';
+    if(s)return'<span class="tk-str">'+s+'</span>';
+    if(t)return'<span class="tk-tab">'+t+'</span><span class="tk-ref">'+tc+'</span>';
+    if(col)return'<span class="tk-ref">'+col+'</span>';
+    if(fn)return'<span class="tk-fn">'+fn+'</span>';
+    if(kw)return'<span class="tk-kw">'+kw+'</span>';
+    if(num)return'<span class="tk-num">'+num+'</span>';
+    return m;});
+}
+function setCode(el,code){el.dataset.raw=code;el.innerHTML=hl(code)}
+$$("pre.code[data-code]").forEach(p=>setCode(p,p.dataset.code));
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".copy");if(!b)return;
+  const pre=b.dataset.copy?document.getElementById(b.dataset.copy):b.parentElement.querySelector("pre");
+  const txt=pre.dataset.raw||pre.textContent;
+  const done=()=>{const o=b.textContent;b.textContent="Copiado";setTimeout(()=>b.textContent="Copiar",1400)};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Texto seleccionado";setTimeout(()=>b.textContent="Copiar",1600)};
+  try{navigator.clipboard.writeText(txt).then(done,fallback)}catch(err){fallback()}
+});
+
+/* ---------- formatters ---------- */
+const nf0=new Intl.NumberFormat("es-CO",{maximumFractionDigits:0});
+const nf1=new Intl.NumberFormat("es-CO",{maximumFractionDigits:1,minimumFractionDigits:1});
+const cop=v=>"$ "+nf0.format(Math.round(v));
+const mill=v=>"$ "+nf1.format(v/1e6)+" M";
+const pct=v=>(v==null||!isFinite(v))?"(en blanco)":nf1.format(v*100)+" %";
+
+/* ---------- sample data ---------- */
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(20251025);
+const REG=["Bogotá","Antioquia","Valle","Santander","Atlántico"],RUB=["Viáticos","Materiales","Servicios"];
+const MES=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const base={"Bogotá":95e6,"Antioquia":78e6,"Valle":62e6,"Santander":44e6,"Atlántico":38e6};
+const rf={"Viáticos":.45,"Materiales":.8,"Servicios":1.25};
+const ratio={"Bogotá":.94,"Antioquia":.87,"Valle":.79,"Santander":.92,"Atlántico":.68};
+const DATA=[];
+[2024,2025].forEach(y=>{for(let m=1;m<=12;m++){REG.forEach(r=>{RUB.forEach(u=>{
+  const season=.72+.5*Math.sin((m-1)/11*Math.PI);
+  const comp=Math.round(base[r]*rf[u]*season*(.85+R()*.3)*(y===2025?1.09:1)/1000)*1000;
+  const rt=Math.min(1,ratio[r]+(R()-.5)*.12-(y===2024?.02:0));
+  const pag=Math.round(comp*rt/1000)*1000;
+  const dep=u==="Viáticos"?"Talento Humano":u==="Materiales"?"Financiera":(R()<.5?"Contratación":"Bienestar");
+  DATA.push({Anio:y,Mes:m,Regional:r,Rubro:u,Dependencia:dep,Comprometido:comp,Pagado:pag,Contratos:1+Math.floor(R()*9*rf[u])});
+});});}});
+const sum=(rows,c)=>rows.reduce((a,r)=>a+r[c],0);
+const where=f=>DATA.filter(f);
+
+/* ---------- home ---------- */
+setCode($("#heroCode"),'% Ejecución =\nDIVIDE (\n    SUM ( Ejecucion[Pagado] ),\n    SUM ( Ejecucion[Comprometido] )\n)');
+$("#heroCode").style.whiteSpace="pre";
+function bars(el,items,fmt,max){
+  const mx=max||Math.max(...items.map(i=>Math.abs(i.v)||0),1);
+  el.innerHTML=items.map(i=>'<div class="hb"><span class="lab">'+i.k+'</span><div class="track"><div class="fill" style="width:'+(i.v==null?0:Math.max(0,i.v)/mx*100)+'%;'+(i.color?'background:'+i.color:'')+'"></div></div><span class="v">'+fmt(i.v)+'</span></div>').join("");
+}
+bars($("#homeBars"),REG.map(r=>{const rows=where(d=>d.Anio===2025&&d.Regional===r);return{k:r,v:sum(rows,"Pagado")/sum(rows,"Comprometido")}}),pct,1);
+$("#routeTbl tbody").innerHTML=MODS.slice(1).map((m,i)=>'<tr><td class="num muted" style="width:2em">'+(i+1)+'</td><td><a href="#'+m[0]+'" data-go="'+m[0]+'" onclick="return false">'+m[1]+'</a></td></tr>').join("");
+
+/* ---------- curve ---------- */
+const LV=[
+ {x:90,y:264,t:"Fundamentos",w:"Semana 1",fn:["SUM","AVERAGE","COUNTROWS","DISTINCTCOUNT","DIVIDE"],d:"Entiende el modelo de datos y crea medidas base explícitas. Sabe diferenciar medida de columna calculada.",c:"Total Pagado = SUM ( Ejecucion[Pagado] )",ok:"Puede construir una tarjeta con el total y el porcentaje de ejecución."},
+ {x:200,y:222,t:"Filtros y CALCULATE",w:"Semanas 2–3",fn:["CALCULATE","FILTER","ALL","REMOVEFILTERS","VALUES"],d:"Comprende el contexto de filtro y lo modifica. Es el tramo más exigente de la curva y el que más rinde.",c:'Pagado Viáticos =\nCALCULATE ( [Total Pagado], Ejecucion[Rubro] = "Viáticos" )',ok:"Explica por qué una medida da el mismo valor en todas las filas de un visual."},
+ {x:330,y:112,t:"Iteradores y relaciones",w:"Semana 4",fn:["SUMX","AVERAGEX","RELATED","RANKX","COUNTX"],d:"Calcula fila por fila y trae datos de tablas relacionadas. Entiende la transición de contexto.",c:"Valor Orden =\nSUMX ( Orden, Orden[Cantidad] * RELATED ( Elemento[Precio] ) )",ok:"Sabe cuándo SUM no alcanza y necesita SUMX."},
+ {x:450,y:72,t:"Inteligencia de tiempo",w:"Semanas 5–6",fn:["TOTALYTD","SAMEPERIODLASTYEAR","DATEADD","DATESYTD","CALENDAR"],d:"Construye y marca una tabla calendario. Compara periodos y acumulados.",c:"Pagado Año Anterior =\nCALCULATE ( [Total Pagado], SAMEPERIODLASTYEAR ( Calendario[Fecha] ) )",ok:"Construye un informe de variación año contra año sin errores."},
+ {x:575,y:44,t:"Variables y patrones",w:"Semana 7 en adelante",fn:["VAR / RETURN","SWITCH(TRUE())","SELECTEDVALUE","COALESCE","TOPN"],d:"Escribe medidas legibles y reutilizables. Aplica patrones como semáforos, medidas dinámicas y top N.",c:"Semáforo =\nVAR e = [% Ejecución]\nRETURN SWITCH ( TRUE (), e >= 0.9, \"Verde\", e >= 0.75, \"Amarillo\", \"Rojo\" )",ok:"Otro compañero entiende sus medidas sin que usted se las explique."}
+];
+const lg=$("#lvls");
+LV.forEach((l,i)=>{const g=document.createElementNS("http://www.w3.org/2000/svg","g");g.setAttribute("class","lvl");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","Nivel "+(i+1)+": "+l.t);
+  g.innerHTML='<circle class="ring" cx="'+l.x+'" cy="'+l.y+'" r="15"/><text class="ln" x="'+l.x+'" y="'+l.y+'">'+(i+1)+'</text><text class="t" x="'+l.x+'" y="'+(l.y-24)+'" text-anchor="middle" font-size="12" font-weight="600">'+l.t+'</text>';
+  g.addEventListener("click",()=>selLvl(i));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selLvl(i)}});lg.appendChild(g)});
+function selLvl(i){$$(".lvl").forEach((g,j)=>g.classList.toggle("active",j===i));const l=LV[i];
+  $("#lvlDetail").innerHTML='<span class="eyebrow">Nivel '+(i+1)+' · '+l.w+'</span><h3>'+l.t+'</h3><p class="small">'+l.d+'</p><div class="chips">'+l.fn.map(f=>'<span class="tag">'+f+'</span>').join("")+'</div><div class="code-wrap"><pre class="code"></pre></div><p class="note small"><b>Señal de dominio:</b> '+l.ok+'</p>';
+  setCode($("#lvlDetail pre"),l.c)}
+selLvl(1);
+
+/* ---------- anatomy ---------- */
+const PARTS={name:["Nombre de la medida","Aparece en el panel de campos. Use un nombre claro."],eq:["Signo igual","Separa el nombre de la expresión."],fn:["Función","Siempre en inglés y seguida de paréntesis."],par:["Paréntesis","Cada paréntesis que abre debe cerrar."],tab:["Tabla","Comillas simples obligatorias si tiene espacios o tildes."],col:["Columna","Entre corchetes, precedida por su tabla."],sep:["Separador","Divide los argumentos de la función."],op:["Operador","Compara la columna con un valor."],str:["Texto","Siempre entre comillas dobles."]};
+$("#parts").innerHTML=Object.entries(PARTS).map(([k,v])=>'<button type="button" class="part" data-p="'+k+'"><b>'+v[0]+'</b><span>'+v[1]+'</span></button>').join("");
+function hlPart(k){$$("#anat span").forEach(s=>s.classList.toggle("hl",s.dataset.p===k));$$(".part").forEach(s=>s.classList.toggle("hl",s.dataset.p===k))}
+$$("#anat span,.part").forEach(el=>{el.addEventListener("mouseenter",()=>hlPart(el.dataset.p));el.addEventListener("focus",()=>hlPart(el.dataset.p));el.addEventListener("click",()=>hlPart(el.dataset.p))});
+$("#anat").addEventListener("mouseleave",()=>hlPart(null));
+
+/* ---------- filter-context sim ---------- */
+const FC=[];REG.forEach(r=>RUB.forEach(u=>{const rows=where(d=>d.Anio===2025&&d.Regional===r&&d.Rubro===u);FC.push({Regional:r,Rubro:u,Pagado:sum(rows,"Pagado")})}));
+const fcSel={reg:new Set(["Valle"]),rub:new Set()};
+function chipSet(el,list,set,cb){el.innerHTML=list.map(v=>'<button type="button" class="chip" aria-pressed="'+set.has(v)+'" data-v="'+v+'">'+v+'</button>').join("");
+  el.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{const v=c.dataset.v;set.has(v)?set.delete(v):set.add(v);c.setAttribute("aria-pressed",set.has(v));cb()}))}
+chipSet($("#fcReg"),REG,fcSel.reg,renderFC);chipSet($("#fcRub"),RUB,fcSel.rub,renderFC);
+$("#fcRemove").addEventListener("change",renderFC);
+function renderFC(){
+  const rm=$("#fcRemove").checked;
+  const okR=r=>rm||fcSel.reg.size===0||fcSel.reg.has(r.Regional), okU=r=>fcSel.rub.size===0||fcSel.rub.has(r.Rubro);
+  let n=0,tot=0;
+  $("#fcTbl tbody").innerHTML=FC.map(r=>{const on=okR(r)&&okU(r);if(on){n++;tot+=r.Pagado}return'<tr class="'+(on?"on":"off")+'"><td>'+r.Regional+'</td><td>'+r.Rubro+'</td><td class="num">'+cop(r.Pagado)+'</td></tr>'}).join("");
+  setCode($("#fcCode"),rm?"Pagado sin filtro Regional =\nCALCULATE (\n    SUM ( Ejecucion[Pagado] ),\n    REMOVEFILTERS ( Ejecucion[Regional] )\n)":"Total Pagado =\nSUM ( Ejecucion[Pagado] )");
+  $("#fcVal").textContent=mill(tot);
+  const ctx=[];
+  if(fcSel.reg.size&&!rm)ctx.push("Regional ∈ {"+[...fcSel.reg].join(", ")+"}");
+  if(fcSel.reg.size&&rm)ctx.push("Regional: filtro eliminado por REMOVEFILTERS");
+  if(fcSel.rub.size)ctx.push("Rubro ∈ {"+[...fcSel.rub].join(", ")+"}");
+  ctx.push("Año = 2025");
+  $("#fcCtx").textContent=ctx.join(" · ");
+  $("#fcRows").textContent=n+" de "+FC.length;
+  $("#fcNote").innerHTML=rm?"<b>Observe:</b> la segmentación de Regional sigue activa en el informe, pero CALCULATE la retira solo para esta medida. El filtro de Rubro se respeta.":"<b>Observe:</b> la fórmula no cambia. Lo que cambia es el conjunto de filas que llega a SUM.";
+}
+renderFC();
+
+/* ---------- row-context sim ---------- */
+const RC=where(d=>d.Anio===2025&&d.Mes===3&&d.Rubro==="Servicios");let rcI=-1;
+function renderRC(){
+  $("#rcTbl tbody").innerHTML=RC.map((r,i)=>'<tr class="'+(i===rcI?"cur":"")+'"><td>'+MES[r.Mes-1]+'</td><td>'+r.Regional+'</td><td>'+r.Rubro+'</td><td class="num">'+cop(r.Comprometido)+'</td><td class="num">'+cop(r.Pagado)+'</td><td class="num"><b>'+(i<=rcI?cop(r.Comprometido-r.Pagado):"·")+'</b></td></tr>').join("");
+  $("#rcMsg").innerHTML=rcI<0?"Pulse el botón para evaluar la primera fila.":rcI>=RC.length-1&&rcI>=0?"<b>Listo.</b> La columna quedó guardada en el modelo, un valor por fila.":"Fila "+(rcI+1)+": "+cop(RC[rcI].Comprometido)+" − "+cop(RC[rcI].Pagado)+" = <b>"+cop(RC[rcI].Comprometido-RC[rcI].Pagado)+"</b>";
+  if(rcI>=RC.length-1&&rcI>=0)$("#rcMsg").innerHTML="Fila "+(rcI+1)+": "+cop(RC[rcI].Comprometido)+" − "+cop(RC[rcI].Pagado)+" = <b>"+cop(RC[rcI].Comprometido-RC[rcI].Pagado)+"</b>. Todas las filas evaluadas.";
+}
+$("#rcStep").addEventListener("click",()=>{if(rcI<RC.length-1)rcI++;renderRC()});
+$("#rcReset").addEventListener("click",()=>{rcI=-1;renderRC()});
+renderRC();
+
+/* ---------- commands ---------- */
+const CMD=[
+["SUM","Agregación","SUM ( columna )","Suma los valores de una columna numérica.","SUM ( Ejecucion[Pagado] )","SUMA"],
+["AVERAGE","Agregación","AVERAGE ( columna )","Promedio aritmético de una columna.","AVERAGE ( Ejecucion[Pagado] )","PROMEDIO"],
+["MIN / MAX","Agregación","MIN ( columna )","Valor menor o mayor de una columna.","MAX ( Ejecucion[Pagado] )","MIN / MAX"],
+["COUNT","Agregación","COUNT ( columna )","Cuenta celdas no vacías con números o fechas.","COUNT ( Contratos[Valor] )","CONTAR"],
+["COUNTA","Agregación","COUNTA ( columna )","Cuenta celdas no vacías de cualquier tipo.","COUNTA ( Contratos[Supervisor] )","CONTARA"],
+["COUNTROWS","Agregación","COUNTROWS ( tabla )","Cuenta las filas de una tabla.","COUNTROWS ( Contratos )","CONTAR (filas)"],
+["DISTINCTCOUNT","Agregación","DISTINCTCOUNT ( columna )","Cuenta valores distintos.","DISTINCTCOUNT ( Contratos[Contratista] )","CONTAR(UNICOS())"],
+["SUMX","Iterador","SUMX ( tabla, expresión )","Evalúa una expresión fila por fila y suma.","SUMX ( Orden, Orden[Cant] * Orden[Valor] )","SUMAPRODUCTO"],
+["AVERAGEX","Iterador","AVERAGEX ( tabla, expresión )","Promedio de una expresión evaluada por fila.","AVERAGEX ( Contratos, Contratos[Días] )","PROMEDIO con columna auxiliar"],
+["RANKX","Iterador","RANKX ( tabla, expresión )","Posición de un elemento según una medida.","RANKX ( ALL ( Ejecucion[Regional] ), [Total Pagado] )","JERARQUIA.EQV"],
+["CALCULATE","Filtro","CALCULATE ( expresión, filtro1, ... )","Evalúa una expresión modificando el contexto de filtro.",'CALCULATE ( [Total Pagado], Ejecucion[Rubro] = "Viáticos" )',"SUMAR.SI.CONJUNTO"],
+["FILTER","Filtro","FILTER ( tabla, condición )","Devuelve las filas de una tabla que cumplen una condición.","FILTER ( Contratos, Contratos[Valor] > 50000000 )","FILTRAR"],
+["ALL","Filtro","ALL ( tabla | columna )","Quita los filtros de una tabla o columna.","CALCULATE ( [Total Pagado], ALL ( Ejecucion ) )","—"],
+["ALLEXCEPT","Filtro","ALLEXCEPT ( tabla, columna )","Quita todos los filtros excepto los indicados.","ALLEXCEPT ( Ejecucion, Ejecucion[Anio] )","—"],
+["REMOVEFILTERS","Filtro","REMOVEFILTERS ( columna )","Quita filtros; se usa como argumento de CALCULATE.","REMOVEFILTERS ( Ejecucion[Regional] )","—"],
+["SELECTEDVALUE","Filtro","SELECTEDVALUE ( columna, alterno )","Devuelve el valor si hay una sola selección.",'SELECTEDVALUE ( Ejecucion[Regional], "Todas" )',"—"],
+["RELATED","Relación","RELATED ( columna )","Trae un valor de la tabla relacionada (lado uno).","RELATED ( Dependencia[Jefe] )","BUSCARV / BUSCARX"],
+["IF","Lógica","IF ( condición, sí, no )","Devuelve un valor según una condición.",'IF ( [% Ejecución] < 0.7, "Revisar", "OK" )',"SI"],
+["SWITCH","Lógica","SWITCH ( expresión, valor, resultado, ... )","Evalúa varios casos; con TRUE() funciona como varios SI.",'SWITCH ( TRUE (), [x] >= 0.9, "Verde", "Rojo" )',"CAMBIAR / SI.CONJUNTO"],
+["AND / OR","Lógica","AND ( a, b )","Combina dos condiciones (también && y ||).","AND ( [A] > 0, [B] > 0 )","Y / O"],
+["ISBLANK","Lógica","ISBLANK ( valor )","Indica si un valor está en blanco.","ISBLANK ( [Total Pagado] )","ESBLANCO"],
+["COALESCE","Lógica","COALESCE ( v1, v2, ... )","Devuelve el primer valor que no esté en blanco.","COALESCE ( [Total Pagado], 0 )","SI.ERROR (aprox.)"],
+["DIVIDE","Matemática","DIVIDE ( numerador, denominador, alterno )","División segura: evita el error por cero.","DIVIDE ( [Total Pagado], [Total Comprometido] )","= A/B con SI.ERROR"],
+["ROUND","Matemática","ROUND ( número, decimales )","Redondea a los decimales indicados.","ROUND ( [Promedio Días], 1 )","REDONDEAR"],
+["FORMAT","Texto","FORMAT ( valor, formato )","Convierte un valor en texto con formato.",'FORMAT ( [Total Pagado], "$ #,##0" )',"TEXTO"],
+["CONCATENATE","Texto","CONCATENATE ( t1, t2 )","Une dos textos (o use el operador &).",'Ejecucion[Regional] & " - " & Ejecucion[Rubro]',"CONCATENAR"],
+["LEFT / UPPER","Texto","LEFT ( texto, n )","Extrae caracteres o cambia a mayúsculas.","UPPER ( LEFT ( Contratos[Código], 3 ) )","IZQUIERDA / MAYUSC"],
+["TODAY","Fecha","TODAY ( )","Fecha actual.","DATEDIFF ( Contratos[Inicio], TODAY (), DAY )","HOY"],
+["YEAR / MONTH","Fecha","YEAR ( fecha )","Extrae el año o el mes de una fecha.","YEAR ( Calendario[Fecha] )","AÑO / MES"],
+["DATEDIFF","Fecha","DATEDIFF ( inicio, fin, intervalo )","Diferencia entre fechas en días, meses o años.","DATEDIFF ( Contratos[Inicio], Contratos[Fin], MONTH )","SIFECHA"],
+["CALENDAR","Fecha","CALENDAR ( inicio, fin )","Crea una tabla con un rango de fechas.","CALENDAR ( DATE ( 2024, 1, 1 ), DATE ( 2025, 12, 31 ) )","—"],
+["TOTALYTD","Inteligencia de tiempo","TOTALYTD ( expresión, fechas )","Acumulado del año hasta la fecha.","TOTALYTD ( [Total Pagado], Calendario[Fecha] )","—"],
+["SAMEPERIODLASTYEAR","Inteligencia de tiempo","SAMEPERIODLASTYEAR ( fechas )","Mismo periodo del año anterior.","CALCULATE ( [Total Pagado], SAMEPERIODLASTYEAR ( Calendario[Fecha] ) )","—"],
+["DATEADD","Inteligencia de tiempo","DATEADD ( fechas, n, intervalo )","Desplaza el periodo n días, meses o años.","CALCULATE ( [Total Pagado], DATEADD ( Calendario[Fecha], -1, MONTH ) )","—"],
+["SUMMARIZE","Tabla","SUMMARIZE ( tabla, columna, ... )","Agrupa una tabla por columnas.","SUMMARIZE ( Ejecucion, Ejecucion[Regional] )","Tabla dinámica"],
+["TOPN","Tabla","TOPN ( n, tabla, expresión )","Devuelve las n primeras filas según una expresión.","TOPN ( 3, VALUES ( Ejecucion[Regional] ), [Total Pagado] )","—"]
+];
+const CATS=["Todas",...new Set(CMD.map(c=>c[1]))];let cat="Todas";
+$("#cmdCats").innerHTML=CATS.map(c=>'<button type="button" class="chip" aria-pressed="'+(c==="Todas")+'" data-c="'+c+'">'+c+'</button>').join("");
+$$("#cmdCats .chip").forEach(b=>b.addEventListener("click",()=>{cat=b.dataset.c;$$("#cmdCats .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCmd()}));
+$("#cmdSearch").addEventListener("input",renderCmd);
+function renderCmd(){
+  const q=$("#cmdSearch").value.trim().toLowerCase();
+  const rows=CMD.filter(c=>(cat==="Todas"||c[1]===cat)&&(!q||c.join(" ").toLowerCase().includes(q)));
+  $("#cmdBody").innerHTML=rows.map(c=>'<tr><td><b class="mono" style="color:var(--green-ink)">'+c[0]+'</b></td><td><span class="tag">'+c[1]+'</span></td><td><code>'+c[2].replace(/</g,"&lt;")+'</code></td><td>'+c[3]+'</td><td><code>'+hl(c[4]).replace(/tk-/g,"tk-")+'</code></td><td>'+c[5]+'</td></tr>').join("")||'<tr><td colspan="6" class="muted">No hay funciones con ese criterio. Pruebe otra palabra.</td></tr>';
+  $("#cmdCount").textContent=rows.length+" funciones mostradas";
+}
+/* highlighted code in light table cells needs dark bg */
+const st=document.createElement("style");st.textContent="#cmdBody code{background:var(--code-bg);color:var(--code-fg);padding:2px 6px;border-radius:5px;display:inline-block}";document.head.appendChild(st);
+renderCmd();
+
+/* ---------- builder ---------- */
+const NUMC=["Pagado","Comprometido","Contratos"],DCOL=["Dependencia","Rubro","Regional"];
+$("#bReg").innerHTML='<option value="">(sin filtro)</option>'+REG.map(r=>"<option>"+r+"</option>").join("");
+$("#bRub").innerHTML='<option value="">(sin filtro)</option>'+RUB.map(r=>"<option>"+r+"</option>").join("");
+function fillCols(){const f=$("#bFn").value,prev=$("#bCol").value;const cols=f==="DISTINCTCOUNT"?DCOL:f==="COUNTROWS"?["(toda la tabla)"]:NUMC;$("#bCol").innerHTML=cols.map(c=>"<option>"+c+"</option>").join("");if(cols.includes(prev))$("#bCol").value=prev;$("#bCol").disabled=f==="COUNTROWS"}
+function aggr(rows,f,c){
+  if(f==="COUNTROWS")return rows.length;
+  if(!rows.length)return null;
+  if(f==="DISTINCTCOUNT")return new Set(rows.map(r=>r[c])).size;
+  const v=rows.map(r=>r[c]);
+  if(f==="SUM")return v.reduce((a,b)=>a+b,0);
+  if(f==="AVERAGE")return v.reduce((a,b)=>a+b,0)/v.length;
+  if(f==="MIN")return Math.min(...v);
+  if(f==="MAX")return Math.max(...v);
+}
+function renderB(){
+  const f=$("#bFn").value,c=$("#bCol").value,rg=$("#bReg").value,ru=$("#bRub").value;
+  const name=($("#bName").value||"Mi medida").replace(/[\[\]]/g,"");
+  const inner=f==="COUNTROWS"?"COUNTROWS ( Ejecucion )":f+" ( Ejecucion["+c+"] )";
+  const filts=[];if(rg)filts.push('Ejecucion[Regional] = "'+rg+'"');if(ru)filts.push('Ejecucion[Rubro] = "'+ru+'"');
+  const code=filts.length?name+" =\nCALCULATE (\n    "+inner+",\n    "+filts.join(",\n    ")+"\n)":name+" =\n"+inner;
+  setCode($("#bCode"),code);
+  const money=(f==="SUM"||f==="AVERAGE"||f==="MIN"||f==="MAX")&&c!=="Contratos";
+  const fmt=v=>v==null?"(en blanco)":money?(f==="SUM"?mill(v):cop(v)):nf0.format(v);
+  const ctx=(regCtx)=>where(d=>d.Anio===2025&&(rg?d.Regional===rg:(regCtx?d.Regional===regCtx:true))&&(ru?d.Rubro===ru:true));
+  $("#bVal").textContent=fmt(aggr(ctx(null),f,c));
+  const items=REG.map(r=>({k:r,v:aggr(ctx(r),f,c)}));
+  bars($("#bBars"),items,fmt);
+  $("#bNote").innerHTML=rg?"<b>Observe el visual:</b> todas las barras muestran el mismo valor. El filtro de CALCULATE sobre Regional <b>reemplaza</b> el filtro que llega de cada fila del visual. Esto es intencional cuando se necesita un valor fijo de referencia.":ru?"El filtro de Rubro se suma al de cada regional del visual: cada barra muestra solo "+ru+".":"Sin CALCULATE, la medida respeta el filtro que llega de cada fila del visual.";
+}
+["#bFn","#bCol","#bReg","#bRub","#bName"].forEach(s=>$(s).addEventListener(s==="#bName"?"input":"change",()=>{if(s==="#bFn")fillCols();renderB()}));
+fillCols();renderB();
+
+/* ---------- SUMX ---------- */
+const SX=[{e:"Resmas de papel",q:40,p:18500},{e:"Tóner impresora",q:6,p:320000},{e:"Sillas ergonómicas",q:10,p:450000},{e:"Carpetas de archivo",q:200,p:2300},{e:"Marcadores",q:50,p:4800},{e:"Botellones de agua",q:24,p:12000}];
+let sxI=-1,sxT=null;
+function renderSX(){
+  $("#sxTbl tbody").innerHTML=SX.map((r,i)=>'<tr class="'+(i===sxI?"cur":"")+'"><td>'+r.e+'</td><td class="num"><input type="number" min="0" max="999" id="sxq'+i+'" value="'+r.q+'" style="width:76px;text-align:right" aria-label="Cantidad de '+r.e+'"></td><td class="num">'+cop(r.p)+'</td><td class="num"><b>'+(i<=sxI?cop(r.q*r.p):"·")+'</b></td></tr>').join("");
+  SX.forEach((r,i)=>$("#sxq"+i).addEventListener("change",e=>{r.q=Math.max(0,Math.min(999,+e.target.value||0));resetSX()}));
+  const sQ=SX.reduce((a,r)=>a+r.q,0),sP=SX.reduce((a,r)=>a+r.p,0);
+  $("#sxWrong").textContent=cop(sQ*sP);
+  let acc=0;for(let i=0;i<=sxI&&i<SX.length;i++)acc+=SX[i].q*SX[i].p;
+  $("#sxRight").textContent=cop(acc);
+  const real=SX.reduce((a,r)=>a+r.q*r.p,0);
+  $("#sxMsg").innerHTML=sxI<0?"SUM × SUM multiplica "+nf0.format(sQ)+" unidades por "+cop(sP)+": un valor sin sentido.":sxI>=SX.length-1?"<b>Resultado de SUMX:</b> "+cop(real)+". SUM × SUM se equivoca por "+cop(sQ*sP-real)+".":"Iterando fila "+(sxI+1)+" de "+SX.length+": acumulado "+cop(acc);
+}
+function resetSX(){clearInterval(sxT);sxT=null;sxI=-1;$("#sxPlay").disabled=false;renderSX()}
+$("#sxPlay").addEventListener("click",()=>{
+  if(sxT)return;sxI=-1;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){sxI=SX.length-1;renderSX();return}
+  sxT=setInterval(()=>{sxI++;renderSX();if(sxI>=SX.length-1){clearInterval(sxT);sxT=null}},750);
+});
+$("#sxReset").addEventListener("click",resetSX);
+renderSX();
+
+/* ---------- time intelligence ---------- */
+let tiMode="Mensual";
+$("#tiMode").innerHTML=["Mensual","Acumulado"].map(m=>'<button type="button" class="chip" aria-pressed="'+(m===tiMode)+'" data-m="'+m+'">'+m+'</button>').join("");
+$$("#tiMode .chip").forEach(b=>b.addEventListener("click",()=>{tiMode=b.dataset.m;$$("#tiMode .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));drawTI()}));
+$("#tiReg").innerHTML='<option value="">Todas</option>'+REG.map(r=>"<option>"+r+"</option>").join("");
+$("#tiReg").addEventListener("change",drawTI);$("#tiMonth").addEventListener("input",drawTI);
+function niceMax(v){const e=Math.pow(10,Math.floor(Math.log10(v)));const n=v/e;const s=n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10;return s*e}
+function drawTI(){
+  const rg=$("#tiReg").value,m=+$("#tiMonth").value;
+  $("#tiMonthLab").textContent=MES[m-1];
+  const ser=y=>MES.map((_,i)=>sum(where(d=>d.Anio===y&&d.Mes===i+1&&(!rg||d.Regional===rg)),"Pagado"));
+  const s25=ser(2025),s24=ser(2024);
+  const cum=a=>a.map((_,i)=>a.slice(0,i+1).reduce((x,y)=>x+y,0));
+  const a25=tiMode==="Acumulado"?cum(s25):s25,a24=tiMode==="Acumulado"?cum(s24):s24;
+  $("#tiK1").textContent=mill(s25[m-1]);$("#tiK2").textContent=mill(s24[m-1]);
+  const vr=(s25[m-1]-s24[m-1])/s24[m-1];
+  $("#tiK3").textContent=(vr>=0?"+":"")+pct(vr);$("#tiK3").style.color=vr>=0?"var(--ok)":"var(--bad)";
+  $("#tiK4").textContent=mill(cum(s25)[m-1]);
+  const W=680,H=290,L=70,Rr=14,T=16,B=36,pw=W-L-Rr,ph=H-T-B;
+  const mx=niceMax(Math.max(...a25,...a24)*1.05);
+  const y=v=>T+ph-v/mx*ph,bw=pw/12;
+  let s='';
+  for(let k=0;k<=4;k++){const v=mx*k/4,yy=y(v);s+='<path class="lstroke" stroke-width="1" d="M'+L+' '+yy+' H'+(W-Rr)+'"/><text class="tm" x="'+(L-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11">'+nf0.format(v/1e6)+' M</text>'}
+  a25.forEach((v,i)=>{const x=L+i*bw+bw*.18,w=bw*.64;s+='<rect x="'+x+'" y="'+y(v)+'" width="'+w+'" height="'+(T+ph-y(v))+'" rx="3" fill="var(--green)" opacity="'+(i+1===m?1:i+1<m||tiMode==="Mensual"?.55:.25)+'"><title>'+MES[i]+' 2025: '+mill(v)+'</title></rect>';
+    s+='<text class="'+(i+1===m?"t":"tm")+'" x="'+(L+i*bw+bw/2)+'" y="'+(H-14)+'" text-anchor="middle" font-size="11" font-weight="'+(i+1===m?700:400)+'">'+MES[i]+'</text>'});
+  const pts=a24.map((v,i)=>(L+i*bw+bw/2)+","+y(v)).join(" ");
+  s+='<polyline points="'+pts+'" fill="none" stroke="var(--navy)" stroke-width="2.5" stroke-dasharray="6 4"/>';
+  a24.forEach((v,i)=>{s+='<circle cx="'+(L+i*bw+bw/2)+'" cy="'+y(v)+'" r="'+(i+1===m?5:3)+'" fill="var(--navy)"><title>'+MES[i]+' 2024: '+mill(v)+'</title></circle>'});
+  const xm=L+(m-1)*bw+bw/2;s+='<text class="t" x="'+Math.min(W-60,Math.max(L+30,xm))+'" y="'+(y(a25[m-1])-8)+'" text-anchor="middle" font-size="11" font-weight="700">'+mill(a25[m-1])+'</text>';
+  $("#tiChart").innerHTML=s;
+  setCode($("#tiCode"),tiMode==="Acumulado"?"// Acumulado del año (YTD)\nPagado YTD =\nTOTALYTD ( [Total Pagado], Calendario[Fecha] )\n\nPagado YTD Año Anterior =\nCALCULATE (\n    [Pagado YTD],\n    SAMEPERIODLASTYEAR ( Calendario[Fecha] )\n)":"Pagado Año Anterior =\nCALCULATE (\n    [Total Pagado],\n    SAMEPERIODLASTYEAR ( Calendario[Fecha] )\n)\n\nVariación % =\nDIVIDE (\n    [Total Pagado] - [Pagado Año Anterior],\n    [Pagado Año Anterior]\n)");
+}
+drawTI();
+
+/* ---------- debugger ---------- */
+const DBG=[
+ {c:"Total Pagado = SUM ( Ejecucion[Pagado]",o:["Falta cerrar el paréntesis de SUM","SUM no acepta columnas","El nombre de la medida no puede tener espacios"],a:0,x:"Cada paréntesis que se abre debe cerrarse. El editor de Power BI marca la línea con un subrayado rojo."},
+ {c:"Total Pagado = SUM ( Ejecucion Pagado )",o:["Usar SUMX en lugar de SUM","Escribir la columna entre corchetes: Ejecucion[Pagado]","Poner Pagado entre comillas dobles"],a:1,x:"Las columnas se escriben entre corchetes y precedidas por el nombre de su tabla."},
+ {c:'Pagado Antioquia =\nCALCULATE ( [Total Pagado], Ejecucion[Regional] = Antioquia )',o:["Escribir \"Antioquia\" entre comillas dobles","Cambiar CALCULATE por FILTER","Escribir [Antioquia] entre corchetes"],a:0,x:"Los valores de texto siempre van entre comillas dobles. Sin ellas, DAX busca una columna o medida llamada Antioquia."},
+ {c:"% Ejecución = [Total Pagado] / [Total Comprometido]",o:["No tiene ningún problema","Usar DIVIDE para evitar errores cuando el denominador es cero","Las medidas no se pueden dividir"],a:1,x:"Funciona, pero si una regional no tiene compromisos el visual mostrará un error o infinito. DIVIDE devuelve BLANK de forma segura."},
+ {c:"Saldo = SUM ( Ejecucion[Comprometido] - Ejecucion[Pagado] )",o:["Agregar FILTER dentro de SUM","SUM solo recibe una columna: use SUMX ( Ejecucion, Ejecucion[Comprometido] - Ejecucion[Pagado] )","Cambiar el signo menos por la función MINUS"],a:1,x:"SUM recibe una sola columna. Para operar entre columnas fila por fila se usa un iterador como SUMX, o se restan dos medidas."},
+ {c:'Total Viáticos = SUMA ( Ejecucion[Pagado] )',o:["DAX usa nombres de funciones en inglés: SUM","Falta CALCULATE","La tabla debe ir entre comillas simples"],a:0,x:"Aunque Power BI esté en español, las funciones DAX siempre se escriben en inglés."}
+];
+let dbgI=0;
+function renderDbg(){
+  const d=DBG[dbgI];$("#dbgPos").textContent="Fórmula "+(dbgI+1)+" de "+DBG.length;
+  $("#dbg").innerHTML='<div class="code-wrap"><pre class="code"></pre></div><div class="opts">'+d.o.map((o,i)=>'<button type="button" class="opt" data-i="'+i+'">'+o.replace(/</g,"&lt;")+'</button>').join("")+'</div><div class="fb" hidden></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn ghost sm" id="dbgPrev">← Anterior</button><button type="button" class="btn sm" id="dbgNext">Siguiente fórmula →</button></div>';
+  setCode($("#dbg pre"),d.c);
+  $$("#dbg .opt").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.i;$$("#dbg .opt").forEach((x,j)=>{x.disabled=true;if(j===d.a)x.classList.add("right");else if(j===i)x.classList.add("wrong")});const fb=$("#dbg .fb");fb.hidden=false;fb.innerHTML=(i===d.a?"<b>Correcto.</b> ":"<b>No es esa.</b> ")+d.x}));
+  $("#dbgPrev").disabled=dbgI===0;
+  $("#dbgPrev").addEventListener("click",()=>{if(dbgI>0){dbgI--;renderDbg()}});
+  $("#dbgNext").addEventListener("click",()=>{dbgI=(dbgI+1)%DBG.length;renderDbg()});
+}
+renderDbg();
+
+/* ---------- examples ---------- */
+const ex={year:2025,rub:"Todos"};
+function exChips(el,list,key){el.innerHTML=list.map(v=>'<button type="button" class="chip" aria-pressed="'+(String(ex[key])===String(v))+'" data-v="'+v+'">'+(key==="year"?"Año "+v:v)+'</button>').join("");
+  el.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{ex[key]=key==="year"?+b.dataset.v:b.dataset.v;el.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderEx()}))}
+exChips($("#exYear"),[2024,2025],"year");exChips($("#exRub"),["Todos",...RUB],"rub");
+const exRows=(reg)=>where(d=>d.Anio===ex.year&&(ex.rub==="Todos"||d.Rubro===ex.rub)&&(!reg||d.Regional===reg));
+const LIB=[
+ {n:"Total Pagado",c:"Total Pagado =\nSUM ( Ejecucion[Pagado] )",f:()=>mill(sum(exRows(),"Pagado")),t:"Medida base. Todas las demás la reutilizan."},
+ {n:"Saldo por pagar",c:"Saldo por Pagar =\n[Total Comprometido] - [Total Pagado]",f:()=>{const r=exRows();return mill(sum(r,"Comprometido")-sum(r,"Pagado"))},t:"Resta de dos medidas base. No necesita SUMX."},
+ {n:"Número de contratos",c:"N.º Contratos =\nSUM ( Ejecucion[Contratos] )",f:()=>nf0.format(sum(exRows(),"Contratos")),t:"Suma de la columna de contratos registrados."},
+ {n:"Valor promedio por contrato",c:"Promedio por Contrato =\nDIVIDE ( [Total Comprometido], [N.º Contratos] )",f:()=>{const r=exRows();return cop(sum(r,"Comprometido")/sum(r,"Contratos"))},t:"Combina dos medidas con DIVIDE."},
+ {n:"Pagado en Bogotá",c:'Pagado Bogotá =\nCALCULATE ( [Total Pagado], Ejecucion[Regional] = "Bogotá" )',f:()=>mill(sum(exRows("Bogotá"),"Pagado")),t:"CALCULATE fija la regional, sin importar la segmentación."},
+ {n:"Regionales con ejecución baja",c:"Regionales bajo 75 % =\nCOUNTROWS (\n    FILTER (\n        VALUES ( Ejecucion[Regional] ),\n        [% Ejecución] < 0.75\n    )\n)",f:()=>{const n=REG.filter(r=>{const x=exRows(r);return sum(x,"Pagado")/sum(x,"Comprometido")<.75}).length;return nf0.format(n)},t:"FILTER recorre las regionales y evalúa la medida en cada una."}
+];
+let libI=0;
+$("#exLib").innerHTML=LIB.map((l,i)=>'<button type="button" class="part" data-i="'+i+'"><b>'+l.n+'</b><span class="mono" style="font-size:.78rem">'+l.c.split("\n")[1].trim().slice(0,38)+'…</span></button>').join("");
+$$("#exLib .part").forEach(b=>b.addEventListener("click",()=>{libI=+b.dataset.i;renderLib()}));
+function renderLib(){$$("#exLib .part").forEach((b,i)=>b.classList.toggle("hl",i===libI));const l=LIB[libI];setCode($("#exLibCode"),l.c);$("#exLibVal").textContent=l.f();$("#exLibTxt").textContent=l.t+" Contexto: año "+ex.year+(ex.rub==="Todos"?", todos los rubros.":", rubro "+ex.rub+".")}
+function renderEx(){
+  const r=exRows(),cp=sum(r,"Comprometido"),pg=sum(r,"Pagado");
+  const k=[["Total Comprometido",mill(cp),"SUM ( Ejecucion[Comprometido] )"],["Total Pagado",mill(pg),"SUM ( Ejecucion[Pagado] )"],["% Ejecución",pct(pg/cp),"DIVIDE ( [Total Pagado], [Total Comprometido] )"],["Saldo por pagar",mill(cp-pg),"[Total Comprometido] - [Total Pagado]"]];
+  $("#exKpis").innerHTML=k.map((x,i)=>'<div class="card kpi"><span class="k-lab">'+x[0]+'</span><span class="k-val'+(i===2?" g":"")+'" style="font-size:1.6rem">'+x[1]+'</span><code class="k-sub" style="font-size:.74rem">'+x[2]+'</code></div>').join("");
+  const regs=REG.map(g=>{const x=exRows(g);return{g,p:sum(x,"Pagado"),e:sum(x,"Pagado")/sum(x,"Comprometido")}});
+  const rk=[...regs].sort((a,b)=>b.p-a.p).map(x=>x.g);
+  $("#exSem").innerHTML=regs.map(x=>{const cl=x.e>=.9?"ok":x.e>=.75?"warn":"bad",lb=x.e>=.9?"Verde":x.e>=.75?"Amarillo":"Rojo";return'<tr><td>'+x.g+'</td><td class="num">'+pct(x.e)+'</td><td><span class="pill '+cl+'">'+lb+'</span></td><td class="num">'+(rk.indexOf(x.g)+1)+'</td></tr>'}).join("");
+  bars($("#exPart"),regs.map(x=>({k:x.g,v:x.p/pg})),pct);
+  renderLib();
+}
+renderEx();
+
+/* ---------- quiz ---------- */
+const QZ=[
+ {q:"¿Qué significa la sigla DAX?",o:["Data Analysis Expressions","Dynamic Access Extension","Data Automation Excel"],a:0,x:"DAX = Data Analysis Expressions, el lenguaje de fórmulas de Power BI, Power Pivot y Analysis Services."},
+ {q:"Necesita un cálculo que cambie cuando el usuario filtra por regional. ¿Qué crea?",o:["Una columna calculada","Una medida","Una tabla calculada"],a:1,x:"Las medidas se evalúan en el momento de la consulta y responden al contexto de filtro."},
+ {q:"¿Qué función modifica el contexto de filtro de una expresión?",o:["SUMX","RELATED","CALCULATE"],a:2,x:"CALCULATE evalúa una expresión con filtros agregados, reemplazados o eliminados."},
+ {q:"¿Cuál es la forma correcta de referenciar una columna?",o:["Ejecucion(Pagado)","Ejecucion[Pagado]","\"Ejecucion.Pagado\""],a:1,x:"Tabla seguida de la columna entre corchetes. Con espacios en el nombre de tabla: 'Mi Tabla'[Columna]."},
+ {q:"¿Qué devuelve DIVIDE ( 10, 0 ) sin tercer argumento?",o:["Un error","Cero","BLANK (en blanco)"],a:2,x:"DIVIDE maneja la división por cero y devuelve BLANK, o el valor alterno si se indica."},
+ {q:"¿Por qué usar SUMX en lugar de SUM para Cantidad × Valor unitario?",o:["Porque SUMX evalúa la multiplicación en cada fila antes de sumar","Porque SUMX es más corta de escribir","Porque SUM no funciona con números decimales"],a:0,x:"SUMX es un iterador: crea contexto de fila, calcula la expresión por fila y luego suma."},
+ {q:"¿Qué necesita TOTALYTD para funcionar correctamente?",o:["Una segmentación de año","Una tabla calendario con fechas continuas","Una columna de texto con el mes"],a:1,x:"Las funciones de inteligencia de tiempo requieren una tabla de fechas completa, idealmente marcada como tabla de fechas."},
+ {q:"¿Qué palabras clave permiten guardar un resultado intermedio en una medida?",o:["LET … IN","VAR … RETURN","SET … END"],a:1,x:"VAR define variables y RETURN indica el resultado. Mejora la lectura y el rendimiento."}
+];
+let qAns={};try{qAns=JSON.parse(store.get("ovaDaxQuiz")||"{}")}catch(e){}
+function renderQuiz(){
+  $("#quiz").innerHTML=QZ.map((q,i)=>'<div class="q" style="padding-bottom:16px;border-bottom:1px solid var(--line)"><h4><span class="muted">'+(i+1)+'.</span> '+q.q+'</h4><div class="opts">'+q.o.map((o,j)=>{let c="";if(qAns[i]!=null){if(j===q.a)c="right";else if(j===qAns[i])c="wrong"}return'<button type="button" class="opt '+c+'" data-q="'+i+'" data-j="'+j+'" '+(qAns[i]!=null?"disabled":"")+'>'+o+'</button>'}).join("")+'</div>'+(qAns[i]!=null?'<div class="fb">'+(qAns[i]===q.a?"<b>Correcto.</b> ":"<b>Incorrecto.</b> ")+q.x+'</div>':"")+'</div>').join("");
+  $$("#quiz .opt").forEach(b=>b.addEventListener("click",()=>{qAns[+b.dataset.q]=+b.dataset.j;store.set("ovaDaxQuiz",JSON.stringify(qAns));renderQuiz()}));
+  const done=Object.keys(qAns).length,ok=QZ.filter((q,i)=>qAns[i]===q.a).length;
+  $("#qScore").textContent=ok+" / "+QZ.length;$("#qBar").style.width=(ok/QZ.length*100)+"%";
+  $("#qMsg").textContent=done<QZ.length?"Ha respondido "+done+" de "+QZ.length+" preguntas.":ok>=7?"Excelente dominio. Ya puede crear medidas para sus propios reportes.":ok>=5?"Buen avance. Repase los módulos de Semántica y Simuladores.":"Le recomendamos repetir el recorrido desde Sintaxis y practicar en los simuladores.";
+  $("#scoreSide").textContent=done?ok+" / "+QZ.length:"sin presentar";
+}
+$("#qReset").addEventListener("click",()=>{qAns={};store.set("ovaDaxQuiz","{}");renderQuiz()});
+renderQuiz();
+
+/* ---------- resources ---------- */
+const VID=[
+ ["MEDIDAS vs COLUMNAS CALCULADAS en Power BI [DAX]","https://www.youtube.com/watch?v=lzLHmLag6Mw","Conceptos · cuándo usar cada una"],
+ ["¿Cómo crear Medidas DAX en Power BI?","https://www.youtube.com/watch?v=oFBfinJO1-w","Fundamentos · primera medida"],
+ ["Curso COMPILADO de DAX con Power BI","https://www.youtube.com/watch?v=7TC0WpLdWcw","Curso completo"],
+ ["Conociendo a CALCULATE: la función más poderosa en DAX","https://www.youtube.com/watch?v=qkXG7_ia70k","Contexto de filtro"],
+ ["Función DAX CALCULATE en Power BI con varios ejemplos de filtro","https://www.youtube.com/watch?v=T3fDQ6Uog1U","CALCULATE · práctica"],
+ ["Filtrar datos en DAX utilizando FILTER y CALCULATE","https://www.youtube.com/watch?v=PcTEJ7x_CvI","Funciones de filtro"],
+ ["SUM vs SUMX en DAX: cuándo usar cada función en Power BI","https://www.youtube.com/watch?v=UYF0Yq-5-kY","Iteradores"],
+ ["Funciones DAX de Inteligencia de Tiempo en Power BI","https://www.youtube.com/watch?v=MfcB33BbjmE","Inteligencia de tiempo"],
+ ["Cómo utilizar SAMEPERIODLASTYEAR, DATEADD y DATESYTD en DAX","https://www.youtube.com/watch?v=UisNrNYS_wQ","Comparación entre periodos"]
+];
+const DOC=[
+ ["Aprenda los conceptos básicos de DAX en Power BI Desktop","https://learn.microsoft.com/es-es/power-bi/transform-model/desktop-quickstart-learn-dax-basics","Microsoft Learn · guía oficial en español"],
+ ["Información general sobre DAX","https://learn.microsoft.com/es-es/dax/dax-overview","Microsoft Learn · sintaxis, contexto y tipos de datos"],
+ ["Referencia de funciones DAX","https://learn.microsoft.com/es-es/dax/dax-function-reference","Microsoft Learn · catálogo completo de funciones"],
+ ["Función CALCULATE","https://learn.microsoft.com/es-es/dax/calculate-function-dax","Microsoft Learn · referencia"],
+ ["DAX Guide","https://dax.guide/","SQLBI · referencia con compatibilidad por versión (inglés)"],
+ ["SQLBI: artículos y videos sobre DAX","https://www.sqlbi.com/","Marco Russo y Alberto Ferrari (inglés)"]
+];
+const resHTML=(l,yt)=>l.map(v=>'<a class="res" href="'+v[1]+'" target="_blank" rel="noopener noreferrer"><span class="ic'+(yt?" yt":"")+'">'+svgI(yt?"play":"link")+'</span><span><b>'+v[0]+'</b><small>'+v[2]+(yt?" · YouTube":"")+'</small></span></a>').join("");
+$("#vids").innerHTML=resHTML(VID,true);$("#docs").innerHTML=resHTML(DOC,false);
+
+/* ---------- boot ---------- */
+const h=(location.hash||"").replace("#","");
+go(MODS.find(m=>m[0]===h)?h:"inicio",false);
+})();
+</script>
+
+</body>
+</html>

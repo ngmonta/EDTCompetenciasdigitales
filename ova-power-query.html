@@ -1,0 +1,1190 @@
+<title>OVA Power Query SENA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: panel lateral fijo (navegación del OVA) + lienzo de módulos en tarjetas tipo dashboard; en móvil la navegación pasa a una franja horizontal. */
+:root{
+  --sena:#39A900;          /* Verde corporativo SENA */
+  --sena-2:#007832;        /* Verde secundario */
+  --navy:#00304D;          /* Azul secundario */
+  --bg:#F3F6F1;
+  --surface:#FFFFFF;
+  --surface-2:#EAF2E5;
+  --fg:#13231A;
+  --muted:#56675C;
+  --line:#D6E2D2;
+  --accent:#2E8A00;        /* verde para texto sobre fondo claro (contraste AA) */
+  --accent-soft:#E3F3D8;
+  --navy-text:#00304D;
+  --code-bg:#0F2219;
+  --code-fg:#DDEBDF;
+  --ok:#1F8A3B; --warn:#B26A00; --bad:#B42318;
+  --ok-soft:#E1F3E5; --warn-soft:#FBEFD9; --bad-soft:#FBE4E1;
+  --shadow:0 1px 2px rgba(0,48,77,.06),0 8px 24px rgba(0,48,77,.06);
+  --f-display:"Work Sans",Calibri,Carlito,"Segoe UI",system-ui,sans-serif;
+  --f-body:"Work Sans",Calibri,Carlito,"Segoe UI",system-ui,sans-serif;
+  --f-alt:Calibri,Carlito,"Work Sans","Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#09140F;--surface:#11201A;--surface-2:#162B21;--fg:#E5EFE8;--muted:#9AB0A2;--line:#24392D;
+  --accent:#5FCB24;--accent-soft:#183A1B;--navy-text:#8FC3E3;--code-bg:#060E0A;--code-fg:#DDEBDF;
+  --ok:#57C97A;--warn:#F0AE4A;--bad:#F27A6E;--ok-soft:#14301E;--warn-soft:#33270F;--bad-soft:#3A1915;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#09140F;--surface:#11201A;--surface-2:#162B21;--fg:#E5EFE8;--muted:#9AB0A2;--line:#24392D;
+  --accent:#5FCB24;--accent-soft:#183A1B;--navy-text:#8FC3E3;--code-bg:#060E0A;--code-fg:#DDEBDF;
+  --ok:#57C97A;--warn:#F0AE4A;--bad:#F27A6E;--ok-soft:#14301E;--warn-soft:#33270F;--bad-soft:#3A1915;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;font-weight:400}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--navy)}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0;color:var(--fg)}
+h2{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--sena);outline-offset:2px;border-radius:6px}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+:not(pre)>code{background:var(--accent-soft);color:var(--fg);padding:.1em .4em;border-radius:5px}
+
+/* ===== Top bar ===== */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--navy);color:#fff;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;
+  display:flex;align-items:center;gap:14px}
+.topbar img{width:40px;height:40px;border-radius:6px;flex:none}
+.topbar .t1{font-weight:700;font-size:1rem;letter-spacing:.01em;line-height:1.2}
+.topbar .t2{font-size:.78rem;opacity:.8;line-height:1.2}
+.topbar .grow{flex:1;min-width:0}
+.progress{height:4px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden;width:140px}
+.progress span{display:block;height:100%;background:var(--sena);width:0%;transition:width .2s}
+.prog-wrap{display:flex;flex-direction:column;gap:3px;font-size:.7rem;opacity:.85}
+.theme-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;padding:7px 14px;font:600 .85rem var(--f-body);cursor:pointer}
+.theme-btn:hover{background:rgba(255,255,255,.18)}
+.theme-btn svg{width:16px;height:16px}
+@media (max-width:640px){.prog-wrap{display:none}.topbar .t2{display:none}.theme-btn .lbl{display:none}}
+
+/* ===== Shell ===== */
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;max-width:1360px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);align-self:start}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.side .cap{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin:4px 12px 8px}
+.side a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:var(--fg);text-decoration:none;font-weight:500;font-size:.93rem}
+.side a .n{font:600 .72rem var(--f-mono);color:var(--muted);width:22px}
+.side a:hover{background:var(--surface-2)}
+.side a.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.side a.on .n{color:var(--accent)}
+.side .bonus{margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+.main{display:flex;flex-direction:column;gap:56px;min-width:0}
+@media (max-width:960px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 60px);z-index:40;background:var(--bg);margin-inline:-16px;padding:8px 16px;border-bottom:1px solid var(--line)}
+  .side .cap{display:none}
+  .side nav{flex-direction:row;overflow-x:auto;scrollbar-width:none}
+  .side nav::-webkit-scrollbar{display:none}
+  .side a{white-space:nowrap;flex:none;padding:7px 12px}
+  .side .bonus{margin:0;border:0;padding:0}
+  html{scroll-padding-top:130px}
+}
+
+/* ===== Section scaffolding ===== */
+section{display:flex;flex-direction:column;gap:20px;min-width:0}
+.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;font-weight:600;color:var(--accent)}
+.sec-head{display:flex;flex-direction:column;gap:8px;max-width:72ch}
+.lead{color:var(--muted);font-size:1.05rem;max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);min-width:0}
+.card h3{margin-bottom:8px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:680px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.svg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-wrap svg{display:block;min-width:620px;width:100%;height:auto}
+.note{display:flex;gap:14px;align-items:flex-start;background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--sena) 35%,transparent);
+  border-radius:var(--r);padding:16px 18px}
+.note .ico{flex:none;width:28px;height:28px;border-radius:50%;background:var(--sena);color:#fff;display:grid;place-items:center;font-weight:800}
+.note.navy{background:color-mix(in srgb,var(--navy-text) 10%,var(--surface));border-color:color-mix(in srgb,var(--navy-text) 30%,transparent)}
+.note.navy .ico{background:var(--navy)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--fg);border:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 .9rem var(--f-body);border-radius:10px;padding:9px 14px;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface);color:var(--fg);transition:background .15s,border-color .15s,transform .1s}
+.btn:hover:not(:disabled){border-color:var(--sena);background:var(--accent-soft)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--sena);border-color:var(--sena);color:#fff}
+.btn.primary:hover:not(:disabled){background:var(--sena-2);border-color:var(--sena-2)}
+input[type=text],input[type=number],input[type=date],input[type=search],select{font:400 .95rem var(--f-body);color:var(--fg);background:var(--surface);
+  border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:0;width:100%}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.82rem;font-weight:600;color:var(--muted)}
+
+/* ===== Hero ===== */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#00405f 55%,var(--sena-2) 130%);color:#fff;border-radius:20px;padding:clamp(22px,4vw,40px);
+  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;bottom:-60px;width:260px;height:260px;border-radius:50%;border:38px solid rgba(57,169,0,.22)}
+.hero h1{color:#fff;font-size:clamp(2rem,4.6vw,3.3rem);font-weight:800;letter-spacing:-.02em;line-height:1.02}
+.hero h1 em{font-style:normal;font-weight:300;display:block;font-size:.55em;letter-spacing:0;margin-top:8px;color:#CFEBC2}
+.hero p{color:#D9E6EE;max-width:56ch;margin-top:16px}
+.hero .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hero .tags span{font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22)}
+.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start;position:relative;z-index:1}
+.meta div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 14px}
+.meta b{display:block;font-size:1.15rem;font-weight:700;color:#fff}
+.meta small{font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;color:#B9D6C6}
+@media (max-width:820px){.hero{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== Uses ===== */
+.use{display:flex;flex-direction:column;gap:10px}
+.use .ic{width:42px;height:42px;border-radius:11px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
+.use .ic svg{width:22px;height:22px}
+.obj-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.obj-list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px}
+.obj-list li b{font:700 .78rem var(--f-mono);color:var(--accent);padding-top:3px}
+
+/* ===== Curve ===== */
+.curve-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.curve-layout{grid-template-columns:minmax(0,1fr)}}
+.stage-pt{cursor:pointer}
+.stage-pt circle.ring{transition:r .15s}
+.stage-pt:hover circle.ring,.stage-pt.on circle.ring{r:15}
+.stage-detail h4{font-size:1.2rem;margin:6px 0 8px}
+.stage-detail ul{margin:10px 0 0;padding-left:18px}
+.stage-detail .bar{height:8px;border-radius:8px;background:var(--surface-2);overflow:hidden;margin-top:14px}
+.stage-detail .bar span{display:block;height:100%;background:linear-gradient(90deg,var(--sena-2),var(--sena));transition:width .3s}
+.stage-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.stage-tabs button{font:600 .78rem var(--f-mono);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:5px 9px;cursor:pointer}
+.stage-tabs button.on{background:var(--sena);border-color:var(--sena);color:#fff}
+
+/* ===== Table of commands ===== */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar .search{flex:1 1 240px;max-width:360px}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{font:600 .8rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;cursor:pointer}
+.filters button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table.data{border-collapse:collapse;width:100%;font-size:.9rem}
+table.data th{text-align:left;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:var(--surface-2);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+table.data td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.data tr:last-child td{border-bottom:0}
+table.data td code{white-space:nowrap}
+.cat{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.cat.Origen{background:color-mix(in srgb,var(--navy-text) 14%,transparent);color:var(--navy-text)}
+.cat.Filas{background:var(--accent-soft);color:var(--accent)}
+.cat.Columnas{background:var(--warn-soft);color:var(--warn)}
+.cat.Agregar{background:var(--ok-soft);color:var(--ok)}
+.cat.Combinar{background:var(--bad-soft);color:var(--bad)}
+.cat.Funciones{background:var(--surface-2);color:var(--fg);border:1px solid var(--line)}
+.count{font-size:.85rem;color:var(--muted)}
+
+/* ===== Code ===== */
+pre.code{margin:0;background:var(--code-bg);color:var(--code-fg);border-radius:12px;padding:16px 18px;overflow-x:auto;font:400 .86rem/1.65 var(--f-mono);position:relative;tab-size:4}
+.k{color:#7FD95A;font-weight:600}.s{color:#F5C77E}.fn{color:#86C8F2}.id{color:#E7A6F0}.num{color:#F59E8B}.cm{color:#7E9688;font-style:italic}.op{color:#B9CBBE}
+.code-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.copy{font:600 .75rem var(--f-body);background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:4px 10px;cursor:pointer}
+.copy:hover{color:var(--accent);border-color:var(--sena)}
+
+/* Anatomy */
+.anat{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.anat{grid-template-columns:minmax(0,1fr)}}
+.anat pre .part{border-radius:4px;cursor:pointer;transition:background .15s,outline-color .15s;outline:1px dashed transparent}
+.anat pre .part:hover,.anat pre .part.on{background:rgba(57,169,0,.22);outline-color:#7FD95A}
+.anat-info{display:flex;flex-direction:column;gap:10px}
+.anat-info .tag{font:700 .75rem var(--f-mono);color:var(--accent)}
+.anat-list{display:flex;flex-wrap:wrap;gap:6px}
+.anat-list button{font:600 .78rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:5px 10px;cursor:pointer}
+.anat-list button.on{border-color:var(--sena);background:var(--accent-soft);color:var(--accent)}
+.sem{display:flex;flex-direction:column;gap:8px}
+.sem .tagline{font:600 .74rem var(--f-mono);color:var(--muted)}
+
+/* ===== Simulator ===== */
+.sim{display:grid;grid-template-columns:240px minmax(0,1fr) 230px;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.sim-bar{grid-column:1/-1;display:flex;align-items:center;gap:10px;background:var(--navy);color:#fff;padding:10px 14px;font-size:.88rem}
+.sim-bar .dots{display:flex;gap:6px}.sim-bar .dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.3)}
+.sim-bar b{font-weight:600}
+.sim-ops{border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--surface-2)}
+.sim-ops h4,.sim-steps h4{font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:2px}
+.op-btn{text-align:left;justify-content:flex-start;font-weight:500;font-size:.85rem;padding:8px 10px;line-height:1.3}
+.op-btn small{display:block;font-size:.72rem;color:var(--muted);font-weight:400}
+.sim-center{min-width:0;display:flex;flex-direction:column}
+.formula{display:flex;align-items:stretch;border-bottom:1px solid var(--line);font:400 .8rem var(--f-mono)}
+.formula .fx{padding:8px 12px;border-right:1px solid var(--line);color:var(--muted);font-style:italic;font-weight:600}
+.formula .fcode{padding:8px 12px;overflow-x:auto;white-space:nowrap;color:var(--fg)}
+.formula .fcode .k{color:var(--accent)}.formula .fcode .s{color:var(--warn)}.formula .fcode .fn{color:var(--navy-text)}.formula .fcode .id{color:#A23FB0}.formula .fcode .num{color:var(--bad)}
+:root[data-theme="dark"] .formula .fcode .id{color:#E7A6F0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .formula .fcode .id{color:#E7A6F0}}
+.grid-wrap{overflow:auto;max-height:420px;flex:1}
+table.pq{border-collapse:collapse;width:100%;font-size:.84rem;font-variant-numeric:tabular-nums}
+table.pq th{position:sticky;top:0;background:var(--surface);border-bottom:2px solid var(--line);border-right:1px solid var(--line);padding:8px 10px;text-align:left;white-space:nowrap;font-weight:600}
+table.pq th .ty{font:700 .68rem var(--f-mono);color:var(--muted);margin-right:6px;padding:1px 4px;border:1px solid var(--line);border-radius:4px}
+table.pq th .ty.n{color:var(--accent);border-color:var(--sena)}
+table.pq th .ty.d{color:var(--navy-text)}
+table.pq td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px 10px;white-space:pre}
+table.pq td.rn{color:var(--muted);background:var(--surface-2);text-align:right;width:36px}
+table.pq td.num{text-align:right}
+table.pq td.null{color:var(--muted);font-style:italic}
+table.pq .ws{color:var(--bad);font-weight:700}
+table.pq tr.new td{animation:flash .6s}
+@keyframes flash{from{background:var(--accent-soft)}to{background:transparent}}
+.sim-status{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);background:var(--surface-2)}
+.sim-steps{border-left:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:8px}
+.steps-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.steps-list li{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;font-size:.85rem}
+.steps-list li.last{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.steps-list li .gear{width:14px;height:14px;flex:none;opacity:.6}
+.steps-list li button{margin-left:auto;background:none;border:0;color:var(--bad);cursor:pointer;font-weight:700;font-size:1rem;line-height:1;padding:2px 4px}
+.sim-msg{font-size:.82rem;border-radius:9px;padding:9px 11px;background:var(--surface-2);border:1px solid var(--line)}
+.sim-msg.warn{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.sim-msg.ok{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+@media (max-width:1100px){.sim{grid-template-columns:220px minmax(0,1fr)}.sim-steps{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:720px){.sim{grid-template-columns:minmax(0,1fr)}.sim-ops{border-right:0;border-bottom:1px solid var(--line)}}
+
+/* ===== Lab ===== */
+.lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:860px){.lab{grid-template-columns:minmax(0,1fr)}}
+.lab-form{display:flex;flex-direction:column;gap:12px}
+.lab-args{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.result{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.result .val{font:600 1.35rem var(--f-mono);color:var(--accent);background:var(--accent-soft);border-radius:10px;padding:12px 14px;word-break:break-word;white-space:pre-wrap}
+.result .ty{font-size:.78rem;color:var(--muted)}
+
+/* Quiz */
+.quiz{display:flex;flex-direction:column;gap:14px}
+.q-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.q-dots{display:flex;gap:6px}.q-dots i{width:26px;height:6px;border-radius:4px;background:var(--line)}
+.q-dots i.done{background:var(--sena)}.q-dots i.miss{background:var(--bad)}.q-dots i.cur{background:var(--navy-text)}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.q-opts button{text-align:left;justify-content:flex-start;font-weight:500;white-space:normal;line-height:1.4}
+.q-opts button.right{background:var(--ok-soft);border-color:var(--ok);color:var(--fg)}
+.q-opts button.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--fg)}
+.q-fb{font-size:.92rem;padding:12px 14px;border-radius:10px;background:var(--surface-2)}
+
+/* SQL */
+.sqlb{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px}
+@media (max-width:860px){.sqlb{grid-template-columns:minmax(0,1fr)}}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;border:1px solid var(--line);border-radius:8px;padding:5px 9px;cursor:pointer;background:var(--surface)}
+.checks input{accent-color:var(--sena)}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.88rem;font-weight:500;cursor:pointer}
+.toggle input{accent-color:var(--sena);width:16px;height:16px}
+.eq-tbl td:first-child,.eq-tbl td:nth-child(2){white-space:nowrap}
+
+/* Resources */
+.vid{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;align-items:start;text-decoration:none;color:var(--fg);padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);transition:border-color .15s,transform .15s}
+.vid:hover{border-color:var(--sena);transform:translateY(-2px)}
+.vid .play{width:56px;height:56px;border-radius:12px;background:var(--navy);display:grid;place-items:center}
+.vid .play svg{width:22px;height:22px}
+.vid b{display:block;font-weight:600;line-height:1.35}
+.vid small{color:var(--muted);font-size:.8rem}
+.vid .lvl{display:inline-block;margin-top:6px}
+.links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.links li{display:flex;flex-direction:column;gap:2px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.links li:last-child{border-bottom:0;padding-bottom:0}
+.links small{color:var(--muted)}
+.biblio{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;font-family:var(--f-alt);font-size:1rem}
+.biblio li{padding-left:2em;text-indent:-2em}
+.biblio i{font-style:italic}
+footer{border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:.84rem;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+footer .brand{display:flex;align-items:center;gap:10px}
+footer img{width:30px;height:30px;border-radius:5px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+svg text{font-family:var(--f-body)}
+</style>
+
+<header class="topbar">
+  <img src="data:image/png;base64,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" alt="Logosímbolo SENA">
+  <div class="grow">
+    <div class="t1">OVA · Power Query para la gestión administrativa</div>
+    <div class="t2">Servicio Nacional de Aprendizaje SENA · Formación para funcionarios administrativos</div>
+  </div>
+  <div class="prog-wrap"><span id="progLbl">Avance de lectura 0 %</span><div class="progress"><span id="progBar"></span></div></div>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Cambiar entre modo claro y oscuro">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="themeIco"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    <span class="lbl" id="themeLbl">Modo oscuro</span>
+  </button>
+</header>
+
+<div class="shell">
+  <aside class="side">
+    <div class="cap">Contenido del OVA</div>
+    <nav id="nav">
+      <a href="#inicio"><span class="n">00</span>Inicio</a>
+      <a href="#que-es"><span class="n">01</span>Qué es y para qué</a>
+      <a href="#objetivo"><span class="n">02</span>Objetivos</a>
+      <a href="#curva"><span class="n">03</span>Curva de aprendizaje</a>
+      <a href="#comandos"><span class="n">04</span>Tabla de comandos</a>
+      <a href="#sintaxis"><span class="n">05</span>Sintaxis y semántica</a>
+      <a href="#simulador"><span class="n">06</span>Simulador</a>
+      <a href="#ejemplos"><span class="n">07</span>Ejemplos y evaluación</a>
+      <div class="bonus"><a href="#sql"><span class="n">+</span>Bonus: SQL</a></div>
+      <a href="#recursos"><span class="n">08</span>Cibergrafía y bibliografía</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+
+    <!-- ============ INICIO ============ -->
+    <section id="inicio" data-sec>
+      <div class="hero">
+        <div style="position:relative;z-index:1">
+          <div class="eyebrow" style="color:#A8DE8C">Objeto Virtual de Aprendizaje</div>
+          <h1 style="margin-top:10px">Power Query<em>Prepare, limpie y combine datos antes de analizarlos en Power BI</em></h1>
+          <p>Este recurso le acompaña paso a paso: desde los clics en el editor hasta escribir sus propias sentencias en lenguaje M. Practique con datos de ejemplo de solicitudes administrativas de varias regionales.</p>
+          <div class="tags"><span>Power BI Desktop</span><span>Excel 365</span><span>Lenguaje M</span><span>ETL</span><span>Bonus SQL</span></div>
+        </div>
+        <div class="meta">
+          <div><small>Dirigido a</small><b>Funcionarios administrativos</b></div>
+          <div><small>Nivel</small><b>Básico · Intermedio</b></div>
+          <div><small>Dedicación</small><b>4 a 6 horas</b></div>
+          <div><small>Actividades</small><b>3 simuladores + quiz</b></div>
+          <div style="grid-column:1/-1"><small>Requisito</small><b style="font-size:.98rem;font-weight:500">Manejo básico de Excel y tablas de datos</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUÉ ES ============ -->
+    <section id="que-es" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 01</span>
+        <h2>¿Qué es Power Query y para qué se usa en Power BI?</h2>
+        <p class="lead">Power Query es el motor de <b>preparación de datos</b> de Microsoft. Se conecta a cientos de fuentes, permite transformar la información con una interfaz gráfica y registra cada acción como un paso que se repite automáticamente al actualizar.</p>
+      </div>
+
+      <div class="card">
+        <div class="code-head"><h3>Infografía · Del dato crudo al informe</h3><span class="chip">Proceso ETL</span></div>
+        <p class="muted small" style="margin-bottom:12px">En Power BI, Power Query ocupa la etapa de Extraer, Transformar y Cargar (ETL). Lo que usted limpia aquí es lo que el modelo y los informes utilizan después.</p>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 900 330" role="img" aria-label="Flujo: fuentes de datos, Power Query, modelo de datos e informe">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker>
+            </defs>
+            <!-- fuentes -->
+            <text x="20" y="28" font-size="12" font-weight="700" fill="var(--muted)" letter-spacing="1.5">1 · FUENTES</text>
+            <g font-size="13" font-weight="500">
+              <rect x="20" y="44" width="160" height="40" rx="9" fill="var(--surface-2)" stroke="var(--line)"/><text x="100" y="69" text-anchor="middle" fill="var(--fg)">Libros de Excel</text>
+              <rect x="20" y="94" width="160" height="40" rx="9" fill="var(--surface-2)" stroke="var(--line)"/><text x="100" y="119" text-anchor="middle" fill="var(--fg)">Archivos CSV / TXT</text>
+              <rect x="20" y="144" width="160" height="40" rx="9" fill="var(--surface-2)" stroke="var(--line)"/><text x="100" y="169" text-anchor="middle" fill="var(--fg)">SharePoint / OneDrive</text>
+              <rect x="20" y="194" width="160" height="40" rx="9" fill="var(--surface-2)" stroke="var(--line)"/><text x="100" y="219" text-anchor="middle" fill="var(--fg)">Bases SQL</text>
+              <rect x="20" y="244" width="160" height="40" rx="9" fill="var(--surface-2)" stroke="var(--line)"/><text x="100" y="269" text-anchor="middle" fill="var(--fg)">Web y API</text>
+            </g>
+            <path d="M186 164 C 210 164 210 164 232 164" stroke="var(--muted)" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+            <!-- power query -->
+            <text x="240" y="28" font-size="12" font-weight="700" fill="var(--accent)" letter-spacing="1.5">2 · POWER QUERY</text>
+            <rect x="240" y="44" width="330" height="240" rx="16" fill="var(--accent-soft)" stroke="var(--sena)" stroke-width="2"/>
+            <g>
+              <rect x="258" y="62" width="94" height="88" rx="10" fill="var(--surface)" stroke="var(--line)"/>
+              <text x="305" y="94" text-anchor="middle" font-size="22" font-weight="800" fill="var(--sena)">E</text>
+              <text x="305" y="116" text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)">Extraer</text>
+              <text x="305" y="134" text-anchor="middle" font-size="10" fill="var(--muted)">conectar</text>
+              <rect x="358" y="62" width="94" height="88" rx="10" fill="var(--surface)" stroke="var(--line)"/>
+              <text x="405" y="94" text-anchor="middle" font-size="22" font-weight="800" fill="var(--sena)">T</text>
+              <text x="405" y="116" text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)">Transformar</text>
+              <text x="405" y="134" text-anchor="middle" font-size="10" fill="var(--muted)">limpiar, unir</text>
+              <rect x="458" y="62" width="94" height="88" rx="10" fill="var(--surface)" stroke="var(--line)"/>
+              <text x="505" y="94" text-anchor="middle" font-size="22" font-weight="800" fill="var(--sena)">C</text>
+              <text x="505" y="116" text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)">Cargar</text>
+              <text x="505" y="134" text-anchor="middle" font-size="10" fill="var(--muted)">al modelo</text>
+            </g>
+            <text x="405" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="var(--fg)">Pasos aplicados (se guardan como código M)</text>
+            <g font-size="11" font-family="JetBrains Mono, monospace">
+              <rect x="262" y="196" width="286" height="74" rx="8" fill="var(--code-bg)"/>
+              <text x="276" y="216" fill="#7FD95A">let</text>
+              <text x="290" y="232" fill="#DDEBDF">Origen = Excel.Workbook(...),</text>
+              <text x="290" y="248" fill="#DDEBDF">Filtrado = Table.SelectRows(...)</text>
+              <text x="276" y="264" fill="#7FD95A">in <tspan fill="#DDEBDF">Filtrado</tspan></text>
+            </g>
+            <path d="M576 164 L 618 164" stroke="var(--muted)" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+            <!-- modelo -->
+            <text x="626" y="28" font-size="12" font-weight="700" fill="var(--muted)" letter-spacing="1.5">3 · MODELO</text>
+            <rect x="626" y="96" width="120" height="136" rx="14" fill="var(--surface)" stroke="var(--navy-text)" stroke-width="1.5"/>
+            <circle cx="666" cy="136" r="15" fill="none" stroke="var(--navy-text)" stroke-width="2"/>
+            <circle cx="708" cy="166" r="15" fill="none" stroke="var(--navy-text)" stroke-width="2"/>
+            <line x1="678" y1="145" x2="696" y2="157" stroke="var(--navy-text)" stroke-width="2"/>
+            <text x="686" y="206" text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)">Relaciones</text>
+            <text x="686" y="222" text-anchor="middle" font-size="10" fill="var(--muted)">y medidas DAX</text>
+            <path d="M750 164 L 778 164" stroke="var(--muted)" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+            <!-- informe -->
+            <text x="786" y="28" font-size="12" font-weight="700" fill="var(--muted)" letter-spacing="1.5">4 · INFORME</text>
+            <rect x="786" y="96" width="100" height="136" rx="14" fill="var(--surface)" stroke="var(--line)"/>
+            <rect x="800" y="180" width="14" height="36" rx="2" fill="var(--sena)"/>
+            <rect x="820" y="160" width="14" height="56" rx="2" fill="var(--sena-2)"/>
+            <rect x="840" y="140" width="14" height="76" rx="2" fill="var(--sena)"/>
+            <rect x="860" y="122" width="14" height="94" rx="2" fill="var(--navy-text)"/>
+            <text x="836" y="118" text-anchor="middle" font-size="10" fill="var(--muted)">Tablero</text>
+            <text x="450" y="314" text-anchor="middle" font-size="12" fill="var(--muted)">Al pulsar «Actualizar», Power BI repite automáticamente todos los pasos sobre los datos nuevos.</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="grid g4">
+        <div class="card use">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+          <h3>Consolidar reportes</h3>
+          <p class="small muted">Unir en una sola tabla los archivos mensuales que envían las regionales y centros de formación.</p>
+        </div>
+        <div class="card use">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21l7-7M14 4l6 6-8 8-6-6z"/></svg></div>
+          <h3>Limpiar bases</h3>
+          <p class="small muted">Quitar espacios, unificar mayúsculas, corregir tipos de fecha y eliminar duplicados en bases de contratistas o proveedores.</p>
+        </div>
+        <div class="card use">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/></svg></div>
+          <h3>Cruzar información</h3>
+          <p class="small muted">Combinar la planta de personal con la nómina o el presupuesto con la ejecución, como un BUSCARV sin límites.</p>
+        </div>
+        <div class="card use">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg></div>
+          <h3>Automatizar</h3>
+          <p class="small muted">Preparar el informe una vez y actualizarlo cada mes con un clic, sin repetir el trabajo manual.</p>
+        </div>
+      </div>
+
+      <div class="note navy">
+        <div class="ico">i</div>
+        <div><b>¿Dónde lo encuentro?</b> En Power BI Desktop: <i>Inicio › Transformar datos</i>. En Excel: <i>Datos › Obtener datos › Iniciar el Editor de Power Query</i>. También está en los flujos de datos de Power BI Service y Microsoft Fabric. Lo aprendido sirve en todos esos lugares.</div>
+      </div>
+    </section>
+
+    <!-- ============ OBJETIVO ============ -->
+    <section id="objetivo" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 02</span>
+        <h2>Objetivos de aprendizaje</h2>
+      </div>
+      <div class="grid g2">
+        <div class="card" style="background:linear-gradient(160deg,var(--accent-soft),var(--surface) 70%)">
+          <span class="chip">Objetivo general</span>
+          <p style="font-size:1.15rem;font-weight:500;margin-top:14px;line-height:1.5">Aplicar Power Query para extraer, limpiar, transformar y combinar datos administrativos, construyendo consultas reproducibles que alimenten informes confiables en Power BI.</p>
+        </div>
+        <div class="card">
+          <span class="chip">Objetivos específicos</span>
+          <ul class="obj-list" style="margin-top:14px">
+            <li><b>OE1</b><span>Identificar la función de Power Query dentro del flujo de trabajo de Power BI.</span></li>
+            <li><b>OE2</b><span>Ejecutar transformaciones comunes desde la interfaz y reconocer el código M que generan.</span></li>
+            <li><b>OE3</b><span>Interpretar la sintaxis <code>let … in</code> y la semántica de los pasos aplicados.</span></li>
+            <li><b>OE4</b><span>Construir sentencias sencillas en M con <code>each</code>, condicionales y funciones de texto, número y fecha.</span></li>
+            <li><b>OE5</b><span>Relacionar las operaciones de Power Query con su equivalente en SQL.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CURVA ============ -->
+    <section id="curva" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 03</span>
+        <h2>Curva de aprendizaje para conformar sentencias de consulta</h2>
+        <p class="lead">Nadie empieza escribiendo código M. Se avanza de los clics a la lectura del código y luego a escribirlo. Haga clic en cada etapa de la curva para ver qué se aprende y cómo practicarla.</p>
+      </div>
+      <div class="curve-layout">
+        <div class="card">
+          <div class="svg-wrap">
+            <svg id="curveSvg" viewBox="0 0 640 310" role="img" aria-label="Curva de aprendizaje de Power Query en cinco etapas a lo largo de 12 semanas"></svg>
+          </div>
+        </div>
+        <div class="card stage-detail" id="stageDetail" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ============ COMANDOS ============ -->
+    <section id="comandos" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 04</span>
+        <h2>Tabla de comandos: de la cinta de opciones al lenguaje M</h2>
+        <p class="lead">Cada botón del editor escribe una función M. Busque una acción por su nombre en la interfaz o por la función, y filtre por categoría.</p>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="cmdSearch" class="search" placeholder="Buscar: filtrar, Table.Group, fecha…" aria-label="Buscar comando">
+        <div class="filters" id="cmdFilters"></div>
+        <span class="count" id="cmdCount"></span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="data" id="cmdTable">
+          <thead><tr><th>Categoría</th><th>Acción en la interfaz</th><th>Función M</th><th>Ejemplo</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ SINTAXIS ============ -->
+    <section id="sintaxis" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 05</span>
+        <h2>Sintaxis y semántica del lenguaje M</h2>
+        <p class="lead">La <b>sintaxis</b> es la forma correcta de escribir una consulta. La <b>semántica</b> es lo que esa escritura significa y cómo la evalúa el motor. Pase el cursor o haga clic sobre cada parte del código.</p>
+      </div>
+
+      <div class="anat">
+        <div class="card">
+          <div class="code-head"><h3>Anatomía de una consulta</h3><span class="chip">Editor avanzado</span></div>
+          <pre class="code" id="anatCode"><span class="part" data-p="let"><span class="k">let</span></span>
+    <span class="part" data-p="paso"><span class="id">Origen</span> <span class="op">=</span> <span class="fn">Excel.Workbook</span>(<span class="fn">File.Contents</span>(<span class="s">"C:\SENA\solicitudes.xlsx"</span>)),</span>
+    <span class="part" data-p="nav"><span class="id">Datos</span> <span class="op">=</span> <span class="id">Origen</span>{[Item=<span class="s">"Solicitudes"</span>, Kind=<span class="s">"Sheet"</span>]}[Data],</span>
+    <span class="part" data-p="ident"><span class="id">#"Tipo cambiado"</span></span> <span class="op">=</span> <span class="part" data-p="func"><span class="fn">Table.TransformColumnTypes</span>(<span class="id">Datos</span>,
+        <span class="part" data-p="list">{{<span class="s">"Valor"</span>, <span class="fn">Int64.Type</span>}, {<span class="s">"Fecha"</span>, <span class="k">type</span> date}}</span>)</span><span class="part" data-p="coma">,</span>
+    <span class="id">#"Filas filtradas"</span> <span class="op">=</span> <span class="fn">Table.SelectRows</span>(<span class="id">#"Tipo cambiado"</span>,
+        <span class="part" data-p="each"><span class="k">each</span> [Valor] <span class="op">&gt;</span> <span class="num">500000</span> <span class="k">and</span> [Estado] <span class="op">=</span> <span class="s">"Aprobado"</span></span>)
+<span class="part" data-p="in"><span class="k">in</span>
+    <span class="id">#"Filas filtradas"</span></span></pre>
+        </div>
+        <div class="card anat-info">
+          <div class="anat-list" id="anatList"></div>
+          <div id="anatBox"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="code-head"><h3>Infografía · Los pasos son una cadena</h3><span class="chip">Semántica</span></div>
+        <p class="muted small" style="margin-bottom:12px">Cada paso recibe la tabla del paso anterior y entrega una tabla nueva. Ninguno modifica el archivo original.</p>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 900 170" role="img" aria-label="Cadena de pasos: Origen, Datos, Tipo cambiado, Filas filtradas, resultado">
+            <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--sena)"/></marker></defs>
+            <g font-size="13">
+              <rect x="10" y="40" width="150" height="74" rx="12" fill="var(--surface-2)" stroke="var(--line)"/>
+              <text x="85" y="70" text-anchor="middle" font-weight="700" fill="var(--fg)">Origen</text>
+              <text x="85" y="92" text-anchor="middle" font-size="11" fill="var(--muted)">archivo .xlsx</text>
+              <rect x="190" y="40" width="150" height="74" rx="12" fill="var(--surface-2)" stroke="var(--line)"/>
+              <text x="265" y="70" text-anchor="middle" font-weight="700" fill="var(--fg)">Datos</text>
+              <text x="265" y="92" text-anchor="middle" font-size="11" fill="var(--muted)">hoja seleccionada</text>
+              <rect x="370" y="40" width="150" height="74" rx="12" fill="var(--surface-2)" stroke="var(--line)"/>
+              <text x="445" y="70" text-anchor="middle" font-weight="700" fill="var(--fg)">Tipo cambiado</text>
+              <text x="445" y="92" text-anchor="middle" font-size="11" fill="var(--muted)">número y fecha</text>
+              <rect x="550" y="40" width="150" height="74" rx="12" fill="var(--surface-2)" stroke="var(--line)"/>
+              <text x="625" y="70" text-anchor="middle" font-weight="700" fill="var(--fg)">Filas filtradas</text>
+              <text x="625" y="92" text-anchor="middle" font-size="11" fill="var(--muted)">aprobadas &gt; $500.000</text>
+              <rect x="730" y="40" width="160" height="74" rx="12" fill="var(--sena)"/>
+              <text x="810" y="70" text-anchor="middle" font-weight="700" fill="#fff">in → resultado</text>
+              <text x="810" y="92" text-anchor="middle" font-size="11" fill="#E8F6E0">va al modelo</text>
+            </g>
+            <g stroke="var(--sena)" stroke-width="2.5" fill="none">
+              <path d="M162 77 H186" marker-end="url(#arr2)"/><path d="M342 77 H366" marker-end="url(#arr2)"/>
+              <path d="M522 77 H546" marker-end="url(#arr2)"/><path d="M702 77 H726" marker-end="url(#arr2)"/>
+            </g>
+            <text x="450" y="150" text-anchor="middle" font-size="12" fill="var(--muted)">El nombre de cada paso funciona como una variable: el siguiente paso lo usa como su primer argumento.</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="grid g3">
+        <div class="card sem"><span class="tagline">REGLA 1 · SENSIBLE A MAYÚSCULAS</span><h3>M distingue mayúsculas</h3><p class="small muted"><code>Table.SelectRows</code> funciona; <code>table.selectrows</code> da error. Lo mismo con los nombres de columna: <code>[valor]</code> no es <code>[Valor]</code>.</p></div>
+        <div class="card sem"><span class="tagline">REGLA 2 · INMUTABILIDAD</span><h3>Los pasos no se sobrescriben</h3><p class="small muted">Cada paso crea un valor nuevo. Por eso puede volver a cualquier paso anterior y ver la tabla en ese momento.</p></div>
+        <div class="card sem"><span class="tagline">REGLA 3 · EVALUACIÓN DIFERIDA</span><h3>Solo se calcula lo necesario</h3><p class="small muted">M evalúa un paso cuando el resultado lo necesita. Un paso que nadie usa no se ejecuta.</p></div>
+        <div class="card sem"><span class="tagline">REGLA 4 · each Y _</span><h3><code>each</code> es una función corta</h3><p class="small muted"><code>each [Valor] &gt; 0</code> equivale a <code>(_) =&gt; _[Valor] &gt; 0</code>. Se evalúa una vez por cada fila.</p></div>
+        <div class="card sem"><span class="tagline">REGLA 5 · TIPOS DE DATOS</span><h3>Texto no es número</h3><p class="small muted">"1500" entre comillas es texto. Hay que cambiar el tipo antes de sumar, comparar o agrupar.</p></div>
+        <div class="card sem"><span class="tagline">REGLA 6 · PLEGADO DE CONSULTAS</span><h3>Query folding</h3><p class="small muted">Si la fuente es una base de datos, Power Query traduce sus pasos a SQL y deja que el servidor haga el trabajo. Vea el bonus de SQL.</p></div>
+      </div>
+
+      <div class="card">
+        <h3>Valores y operadores esenciales</h3>
+        <div class="tbl-wrap" style="margin-top:10px">
+          <table class="data">
+            <thead><tr><th>Elemento</th><th>Se escribe</th><th>Significado</th></tr></thead>
+            <tbody>
+              <tr><td>Texto</td><td><code>"Bogotá"</code></td><td>Siempre entre comillas dobles</td></tr>
+              <tr><td>Número</td><td><code>1500000</code> · <code>0.19</code></td><td>Punto como separador decimal</td></tr>
+              <tr><td>Fecha</td><td><code>#date(2026, 10, 25)</code></td><td>Año, mes, día</td></tr>
+              <tr><td>Vacío</td><td><code>null</code></td><td>Celda sin valor</td></tr>
+              <tr><td>Lista</td><td><code>{"A", "B", "C"}</code></td><td>Llaves: colección ordenada</td></tr>
+              <tr><td>Registro</td><td><code>[Nombre = "Ana", Edad = 34]</code></td><td>Corchetes: campos con nombre (una fila)</td></tr>
+              <tr><td>Columna de la fila</td><td><code>[Valor]</code></td><td>Dentro de <code>each</code>, el valor de esa columna</td></tr>
+              <tr><td>Comparación</td><td><code>= &lt;&gt; &gt; &lt; &gt;= &lt;=</code></td><td><code>&lt;&gt;</code> significa «diferente de»</td></tr>
+              <tr><td>Lógicos</td><td><code>and</code> · <code>or</code> · <code>not</code></td><td>Siempre en minúscula</td></tr>
+              <tr><td>Unir texto</td><td><code>"SENA " &amp; [Regional]</code></td><td>El ampersand concatena</td></tr>
+              <tr><td>Condicional</td><td><code>if … then … else …</code></td><td>El <code>else</code> es obligatorio</td></tr>
+              <tr><td>Comentario</td><td><code>// nota</code></td><td>El motor lo ignora</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SIMULADOR ============ -->
+    <section id="simulador" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 06 · Simulador</span>
+        <h2>Editor de Power Query simulado</h2>
+        <p class="lead">La tabla tiene problemas reales: espacios sobrantes (marcados con <b style="color:var(--bad)">·</b>), mayúsculas inconsistentes, valores vacíos y números guardados como texto. Aplique transformaciones, observe la barra de fórmulas y los pasos aplicados, y revise el código M completo al final.</p>
+      </div>
+
+      <div class="sim">
+        <div class="sim-bar"><span class="dots"><i></i><i></i><i></i></span><b>Editor de Power Query</b><span style="opacity:.75">— Solicitudes_Regionales</span></div>
+        <div class="sim-ops">
+          <h4>Transformar</h4>
+          <div id="opList" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+        <div class="sim-center">
+          <div class="formula"><span class="fx">fx</span><div class="fcode" id="fxCode"></div></div>
+          <div class="grid-wrap"><table class="pq" id="pqTable"></table></div>
+          <div class="sim-status"><span id="simStat"></span><span>Vista previa · datos de ejemplo</span></div>
+        </div>
+        <div class="sim-steps">
+          <h4>Pasos aplicados</h4>
+          <ul class="steps-list" id="stepsList"></ul>
+          <div id="simMsg" class="sim-msg">Sugerencia: empiece por <b>Recortar y corregir Regional</b>, luego <b>Cambiar tipo</b>. Pruebe también agrupar antes de recortar y compare.</div>
+          <button class="btn" id="simReset" type="button">Reiniciar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="code-head"><h3>Código M generado (Editor avanzado)</h3><button class="copy" data-copy="mFull" type="button">Copiar</button></div>
+        <pre class="code" id="mFull"></pre>
+      </div>
+    </section>
+
+    <!-- ============ EJEMPLOS ============ -->
+    <section id="ejemplos" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 07</span>
+        <h2>Ejemplos interactivos y evaluación</h2>
+        <p class="lead">Pruebe funciones M con sus propios valores. El laboratorio muestra la sentencia y el resultado que obtendría en una columna personalizada.</p>
+      </div>
+
+      <div class="lab">
+        <div class="card lab-form">
+          <div class="code-head"><h3>Laboratorio de funciones</h3><span class="chip">Simulador 2</span></div>
+          <label class="f" for="labFn">Función
+            <select id="labFn"></select>
+          </label>
+          <p class="small muted" id="labDesc"></p>
+          <div class="lab-args" id="labArgs"></div>
+        </div>
+        <div class="card">
+          <div class="code-head"><h3>Sentencia y resultado</h3><button class="copy" data-copy="labCode" type="button">Copiar</button></div>
+          <pre class="code" id="labCode"></pre>
+          <div class="result"><span class="ty" id="labType"></span><div class="val" id="labVal"></div></div>
+          <p class="small muted" style="margin-top:12px" id="labUse"></p>
+        </div>
+      </div>
+
+      <div class="grid g2">
+        <div class="card">
+          <div class="code-head"><h3>Ejemplo · Columna condicional</h3><button class="copy" data-copy="ex1" type="button">Copiar</button></div>
+          <p class="small muted" style="margin-bottom:10px">Clasificar solicitudes según su valor para priorizar la revisión.</p>
+          <pre class="code" id="ex1" data-m>Table.AddColumn(#"Tipo cambiado", "Prioridad",
+    each if [Valor] >= 2000000 then "Alta"
+         else if [Valor] >= 800000 then "Media"
+         else "Baja",
+    type text)</pre>
+        </div>
+        <div class="card">
+          <div class="code-head"><h3>Ejemplo · Combinar carpetas mensuales</h3><button class="copy" data-copy="ex2" type="button">Copiar</button></div>
+          <p class="small muted" style="margin-bottom:10px">Leer todos los CSV de una carpeta compartida y unirlos en una tabla.</p>
+          <pre class="code" id="ex2" data-m>let
+    Archivos = Folder.Files("C:\SENA\Reportes_2026"),
+    SoloCSV  = Table.SelectRows(Archivos, each [Extension] = ".csv"),
+    Tablas   = Table.AddColumn(SoloCSV, "Contenido",
+                 each Table.PromoteHeaders(Csv.Document([Content], [Delimiter = ";"]))),
+    Unidas   = Table.Combine(Tablas[Contenido])
+in
+    Unidas</pre>
+        </div>
+      </div>
+
+      <div class="card quiz" id="quiz">
+        <div class="q-head"><h3>Autoevaluación</h3><div class="q-dots" id="qDots"></div></div>
+        <p id="qText" style="font-weight:500;font-size:1.05rem"></p>
+        <pre class="code" id="qCode" hidden></pre>
+        <div class="q-opts" id="qOpts"></div>
+        <div class="q-fb" id="qFb" hidden></div>
+        <div style="display:flex;gap:8px"><button class="btn primary" id="qNext" type="button" hidden>Siguiente pregunta</button></div>
+      </div>
+    </section>
+
+    <!-- ============ SQL ============ -->
+    <section id="sql" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Bonus track</span>
+        <h2>SQL en cinco minutos</h2>
+        <p class="lead">SQL (Structured Query Language) es el lenguaje estándar para consultar bases de datos. Lo que usted hizo con clics en Power Query, una base de datos lo hace con una sentencia <code>SELECT</code>.</p>
+      </div>
+
+      <div class="note">
+        <div class="ico">!</div>
+        <div><b>Nota importante.</b> SQL es el lenguaje de consultas integrado en prácticamente todos los motores de bases de datos: SQL Server, Oracle, PostgreSQL, MySQL, SQLite, y también en plataformas en la nube como Azure, Microsoft Fabric o BigQuery. Aprender lo básico le permite entender de dónde vienen los datos institucionales y conversar con las áreas de tecnología. Además, cuando Power Query se conecta a una base de datos, traduce muchos de sus pasos a SQL (plegado de consultas).</div>
+      </div>
+
+      <div class="card">
+        <div class="code-head"><h3>Infografía · Orden de escritura vs. orden de ejecución</h3><span class="chip">SELECT</span></div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 900 240" role="img" aria-label="Orden en que se escribe una consulta SQL y orden en que el motor la ejecuta">
+            <text x="20" y="30" font-size="12" font-weight="700" fill="var(--muted)" letter-spacing="1.5">ASÍ SE ESCRIBE</text>
+            <text x="20" y="160" font-size="12" font-weight="700" fill="var(--accent)" letter-spacing="1.5">ASÍ LA EJECUTA EL MOTOR</text>
+            <g font-family="JetBrains Mono, monospace" font-size="14" font-weight="600">
+              <g id="sqlw"></g>
+            </g>
+            <g font-size="11" fill="var(--muted)"><text x="450" y="226" text-anchor="middle">Por eso no puede usar en WHERE un alias creado en SELECT: el filtro ocurre antes.</text></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="sqlb">
+        <div class="card" style="display:flex;flex-direction:column;gap:14px">
+          <div class="code-head"><h3>Constructor de consultas</h3><span class="chip">Simulador 3</span></div>
+          <div><div class="small" style="font-weight:600;color:var(--muted);margin-bottom:6px">SELECT · columnas</div><div class="checks" id="sqlCols"></div></div>
+          <label class="f" for="sqlWhere">WHERE · filtrar Estado
+            <select id="sqlWhere"><option value="">Sin filtro</option><option>Aprobado</option><option>Pendiente</option><option>Rechazado</option></select>
+          </label>
+          <label class="f" for="sqlMin">WHERE · Valor mínimo
+            <select id="sqlMin"><option value="0">Sin mínimo</option><option value="500000">500.000</option><option value="1000000">1.000.000</option></select>
+          </label>
+          <label class="toggle" for="sqlGroup"><input type="checkbox" id="sqlGroup"> GROUP BY Regional con SUM(Valor)</label>
+          <label class="f" for="sqlOrder">ORDER BY
+            <select id="sqlOrder"><option value="">Sin orden</option><option value="Valor DESC">Valor, mayor a menor</option><option value="Fecha ASC">Fecha, más antigua primero</option><option value="Regional ASC">Regional, A–Z</option></select>
+          </label>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div class="code-head"><h3>Sentencia SQL</h3><button class="copy" data-copy="sqlCode" type="button">Copiar</button></div>
+          <pre class="code" id="sqlCode"></pre>
+          <div class="tbl-wrap"><table class="pq" id="sqlTable"></table></div>
+          <span class="small muted" id="sqlStat"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Equivalencias Power Query ↔ SQL</h3>
+        <div class="tbl-wrap" style="margin-top:10px">
+          <table class="data eq-tbl">
+            <thead><tr><th>Power Query (M)</th><th>SQL</th><th>Qué hace</th></tr></thead>
+            <tbody>
+              <tr><td><code>Table.SelectColumns</code></td><td><code>SELECT col1, col2</code></td><td>Elegir columnas</td></tr>
+              <tr><td><code>Table.SelectRows</code></td><td><code>WHERE</code></td><td>Filtrar filas</td></tr>
+              <tr><td><code>Table.Sort</code></td><td><code>ORDER BY</code></td><td>Ordenar</td></tr>
+              <tr><td><code>Table.Group</code></td><td><code>GROUP BY</code> + <code>SUM()</code></td><td>Agrupar y totalizar</td></tr>
+              <tr><td><code>Table.NestedJoin</code></td><td><code>LEFT JOIN</code></td><td>Combinar tablas</td></tr>
+              <tr><td><code>Table.Combine</code></td><td><code>UNION ALL</code></td><td>Anexar tablas</td></tr>
+              <tr><td><code>Table.Distinct</code></td><td><code>SELECT DISTINCT</code></td><td>Quitar duplicados</td></tr>
+              <tr><td><code>Table.FirstN</code></td><td><code>TOP 10</code> / <code>LIMIT 10</code></td><td>Primeras filas</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RECURSOS ============ -->
+    <section id="recursos" data-sec>
+      <div class="sec-head">
+        <span class="eyebrow">Módulo 08</span>
+        <h2>Cibergrafía y bibliografía</h2>
+        <p class="lead">Videos en español y documentación oficial para seguir aprendiendo. Enlaces revisados el 25 de octubre de 2026; se abren en una pestaña nueva.</p>
+      </div>
+
+      <h3>Videos en español · Power Query y lenguaje M</h3>
+      <div class="grid g3" id="vidPQ"></div>
+      <h3 style="margin-top:8px">Videos en español · SQL</h3>
+      <div class="grid g3" id="vidSQL"></div>
+
+      <div class="grid g2">
+        <div class="card">
+          <h3>Documentación oficial (Microsoft Learn, español)</h3>
+          <ul class="links" style="margin-top:12px">
+            <li><a href="https://learn.microsoft.com/es-es/power-query/power-query-what-is-power-query" target="_blank" rel="noopener">¿Qué es Power Query?</a><small>Conceptos, experiencias y dónde se encuentra disponible.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/power-query/" target="_blank" rel="noopener">Documentación de Power Query</a><small>Portal con guías, conectores y tutoriales.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/powerquery-m/table-functions" target="_blank" rel="noopener">Funciones de tabla · Power Query M</a><small>Referencia de Table.SelectRows, Table.Group y demás.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/powerquery-m/text-functions" target="_blank" rel="noopener">Funciones de texto · Power Query M</a><small>Text.Trim, Text.Proper, Text.Replace y otras.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/power-query/query-folding-basics" target="_blank" rel="noopener">Evaluación y plegado de consultas</a><small>Cómo Power Query traduce los pasos a SQL.</small></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Documentación de SQL (Microsoft Learn, español)</h3>
+          <ul class="links" style="margin-top:12px">
+            <li><a href="https://learn.microsoft.com/es-es/sql/t-sql/queries/select-transact-sql?view=sql-server-ver17" target="_blank" rel="noopener">SELECT (Transact-SQL)</a><small>Sintaxis completa de la instrucción SELECT.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/sql/t-sql/queries/select-examples-transact-sql?view=sql-server-ver17" target="_blank" rel="noopener">Ejemplos de SELECT</a><small>Consultas comentadas listas para practicar.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/sql/t-sql/queries/select-group-by-transact-sql?view=sql-server-ver17" target="_blank" rel="noopener">Cláusula GROUP BY</a><small>Agrupaciones y totales.</small></li>
+            <li><a href="https://learn.microsoft.com/es-es/training/paths/get-started-querying-with-transact-sql/" target="_blank" rel="noopener">Ruta de formación: consulta con Transact-SQL</a><small>Curso gratuito de Microsoft Learn.</small></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Bibliografía</h3>
+        <p class="small muted" style="margin:4px 0 14px">Formato APA 7.ª edición.</p>
+        <ul class="biblio">
+          <li>Beaulieu, A. (2020). <i>Learning SQL: Generate, manipulate, and retrieve data</i> (3.ª ed.). O'Reilly Media.</li>
+          <li>Ferrari, A., &amp; Russo, M. (2017). <i>Analyzing data with Power BI and Power Pivot for Excel</i>. Microsoft Press.</li>
+          <li>Microsoft. (s. f.). <i>Documentación de Power Query</i>. Microsoft Learn. https://learn.microsoft.com/es-es/power-query/</li>
+          <li>Microsoft. (s. f.). <i>Especificación del lenguaje de fórmulas Power Query M</i>. Microsoft Learn. https://learn.microsoft.com/es-es/powerquery-m/</li>
+          <li>Puls, K., &amp; Escobar, M. (2021). <i>Master your data with Power Query in Excel and Power BI</i> (2.ª ed.). Holy Macro! Books.</li>
+          <li>Raviv, G. (2019). <i>Collect, combine, and transform data using Power Query in Excel and Power BI</i>. Microsoft Press.</li>
+          <li>Webb, C. (2014). <i>Power Query for Power BI and Excel</i>. Apress.</li>
+        </ul>
+      </div>
+
+      <footer>
+        <div class="brand"><img src="data:image/png;base64,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" alt=""><span>SENA · Objeto Virtual de Aprendizaje · Power Query</span></div>
+        <span>Identidad visual: verde corporativo #39A900, tipografía Work Sans y Calibri.</span>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Tema ---------- */
+const root=document.documentElement;
+function isDark(){const t=root.getAttribute('data-theme');if(t)return t==='dark';return matchMedia('(prefers-color-scheme: dark)').matches}
+function paintThemeBtn(){const d=isDark();$('#themeLbl').textContent=d?'Modo claro':'Modo oscuro';
+  $('#themeIco').innerHTML=d?'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>':'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'}
+try{const saved=localStorage.getItem('ova-pq-theme');if(saved)root.setAttribute('data-theme',saved)}catch(e){}
+paintThemeBtn();
+$('#themeBtn').addEventListener('click',()=>{const n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('ova-pq-theme',n)}catch(e){}paintThemeBtn()});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',paintThemeBtn);
+
+/* ---------- Resaltado de código ---------- */
+function hlM(code){
+  const re=/(\/\/[^\n]*)|(#"(?:[^"]|"")*")|("(?:[^"]|"")*")|\b(let|in|each|if|then|else|and|or|not|true|false|null|type|as)\b|\b([A-Z][A-Za-z0-9]*(?:\.[A-Z][A-Za-z0-9]*)+)\b|\b(\d+(?:\.\d+)?)\b/g;
+  let out='',last=0,m;
+  while((m=re.exec(code))){out+=esc(code.slice(last,m.index));
+    const t=esc(m[0]);
+    out+=m[1]?`<span class="cm">${t}</span>`:m[2]?`<span class="id">${t}</span>`:m[3]?`<span class="s">${t}</span>`:m[4]?`<span class="k">${t}</span>`:m[5]?`<span class="fn">${t}</span>`:`<span class="num">${t}</span>`;
+    last=re.lastIndex}
+  return out+esc(code.slice(last));
+}
+function hlSQL(code){
+  const re=/('(?:[^']|'')*')|\b(SELECT|FROM|WHERE|GROUP|BY|ORDER|AND|OR|AS|DESC|ASC|SUM|COUNT|TOP|LIMIT|JOIN|ON)\b|\b(\d+)\b/g;
+  let out='',last=0,m;
+  while((m=re.exec(code))){out+=esc(code.slice(last,m.index));const t=esc(m[0]);
+    out+=m[1]?`<span class="s">${t}</span>`:m[2]?`<span class="k">${t}</span>`:`<span class="num">${t}</span>`;last=re.lastIndex}
+  return out+esc(code.slice(last));
+}
+$$('pre[data-m]').forEach(p=>p.innerHTML=hlM(p.textContent));
+
+/* ---------- Copiar ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('.copy');if(!b)return;const el=document.getElementById(b.dataset.copy);const txt=el.innerText;
+  const done=()=>{const o=b.textContent;b.textContent='Copiado';setTimeout(()=>b.textContent=o,1400)};
+  try{navigator.clipboard.writeText(txt).then(done,()=>{selectEl(el);b.textContent='Seleccionado: Ctrl+C'})}catch(err){selectEl(el)}});
+function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+
+/* ---------- Navegación y progreso ---------- */
+const secs=$$('[data-sec]'),links=$$('#nav a');
+function onScroll(){let cur=secs[0].id;for(const s of secs){if(s.getBoundingClientRect().top<160)cur=s.id}
+  links.forEach(a=>{const on=a.getAttribute('href')==='#'+cur;a.classList.toggle('on',on);if(on&&innerWidth<=960)a.scrollIntoView({block:'nearest',inline:'nearest'})});
+  const h=document.documentElement;const p=Math.min(100,Math.round(h.scrollTop/(h.scrollHeight-h.clientHeight||1)*100));
+  $('#progBar').style.width=p+'%';$('#progLbl').textContent='Avance de lectura '+p+' %'}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ---------- Curva de aprendizaje ---------- */
+const stages=[
+ {w:1,p:15,t:'Explorar la interfaz',sem:'Semana 1',items:['Obtener datos desde Excel, CSV y carpetas','Vista previa, perfil y calidad de columnas','Cerrar y aplicar al modelo'],tip:'Abra un archivo de su dependencia y recorra la cinta de opciones sin miedo: nada cambia el archivo original.'},
+ {w:2.6,p:36,t:'Transformar con clics',sem:'Semanas 2–3',items:['Filtrar, ordenar, quitar columnas','Cambiar tipos de datos','Reemplazar valores y quitar duplicados'],tip:'Mire el panel «Pasos aplicados» después de cada clic. Cada paso es una instrucción.'},
+ {w:4.6,p:50,t:'Leer el código M',sem:'Semanas 4–5',items:['Activar la barra de fórmulas','Abrir el Editor avanzado','Reconocer let, in y los nombres de pasos'],tip:'Aquí aparece la meseta: el código parece difícil. Lea el que generan sus propios clics antes de escribir.'},
+ {w:7,p:74,t:'Escribir sentencias',sem:'Semanas 6–8',items:['Columnas personalizadas con each','Condicionales if … then … else','Combinar y anexar consultas'],tip:'Modifique una fórmula existente en la barra fx: cambie un valor de filtro o un nombre de columna.'},
+ {w:10.4,p:91,t:'Automatizar',sem:'Semanas 9–12',items:['Parámetros (rutas, fechas de corte)','Funciones personalizadas','Plegado de consultas y rendimiento'],tip:'Convierta un informe mensual repetitivo en una consulta desde carpeta que se actualice sola.'}];
+let stageOn=1;
+function drawCurve(){
+  const X=w=>60+w/12*560,Y=p=>262-p/100*222;
+  const pts=[[0,4],...stages.map(s=>[s.w,s.p]),[12,96]].map(([w,p])=>[X(w),Y(p)]);
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6],c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    d+=` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`}
+  let g='';
+  [0,25,50,75,100].forEach(p=>{g+=`<line x1="60" x2="620" y1="${Y(p)}" y2="${Y(p)}" stroke="var(--line)" stroke-dasharray="${p?'3 4':'0'}"/><text x="50" y="${Y(p)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${p}%</text>`});
+  [0,2,4,6,8,10,12].forEach(w=>{g+=`<text x="${X(w)}" y="282" text-anchor="middle" font-size="11" fill="var(--muted)">${w}</text>`});
+  g+=`<text x="340" y="302" text-anchor="middle" font-size="11" font-weight="600" fill="var(--muted)">Semanas de práctica (≈ 2 h por semana)</text>`;
+  g+=`<text x="16" y="146" transform="rotate(-90 16 146)" text-anchor="middle" font-size="11" font-weight="600" fill="var(--muted)">Dominio</text>`;
+  g+=`<rect x="${X(3.6)}" y="${Y(100)}" width="${X(5.6)-X(3.6)}" height="${Y(0)-Y(100)}" fill="var(--warn-soft)" opacity=".7"/><text x="${X(4.6)}" y="${Y(97)}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--warn)">MESETA</text>`;
+  g+=`<path d="${d} L${X(12)},${Y(0)} L${X(0)},${Y(0)} Z" fill="var(--sena)" opacity=".1"/>`;
+  g+=`<path d="${d}" fill="none" stroke="var(--sena)" stroke-width="3.5" stroke-linecap="round"/>`;
+  stages.forEach((s,i)=>{const x=X(s.w),y=Y(s.p);
+    g+=`<g class="stage-pt${i===stageOn?' on':''}" data-i="${i}" tabindex="0" role="button" aria-label="Etapa ${i+1}: ${s.t}">
+      <circle class="ring" cx="${x}" cy="${y}" r="12" fill="var(--surface)" stroke="${i===stageOn?'var(--navy-text)':'var(--sena)'}" stroke-width="3"/>
+      <text x="${x}" y="${y+4}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--fg)">${i+1}</text>
+      <text x="${x}" y="${y+(i%2?32:-20)}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--fg)">${s.t}</text></g>`});
+  $('#curveSvg').innerHTML=g;
+  $$('.stage-pt').forEach(el=>{const go=()=>{stageOn=+el.dataset.i;drawCurve();showStage()};el.addEventListener('click',go);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+}
+function showStage(){const s=stages[stageOn];
+  $('#stageDetail').innerHTML=`<span class="chip">${s.sem} · Etapa ${stageOn+1} de 5</span><h4>${s.t}</h4>
+  <p class="small muted">Lo que se aprende:</p><ul class="small">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <div class="note" style="margin-top:14px;padding:12px 14px"><div class="ico" style="width:24px;height:24px;font-size:.8rem">✓</div><div class="small"><b>Cómo practicar:</b> ${s.tip}</div></div>
+  <div class="bar"><span style="width:${s.p}%"></span></div><p class="small muted" style="margin-top:6px">Dominio estimado al cierre de la etapa: <b>${s.p} %</b></p>
+  <div class="stage-tabs">${stages.map((x,i)=>`<button type="button" data-i="${i}" class="${i===stageOn?'on':''}">${i+1}</button>`).join('')}</div>`;
+  $$('#stageDetail .stage-tabs button').forEach(b=>b.onclick=()=>{stageOn=+b.dataset.i;drawCurve();showStage()})}
+drawCurve();showStage();
+
+/* ---------- Tabla de comandos ---------- */
+const cmds=[
+ ['Origen','Obtener datos › Libro de Excel','Excel.Workbook','Excel.Workbook(File.Contents("C:\\datos.xlsx"), null, true)'],
+ ['Origen','Obtener datos › Texto/CSV','Csv.Document','Csv.Document(File.Contents("C:\\datos.csv"), [Delimiter=";"])'],
+ ['Origen','Obtener datos › Carpeta','Folder.Files','Folder.Files("C:\\SENA\\Reportes")'],
+ ['Origen','Obtener datos › SQL Server','Sql.Database','Sql.Database("servidor", "BD_Administrativa")'],
+ ['Origen','Obtener datos › Web','Web.Contents','Json.Document(Web.Contents("https://api.ejemplo.co"))'],
+ ['Filas','Usar primera fila como encabezado','Table.PromoteHeaders','Table.PromoteHeaders(t, [PromoteAllScalars=true])'],
+ ['Filas','Filtrar filas','Table.SelectRows','Table.SelectRows(t, each [Estado] = "Aprobado")'],
+ ['Filas','Quitar duplicados','Table.Distinct','Table.Distinct(t, {"Cédula"})'],
+ ['Filas','Quitar filas superiores','Table.Skip','Table.Skip(t, 3)'],
+ ['Filas','Conservar filas superiores','Table.FirstN','Table.FirstN(t, 10)'],
+ ['Filas','Quitar filas en blanco','Table.SelectRows','Table.SelectRows(t, each [Valor] <> null)'],
+ ['Filas','Ordenar descendente','Table.Sort','Table.Sort(t, {{"Valor", Order.Descending}})'],
+ ['Columnas','Quitar columnas','Table.RemoveColumns','Table.RemoveColumns(t, {"ID", "Notas"})'],
+ ['Columnas','Elegir columnas','Table.SelectColumns','Table.SelectColumns(t, {"Regional", "Valor"})'],
+ ['Columnas','Cambiar nombre','Table.RenameColumns','Table.RenameColumns(t, {{"Vr", "Valor"}})'],
+ ['Columnas','Tipo de datos','Table.TransformColumnTypes','Table.TransformColumnTypes(t, {{"Fecha", type date}})'],
+ ['Columnas','Dividir columna por delimitador','Table.SplitColumn','Table.SplitColumn(t, "Nombre", Splitter.SplitTextByDelimiter(" "))'],
+ ['Columnas','Reemplazar valores','Table.ReplaceValue','Table.ReplaceValue(t, "N/A", null, Replacer.ReplaceValue, {"Valor"})'],
+ ['Columnas','Rellenar hacia abajo','Table.FillDown','Table.FillDown(t, {"Regional"})'],
+ ['Columnas','Formato › Recortar','Table.TransformColumns','Table.TransformColumns(t, {{"Regional", Text.Trim}})'],
+ ['Columnas','Anular dinamización de otras columnas','Table.UnpivotOtherColumns','Table.UnpivotOtherColumns(t, {"Regional"}, "Mes", "Valor")'],
+ ['Columnas','Columna dinamizada','Table.Pivot','Table.Pivot(t, List.Distinct(t[Mes]), "Mes", "Valor", List.Sum)'],
+ ['Agregar','Columna personalizada','Table.AddColumn','Table.AddColumn(t, "Con IVA", each [Valor] * 1.19)'],
+ ['Agregar','Columna condicional','Table.AddColumn','Table.AddColumn(t, "Rango", each if [Valor] > 1000000 then "Alto" else "Normal")'],
+ ['Agregar','Columna de índice','Table.AddIndexColumn','Table.AddIndexColumn(t, "Consecutivo", 1, 1)'],
+ ['Combinar','Combinar consultas (merge)','Table.NestedJoin','Table.NestedJoin(Planta, {"Cédula"}, Nómina, {"Cédula"}, "Nómina", JoinKind.LeftOuter)'],
+ ['Combinar','Expandir columna de tabla','Table.ExpandTableColumn','Table.ExpandTableColumn(t, "Nómina", {"Salario"})'],
+ ['Combinar','Anexar consultas','Table.Combine','Table.Combine({Enero, Febrero, Marzo})'],
+ ['Combinar','Agrupar por','Table.Group','Table.Group(t, {"Regional"}, {{"Total", each List.Sum([Valor]), type number}})'],
+ ['Funciones','Texto › Mayúsculas','Text.Upper','Text.Upper("sena") // "SENA"'],
+ ['Funciones','Texto › Poner en mayúsculas cada palabra','Text.Proper','Text.Proper("distrito capital")'],
+ ['Funciones','Texto › Longitud','Text.Length','Text.Length("Bogotá") // 6'],
+ ['Funciones','Extraer › Primeros caracteres','Text.Start','Text.Start([Código], 3)'],
+ ['Funciones','Fecha › Año','Date.Year','Date.Year([Fecha])'],
+ ['Funciones','Fecha › Mes','Date.Month','Date.Month([Fecha])'],
+ ['Funciones','Fecha y hora actual','DateTime.LocalNow','DateTime.LocalNow()'],
+ ['Funciones','Redondear','Number.Round','Number.Round([Valor], 0)'],
+ ['Funciones','Suma de una lista','List.Sum','List.Sum(t[Valor])']];
+const cats=['Todas','Origen','Filas','Columnas','Agregar','Combinar','Funciones'];
+let catOn='Todas';
+$('#cmdFilters').innerHTML=cats.map(c=>`<button type="button" data-c="${c}" class="${c===catOn?'on':''}">${c==='Agregar'?'Agregar columna':c}</button>`).join('');
+$$('#cmdFilters button').forEach(b=>b.onclick=()=>{catOn=b.dataset.c;$$('#cmdFilters button').forEach(x=>x.classList.toggle('on',x===b));renderCmds()});
+$('#cmdSearch').addEventListener('input',renderCmds);
+function renderCmds(){const q=$('#cmdSearch').value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const rows=cmds.filter(c=>(catOn==='Todas'||c[0]===catOn)&&(!q||c.join(' ').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)));
+  $('#cmdTable tbody').innerHTML=rows.length?rows.map(c=>`<tr><td><span class="cat ${c[0]}">${c[0]==='Agregar'?'Agregar columna':c[0]}</span></td><td>${esc(c[1])}</td><td><code>${esc(c[2])}</code></td><td><code style="white-space:normal">${esc(c[3])}</code></td></tr>`).join(''):`<tr><td colspan="4" class="muted">No hay comandos que coincidan con «${esc(q)}». Pruebe con otra palabra, por ejemplo «texto» o «Table».</td></tr>`;
+  $('#cmdCount').textContent=rows.length+' de '+cmds.length+' comandos'}
+renderCmds();
+
+/* ---------- Anatomía ---------- */
+const anat={
+ let:{n:'let',t:'Inicio de la consulta',d:'Abre el bloque donde se declaran los pasos. Todo lo que está entre <code>let</code> e <code>in</code> son definiciones con nombre.',k:'Sintaxis'},
+ paso:{n:'Paso = expresión',t:'Declaración de un paso',d:'Cada paso tiene un nombre, el signo igual y una expresión. <code>Origen</code> es la conexión al archivo. Los pasos se separan con coma.',k:'Sintaxis'},
+ nav:{n:'Navegación',t:'Acceso a un elemento',d:'<code>{[Item="Solicitudes"]}</code> busca la fila de la hoja y <code>[Data]</code> toma su contenido. Llaves para buscar en una tabla, corchetes para tomar un campo.',k:'Sintaxis'},
+ ident:{n:'#"Nombre con espacios"',t:'Identificador entre comillas',d:'Si el nombre de un paso tiene espacios o tildes se escribe con <code>#"…"</code>. Así lo hace la interfaz en español.',k:'Sintaxis'},
+ func:{n:'Función(argumentos)',t:'Llamada a una función',d:'<code>Table.TransformColumnTypes</code> pertenece a la biblioteca Table. El primer argumento casi siempre es la tabla del paso anterior.',k:'Semántica'},
+ list:{n:'{ {…}, {…} }',t:'Lista de listas',d:'Las llaves crean listas. Aquí cada par indica columna y tipo nuevo: <code>Int64.Type</code> es número entero y <code>type date</code> es fecha.',k:'Sintaxis'},
+ coma:{n:',',t:'Separador de pasos',d:'Cada paso termina en coma, excepto el último antes de <code>in</code>. Una coma de más o de menos es el error de sintaxis más común.',k:'Sintaxis'},
+ each:{n:'each',t:'Función por fila',d:'<code>each</code> se evalúa para cada fila. <code>[Valor]</code> y <code>[Estado]</code> leen esa fila. Solo pasan las filas donde la condición es verdadera.',k:'Semántica'},
+ in:{n:'in',t:'Resultado de la consulta',d:'Después de <code>in</code> va el paso que se entrega. Normalmente es el último, pero puede ser cualquiera: eso cambia el resultado sin borrar pasos.',k:'Semántica'}};
+let anatOn='each';
+$('#anatList').innerHTML=Object.keys(anat).map(k=>`<button type="button" data-p="${k}">${esc(anat[k].n)}</button>`).join('');
+function setAnat(k){anatOn=k;const a=anat[k];
+  $('#anatBox').innerHTML=`<span class="tag">${a.k.toUpperCase()}</span><h3 style="margin:4px 0 8px">${a.t}</h3><p class="small">${a.d}</p>`;
+  $$('#anatCode .part').forEach(p=>p.classList.toggle('on',p.dataset.p===k));
+  $$('#anatList button').forEach(b=>b.classList.toggle('on',b.dataset.p===k))}
+$$('#anatCode .part').forEach(p=>{p.addEventListener('mouseenter',()=>setAnat(p.dataset.p));p.addEventListener('click',e=>{e.stopPropagation();setAnat(p.dataset.p)})});
+$$('#anatList button').forEach(b=>b.onclick=()=>setAnat(b.dataset.p));
+setAnat(anatOn);
+
+/* ---------- Simulador Power Query ---------- */
+const RAW=[
+ ['S-001','2026-01-15',' antioquia','Talento Humano','Viáticos','850000','Aprobado'],
+ ['S-002','2026-01-22','Distrito Capital ','Financiera','Papelería','320000','Pendiente'],
+ ['S-003','2026-02-03','VALLE','Contratación','Mantenimiento','2400000','Aprobado'],
+ ['S-004','2026-02-10','antioquia ','Financiera','Viáticos',null,'Rechazado'],
+ ['S-005','2026-02-18','Santander','Talento Humano','Capacitación','1500000','Aprobado'],
+ ['S-006','2026-03-02',' distrito capital','Administrativa','Transporte','640000','Aprobado'],
+ ['S-007','2026-03-09','Valle','Talento Humano','Viáticos','910000','Pendiente'],
+ ['S-008','2026-03-21','SANTANDER ','Contratación','Papelería','275000','Aprobado'],
+ ['S-009','2026-04-04','Antioquia','Administrativa','Mantenimiento','1980000','Aprobado'],
+ ['S-010','2026-04-12','Distrito Capital','Financiera','Capacitación',null,'Pendiente'],
+ ['S-011','2026-04-20','valle ','Administrativa','Transporte','560000','Aprobado'],
+ ['S-012','2026-05-06','Santander','Financiera','Viáticos','1120000','Rechazado']];
+const COLS=['ID','Fecha','Regional','Dependencia','Concepto','Valor','Estado'];
+function base(){return{cols:COLS.slice(),types:Object.fromEntries(COLS.map(c=>[c,'text'])),rows:RAW.map(r=>Object.fromEntries(COLS.map((c,i)=>[c,r[i]])))}}
+const proper=s=>s.toLowerCase().replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase());
+const clone=t=>({cols:t.cols.slice(),types:{...t.types},rows:t.rows.map(r=>({...r}))});
+const has=(t,c)=>t.cols.includes(c);
+const ops={
+ trim:{label:'Recortar y corregir Regional',sub:'Text.Trim + Text.Proper',name:'Texto limpio',
+   can:t=>has(t,'Regional')?'':'No existe la columna Regional.',
+   run:t=>{t=clone(t);t.rows.forEach(r=>{if(r.Regional!=null)r.Regional=proper(r.Regional.trim())});return t},
+   m:p=>`Table.TransformColumns(${p}, {{"Regional", each Text.Proper(Text.Trim(_)), type text}})`},
+ nulls:{label:'Quitar filas con Valor vacío',sub:'Table.SelectRows … <> null',name:'Filas sin vacíos',
+   can:t=>!has(t,'Valor')?'No existe la columna Valor.':t.rows.some(r=>r.Valor==null)?'':'Ya no hay valores vacíos.',
+   run:t=>{t=clone(t);t.rows=t.rows.filter(r=>r.Valor!=null);return t},
+   m:p=>`Table.SelectRows(${p}, each [Valor] <> null)`},
+ type:{label:'Cambiar tipo: Valor y Fecha',sub:'Table.TransformColumnTypes',name:'Tipo cambiado',
+   can:t=>!has(t,'Valor')?'No existe la columna Valor.':t.types.Valor==='number'?'Valor ya es número.':'',
+   run:t=>{t=clone(t);t.rows.forEach(r=>{if(r.Valor!=null)r.Valor=Number(r.Valor)});t.types.Valor='number';if(has(t,'Fecha'))t.types.Fecha='date';return t},
+   m:p=>`Table.TransformColumnTypes(${p}, {{"Valor", Int64.Type}, {"Fecha", type date}})`},
+ filter:{label:'Filtrar Estado = Aprobado',sub:'Table.SelectRows',name:'Filas filtradas',
+   can:t=>!has(t,'Estado')?'No existe la columna Estado.':t.rows.every(r=>r.Estado==='Aprobado')?'Ya solo hay aprobadas.':'',
+   run:t=>{t=clone(t);t.rows=t.rows.filter(r=>r.Estado==='Aprobado');return t},
+   m:p=>`Table.SelectRows(${p}, each [Estado] = "Aprobado")`},
+ remove:{label:'Quitar columna ID',sub:'Table.RemoveColumns',name:'Columnas quitadas',
+   can:t=>has(t,'ID')?'':'La columna ID ya no está.',
+   run:t=>{t=clone(t);t.cols=t.cols.filter(c=>c!=='ID');t.rows.forEach(r=>delete r.ID);return t},
+   m:p=>`Table.RemoveColumns(${p}, {"ID"})`},
+ iva:{label:'Agregar columna: Valor con IVA',sub:'Table.AddColumn · each [Valor] * 1.19',name:'Personalizada agregada',
+   can:t=>!has(t,'Valor')?'Necesita la columna Valor.':t.types.Valor!=='number'?'Primero cambie el tipo de Valor a número: no se puede multiplicar texto.':has(t,'Valor con IVA')?'La columna ya existe.':'',
+   run:t=>{t=clone(t);t.cols.push('Valor con IVA');t.types['Valor con IVA']='number';t.rows.forEach(r=>r['Valor con IVA']=r.Valor==null?null:Math.round(r.Valor*1.19));return t},
+   m:p=>`Table.AddColumn(${p}, "Valor con IVA", each [Valor] * 1.19, type number)`},
+ group:{label:'Agrupar por Regional',sub:'Table.Group · List.Sum([Valor])',name:'Filas agrupadas',
+   can:t=>!has(t,'Regional')||!has(t,'Valor')?'Necesita Regional y Valor.':t.types.Valor!=='number'?'Primero cambie el tipo de Valor a número para poder sumar.':'',
+   run:t=>{const g=new Map();t.rows.forEach(r=>{const k=r.Regional;if(!g.has(k))g.set(k,{Regional:k,Total:0,Solicitudes:0});const o=g.get(k);o.Total+=r.Valor||0;o.Solicitudes++});
+     return{cols:['Regional','Total','Solicitudes'],types:{Regional:'text',Total:'number',Solicitudes:'number'},rows:[...g.values()]}},
+   m:p=>`Table.Group(${p}, {"Regional"}, {{"Total", each List.Sum([Valor]), type number}, {"Solicitudes", each Table.RowCount(_), Int64.Type}})`},
+ sort:{label:'Ordenar de mayor a menor',sub:'Table.Sort · Order.Descending',name:'Filas ordenadas',
+   can:t=>{const c=has(t,'Total')?'Total':'Valor';return !has(t,c)?'No hay columna numérica para ordenar.':t.types[c]!=='number'?'Primero cambie el tipo de Valor: ordenar texto pone "850000" después de "2400000".':''},
+   run:t=>{t=clone(t);const c=has(t,'Total')?'Total':'Valor';t.rows.sort((a,b)=>(b[c]??-1)-(a[c]??-1));t._sortCol=c;return t},
+   m:(p,t)=>`Table.Sort(${p}, {{"${has(t,'Total')?'Total':'Valor'}", Order.Descending}})`}};
+let applied=[];
+$('#opList').innerHTML=Object.entries(ops).map(([k,o])=>`<button type="button" class="btn op-btn" data-op="${k}">${o.label}<small>${o.sub}</small></button>`).join('');
+$$('#opList button').forEach(b=>b.onclick=()=>{applied.push(b.dataset.op);renderSim(true)});
+$('#simReset').onclick=()=>{applied=[];renderSim()};
+const fmt=n=>n==null?'null':Number(n).toLocaleString('es-CO');
+function cellHTML(v,ty){if(v==null)return['null','null'];
+  if(ty==='number')return[fmt(v),'num'];
+  if(ty==='date'){const [y,m,d]=v.split('-');return[`${d}/${m}/${y}`,'']}
+  const s=esc(v);const lead=s.match(/^ +/),trail=s.match(/ +$/);
+  return[(lead?'<span class="ws">·</span>'.repeat(lead[0].length):'')+s.trim()+(trail?'<span class="ws">·</span>'.repeat(trail[0].length):''),'']}
+function stepName(i){return i===0?'Origen':i===1?'Datos':ops[applied[i-2]].name}
+function mId(n){return /^[A-Za-z_][A-Za-z0-9_]*$/.test(n)?n:`#"${n}"`}
+function renderSim(flash){
+  let t=base();const states=[t];const lines=[`Excel.Workbook(File.Contents("C:\\SENA\\solicitudes.xlsx"), null, true)`,`Origen{[Item="Solicitudes", Kind="Sheet"]}[Data]`];
+  // nombres únicos
+  const names=['Origen','Datos'];const used={};
+  applied.forEach((k,i)=>{let n=ops[k].name;used[n]=(used[n]||0)+1;if(used[n]>1)n+=' '+used[n];names.push(n);
+    const prev=mId(names[names.length-2]);lines.push(ops[k].m(prev,t));t=ops[k].run(t);states.push(t)});
+  // tabla
+  $('#pqTable').innerHTML=`<thead><tr><th></th>${t.cols.map(c=>{const ty=t.types[c];const lbl=ty==='number'?'1²3':ty==='date'?'📅':'ABC';return`<th><span class="ty ${ty==='number'?'n':ty==='date'?'d':''}">${ty==='date'?'FEC':lbl}</span>${esc(c)}</th>`}).join('')}</tr></thead><tbody>${
+    t.rows.map((r,i)=>`<tr class="${flash?'new':''}"><td class="rn">${i+1}</td>${t.cols.map(c=>{const[h,cl]=cellHTML(r[c],t.types[c]);return`<td class="${cl}">${h}</td>`}).join('')}</tr>`).join('')}</tbody>`;
+  $('#simStat').textContent=`${t.cols.length} columnas, ${t.rows.length} filas`;
+  // fórmula
+  $('#fxCode').innerHTML=hlM('= '+lines[lines.length-1]);
+  // pasos
+  $('#stepsList').innerHTML=names.map((n,i)=>`<li class="${i===names.length-1?'last':''}"><svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>${esc(n)}${i===names.length-1&&i>1?`<button type="button" aria-label="Eliminar paso ${esc(n)}" title="Eliminar paso">×</button>`:''}</li>`).join('');
+  const del=$('#stepsList button');if(del)del.onclick=()=>{applied.pop();renderSim()};
+  // botones
+  $$('#opList button').forEach(b=>{const why=ops[b.dataset.op].can(t);b.disabled=!!why;b.title=why||''});
+  // mensaje
+  const msg=$('#simMsg');msg.className='sim-msg';
+  const last=applied[applied.length-1];
+  if(!last){msg.innerHTML='Sugerencia: empiece por <b>Recortar y corregir Regional</b>, luego <b>Cambiar tipo</b>. Pruebe también agrupar antes de recortar y compare.'}
+  else if(last==='group'&&!applied.includes('trim')){msg.className='sim-msg warn';msg.innerHTML='<b>Observe:</b> «antioquia» y «Antioquia» quedaron como regionales distintas. Elimine este paso, aplique primero <b>Recortar y corregir Regional</b> y vuelva a agrupar.'}
+  else if(last==='group'){msg.className='sim-msg ok';msg.innerHTML='<b>Bien.</b> Una fila por regional. Esto equivale a <code>GROUP BY</code> en SQL.'}
+  else if(last==='type'){msg.className='sim-msg ok';msg.innerHTML='El icono de la columna Valor pasó de <b>ABC</b> a <b>1²3</b>. Ahora se puede sumar, multiplicar y ordenar correctamente.'}
+  else if(last==='trim'){msg.className='sim-msg ok';msg.innerHTML='Los espacios marcados con <b>·</b> desaparecieron y todas las regionales tienen la misma escritura.'}
+  else {const disabled=$$('#opList button').filter(b=>b.disabled&&b.title.startsWith('Primero'));msg.innerHTML=disabled.length?'Algunas acciones están desactivadas. Pase el cursor sobre ellas para saber por qué.':'Paso agregado. Revise la barra de fórmulas: es el código M de esta acción.'}
+  // código completo
+  const body=names.map((n,i)=>`    ${mId(n)} = ${lines[i]}`).join(',\n');
+  $('#mFull').innerHTML=hlM(`let\n${body}\nin\n    ${mId(names[names.length-1])}`);
+}
+renderSim();
+
+/* ---------- Laboratorio de funciones ---------- */
+const labFns=[
+ {f:'Text.Upper',d:'Convierte todo el texto a MAYÚSCULAS.',a:[['texto','text','Centro de Gestión Administrativa']],r:a=>a[0].toUpperCase(),t:'text',use:'Útil para unificar códigos o siglas antes de combinar tablas.'},
+ {f:'Text.Lower',d:'Convierte todo el texto a minúsculas.',a:[['texto','text','CORREO@SENA.EDU.CO']],r:a=>a[0].toLowerCase(),t:'text',use:'Normaliza correos electrónicos para evitar duplicados.'},
+ {f:'Text.Proper',d:'Pone en mayúscula la primera letra de cada palabra.',a:[['texto','text','distrito capital']],r:a=>proper(a[0]),t:'text',use:'Corrige nombres de regionales o municipios escritos de forma distinta.'},
+ {f:'Text.Trim',d:'Quita los espacios al inicio y al final.',a:[['texto','text','   Talento Humano   ']],r:a=>a[0].trim(),t:'text',use:'Un espacio invisible hace que «Valle» y «Valle » se cuenten como dos regionales.'},
+ {f:'Text.Length',d:'Cuenta los caracteres del texto.',a:[['texto','text','1020304050']],r:a=>a[0].length,t:'number',use:'Valide que una cédula o NIT tenga la longitud esperada.'},
+ {f:'Text.Start',d:'Devuelve los primeros n caracteres.',a:[['texto','text','CTR-9201-2026'],['n','number','3']],r:a=>a[0].slice(0,Math.max(0,parseInt(a[1])||0)),t:'text',use:'Extraiga el prefijo de un número de contrato o de un código de centro.'},
+ {f:'Text.Replace',d:'Reemplaza todas las apariciones de un texto por otro.',a:[['texto','text','Reg. Antioquia'],['buscar','text','Reg.'],['reemplazar por','text','Regional']],r:a=>a[1]?a[0].split(a[1]).join(a[2]):a[0],t:'text',use:'Expanda abreviaturas o corrija errores repetidos.'},
+ {f:'Number.Round',d:'Redondea un número a los decimales indicados.',a:[['número','number','1234567.891'],['decimales','number','2']],r:a=>{const n=parseFloat(a[0]),d=Math.max(0,parseInt(a[1])||0);return isNaN(n)?'Error: el valor no es un número':Number(n.toFixed(d))},t:'number',use:'Presente valores monetarios sin decimales excesivos.'},
+ {f:'Date.Year',d:'Extrae el año de una fecha.',a:[['fecha','date','2026-10-25']],r:a=>a[0]?Number(a[0].slice(0,4)):'null',t:'number',fmt:a=>`Date.Year(#date(${a[0]?a[0].split('-').map(Number).join(', '):'null'}))`,use:'Cree una columna de año para filtrar el informe por vigencia.'},
+ {f:'Date.Month',d:'Extrae el número del mes de una fecha.',a:[['fecha','date','2026-10-25']],r:a=>a[0]?Number(a[0].slice(5,7)):'null',t:'number',fmt:a=>`Date.Month(#date(${a[0]?a[0].split('-').map(Number).join(', '):'null'}))`,use:'Agrupe la ejecución presupuestal por mes.'}];
+$('#labFn').innerHTML=labFns.map((x,i)=>`<option value="${i}">${x.f}</option>`).join('');
+$('#labFn').onchange=buildLab;
+function buildLab(){const x=labFns[+$('#labFn').value];$('#labDesc').textContent=x.d;
+  $('#labArgs').innerHTML=x.a.map((a,i)=>`<label class="f" for="la${i}">${a[0]}<input id="la${i}" type="${a[1]==='number'?'text':a[1]==='date'?'date':'text'}" ${a[1]==='number'?'inputmode="decimal"':''} value="${esc(a[2])}"></label>`).join('');
+  $$('#labArgs input').forEach(i=>i.addEventListener('input',runLab));runLab()}
+function runLab(){const x=labFns[+$('#labFn').value];const v=x.a.map((a,i)=>$('#la'+i).value);
+  const code=x.fmt?x.fmt(v):`${x.f}(${v.map((s,i)=>x.a[i][1]==='number'?(s.trim()||'0'):`"${s.replace(/"/g,'""')}"`).join(', ')})`;
+  $('#labCode').innerHTML=hlM(code);const r=x.r(v);
+  const isNum=typeof r==='number';$('#labVal').textContent=isNum?String(r).replace('.',','):(typeof r==='string'&&r.startsWith('Error')?r:`"${r}"`);
+  $('#labType').textContent='Resultado · tipo '+(isNum?'número':'texto');
+  $('#labUse').innerHTML='<b>Uso administrativo:</b> '+x.use+` En una columna: <code>each ${esc(x.f)}([Columna]${x.a.length>1?', …':''})</code>`}
+buildLab();
+
+/* ---------- Quiz ---------- */
+const Q=[
+ {q:'¿En qué etapa del proceso ETL trabaja principalmente Power Query?',o:['Solo en la visualización de informes','Extraer, transformar y cargar los datos','En el cálculo de medidas DAX','En la publicación en Power BI Service'],a:1,fb:'Power Query prepara los datos (ETL). DAX y los objetos visuales vienen después, sobre el modelo ya cargado.'},
+ {q:'¿Qué hace esta línea?',c:'Table.SelectRows(Datos, each [Estado] = "Aprobado")',o:['Elimina la columna Estado','Ordena por Estado','Conserva solo las filas cuyo Estado es Aprobado','Cambia el texto de Estado a Aprobado'],a:2,fb:'SelectRows filtra filas. each evalúa la condición en cada fila y conserva las que dan verdadero.'},
+ {q:'En el simulador, al agrupar sin recortar, «antioquia» y «Antioquia» salieron separadas. ¿Por qué?',o:['Porque M distingue mayúsculas y espacios: son textos diferentes','Porque Table.Group no funciona con texto','Porque faltaba ordenar','Porque la columna Valor era texto'],a:0,fb:'Para M, " antioquia" y "Antioquia" son valores distintos. Limpiar el texto antes de agrupar es una buena práctica.'},
+ {q:'¿Qué palabra indica el resultado final de una consulta M?',c:'let\n    Origen = ...,\n    Final = ...\n??\n    Final',o:['return','in','end','select'],a:1,fb:'La estructura es let … in. Después de in va el paso que se entrega como resultado.'},
+ {q:'¿Cuál es el equivalente SQL de Table.Group con List.Sum?',o:['WHERE','ORDER BY','GROUP BY con SUM()','JOIN'],a:2,fb:'GROUP BY agrupa las filas y SUM() totaliza, igual que Table.Group con List.Sum.'}];
+let qi=0,res=[];
+function renderQ(){const x=Q[qi];
+  $('#qDots').innerHTML=Q.map((_,i)=>`<i class="${i<res.length?(res[i]?'done':'miss'):i===qi?'cur':''}"></i>`).join('');
+  if(qi>=Q.length){const ok=res.filter(Boolean).length;$('#qText').innerHTML=`Resultado: <b>${ok} de ${Q.length}</b> respuestas correctas. ${ok===Q.length?'Excelente dominio de los conceptos.':ok>=3?'Buen trabajo. Repase los módulos de las preguntas falladas.':'Le recomendamos repasar los módulos 05 y 06 y volver a intentarlo.'}`;
+    $('#qCode').hidden=true;$('#qOpts').innerHTML='';$('#qFb').hidden=true;$('#qNext').hidden=false;$('#qNext').textContent='Reintentar';return}
+  $('#qText').textContent=`${qi+1}. ${x.q}`;$('#qCode').hidden=!x.c;if(x.c)$('#qCode').innerHTML=hlM(x.c);
+  $('#qOpts').innerHTML=x.o.map((o,i)=>`<button type="button" class="btn" data-i="${i}">${esc(o)}</button>`).join('');
+  $('#qFb').hidden=true;$('#qNext').hidden=true;
+  $$('#qOpts button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=i===x.a;res.push(ok);
+    $$('#qOpts button').forEach(z=>{z.disabled=true;if(+z.dataset.i===x.a)z.classList.add('right');else if(z===b)z.classList.add('wrong')});
+    $('#qFb').hidden=false;$('#qFb').innerHTML=`<b>${ok?'Correcto.':'No es correcto.'}</b> ${x.fb}`;
+    $('#qNext').hidden=false;$('#qNext').textContent=qi===Q.length-1?'Ver resultado':'Siguiente pregunta';
+    $('#qDots').innerHTML=Q.map((_,j)=>`<i class="${j<res.length?(res[j]?'done':'miss'):''}"></i>`).join('')})}
+$('#qNext').onclick=()=>{if(qi>=Q.length){qi=0;res=[]}else qi++;renderQ()};
+renderQ();
+
+/* ---------- SQL ---------- */
+(function(){const w=[['SELECT',1],['FROM',2],['WHERE',3],['GROUP BY',4],['ORDER BY',5]];
+ const exec=[['FROM','Toma la tabla'],['WHERE','Filtra filas'],['GROUP BY','Agrupa'],['SELECT','Elige columnas'],['ORDER BY','Ordena']];
+ let g='';const bw=150,gap=24,x0=20;
+ w.forEach(([k],i)=>{const x=x0+i*(bw+gap);g+=`<rect x="${x}" y="44" width="${bw}" height="46" rx="10" fill="var(--surface-2)" stroke="var(--line)"/><text x="${x+bw/2}" y="73" text-anchor="middle" fill="var(--fg)">${k}</text>`;if(i<4)g+=`<text x="${x+bw+gap/2}" y="73" text-anchor="middle" fill="var(--muted)" font-family="Work Sans">›</text>`});
+ exec.forEach(([k,d],i)=>{const x=x0+i*(bw+gap);g+=`<rect x="${x}" y="172" width="${bw}" height="34" rx="10" fill="var(--sena)"/><text x="${x+bw/2}" y="194" text-anchor="middle" fill="#fff">${i+1}. ${k}</text><text x="${x+bw/2}" y="166" text-anchor="middle" font-family="Work Sans" font-weight="500" font-size="11" fill="var(--muted)">${d}</text>`;
+   const wi=w.findIndex(z=>z[0]===k);const wx=x0+wi*(bw+gap)+bw/2;g+=`<path d="M${wx} 92 C ${wx} 120, ${x+bw/2} 118, ${x+bw/2} 146" stroke="var(--sena)" stroke-width="1.5" stroke-dasharray="4 4" fill="none" opacity=".7"/>`});
+ document.getElementById('sqlw').innerHTML=g})();
+
+const CLEAN=RAW.map(r=>({ID:r[0],Fecha:r[1],Regional:proper(r[2].trim()),Dependencia:r[3],Concepto:r[4],Valor:r[5]==null?null:Number(r[5]),Estado:r[6]}));
+const sqlDefault=['Regional','Concepto','Valor','Estado'];
+$('#sqlCols').innerHTML=COLS.map(c=>`<label><input type="checkbox" value="${c}" ${sqlDefault.includes(c)?'checked':''}>${c}</label>`).join('');
+['#sqlWhere','#sqlMin','#sqlGroup','#sqlOrder'].forEach(s=>$(s).addEventListener('change',renderSQL));
+$$('#sqlCols input').forEach(i=>i.addEventListener('change',renderSQL));
+$('#sqlWhere').value='Aprobado';$('#sqlOrder').value='Valor DESC';
+function renderSQL(){const grp=$('#sqlGroup').checked;$$('#sqlCols input').forEach(i=>i.disabled=grp);
+  let cols=$$('#sqlCols input').filter(i=>i.checked).map(i=>i.value);if(!cols.length)cols=['*'];
+  const st=$('#sqlWhere').value,min=+$('#sqlMin').value,ord=$('#sqlOrder').value;
+  const conds=[];if(st)conds.push(`Estado = '${st}'`);if(min)conds.push(`Valor >= ${min}`);
+  let sel=grp?['Regional','SUM(Valor) AS Total','COUNT(*) AS Solicitudes']:cols;
+  let sql=`SELECT ${sel.join(', ')}\nFROM Solicitudes`;
+  if(conds.length)sql+=`\nWHERE ${conds.join('\n  AND ')}`;
+  if(grp)sql+=`\nGROUP BY Regional`;
+  let ordOk=ord;if(grp&&ord){ordOk=ord.startsWith('Valor')?'Total DESC':ord.startsWith('Regional')?ord:''}
+  if(!grp&&ord&&cols[0]!=='*'&&!cols.includes(ord.split(' ')[0]))ordOk=ord; // SQL permite ordenar por columna no seleccionada
+  if(ordOk)sql+=`\nORDER BY ${ordOk}`;sql+=';';
+  $('#sqlCode').innerHTML=hlSQL(sql);
+  let rows=CLEAN.filter(r=>(!st||r.Estado===st)&&(!min||(r.Valor!=null&&r.Valor>=min)));
+  let outCols,types;
+  if(grp){const g=new Map();rows.forEach(r=>{if(!g.has(r.Regional))g.set(r.Regional,{Regional:r.Regional,Total:0,Solicitudes:0});const o=g.get(r.Regional);o.Total+=r.Valor||0;o.Solicitudes++});rows=[...g.values()];outCols=['Regional','Total','Solicitudes'];types={Total:'number',Solicitudes:'number'}}
+  else{outCols=cols[0]==='*'?COLS:cols;types={Valor:'number',Fecha:'date'}}
+  if(ordOk){const[c,dir]=ordOk.split(' ');rows=rows.slice().sort((a,b)=>{const x=a[c],y=b[c];const r=(x==null)-(y==null)||(typeof x==='number'?x-y:String(x).localeCompare(String(y),'es'));return dir==='DESC'?-r:r})}
+  $('#sqlTable').innerHTML=`<thead><tr>${outCols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${outCols.map(c=>{const[h,cl]=cellHTML(r[c],types[c]||'text');return`<td class="${cl}">${h}</td>`}).join('')}</tr>`).join(''):`<tr><td colspan="${outCols.length}" class="muted">La consulta no devuelve filas con estos filtros.</td></tr>`}</tbody>`;
+  $('#sqlStat').textContent=`${rows.length} fila${rows.length===1?'':'s'} devuelta${rows.length===1?'':'s'} · datos ya limpios del simulador`}
+renderSQL();
+
+/* ---------- Videos ---------- */
+const play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#39A900"/></svg>';
+const vPQ=[
+ ['¿Qué es Power Query? ¿Excel? ¿Power BI?','https://www.youtube.com/watch?v=Wy46tFMmsxg','Introducción','Concepto y dónde se usa'],
+ ['Power Query desde cero: guía para principiantes en Power BI','https://www.youtube.com/watch?v=Qy2nuXXq0II','Básico','Primeros pasos en Power BI'],
+ ['Power Query desde Cero: tutorial completo para principiantes','https://www.youtube.com/watch?v=f3nEZo4b-Yg','Básico','Recorrido por el editor'],
+ ['Curso Power Query 100 % gratuito (4 horas)','https://www.youtube.com/watch?v=gnjQgRV8s28','Básico · Intermedio','Curso largo de práctica'],
+ ['Fundamentos del lenguaje M','https://www.youtube.com/watch?v=IVnlCgR-iRU','Intermedio','Sintaxis let … in'],
+ ['¿Cómo utilizar lenguaje M de Power Query?','https://www.youtube.com/watch?v=KoQpxop5-aY','Intermedio','Escribir y editar fórmulas'],
+ ['Power Query: función if…else en lenguaje M','https://www.youtube.com/watch?v=qAVu8XTl36k','Intermedio','Columnas condicionales'],
+ ['Power Query: funciones de texto (lenguaje M)','https://www.youtube.com/watch?v=OO85U1s5mK4','Intermedio','Limpieza de texto'],
+ ['Tabla calendario con lenguaje M en Power Query','https://www.youtube.com/watch?v=iFL4nuHNP58','Avanzado','Fechas para informes']];
+const vSQL=[
+ ['Curso de SQL y bases de datos desde cero para principiantes','https://www.youtube.com/watch?v=OuJerKzV5T0','Básico','Conceptos y primeras consultas'],
+ ['Curso de SQL desde cero (completo)','https://www.youtube.com/watch?v=DFg1V-rO6Pg','Básico','SELECT, WHERE, ORDER BY'],
+ ['Curso completo de SQL y bases de datos desde cero (8 horas)','https://www.youtube.com/watch?v=8N4M994IDt8','Básico · Intermedio','Curso extenso']];
+const vh=v=>`<a class="vid" href="${v[1]}" target="_blank" rel="noopener"><span class="play">${play}</span><span><b>${esc(v[0])}</b><small>YouTube · ${esc(v[3])}</small><br><span class="chip lvl">${esc(v[2])}</span></span></a>`;
+$('#vidPQ').innerHTML=vPQ.map(vh).join('');$('#vidSQL').innerHTML=vSQL.map(vh).join('');
+})();
+</script>
